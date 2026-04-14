@@ -37,6 +37,7 @@ book/
 ├── 04-activation-and-routing.md
 ├── 05-context-engineering.md
 ├── 06-industry-practice.md            # Part III: Industry Practice
+├── 06a-deep-dive-production-skills.md # Deep Dive: actual production skills dissected
 ├── 07-error-recovery-and-resilience.md # Part IV: Patterns for Hard Tasks
 ├── 08-memory-and-learning.md
 ├── 09-multi-agent-composition.md

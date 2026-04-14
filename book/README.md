@@ -30,6 +30,15 @@
   - 6.4 Cursor: The IDE as Agent Harness
   - 6.5 Devin (Cognition): The Planner-Critic Architecture
   - 6.6 Manus (Meta): Skills in the Sandbox
+- [Chapter 6A: Deep Dive — Anatomy of Top-Tier Production Skills](06a-deep-dive-production-skills.md)
+  - 6A.1 OpenAI's Agents SDK Skills: The "Tiny CLI" Philosophy
+  - 6A.2 OpenAI's Curated Skills: The Media Production Pattern
+  - 6A.3 Anthropic's Philosophy: The Agent-Computer Interface (ACI)
+  - 6A.4 Cursor's Philosophy: Dynamic Context Discovery
+  - 6A.5 Manus's Philosophy: The Event-Driven Agent Loop
+  - 6A.6 Devin's Philosophy: Planning Mode and Confidence
+  - 6A.7 Addy Osmani's Engineering Skills: Process Over Prose
+  - 6A.8 The `skills-best-practices` Meta-Skill
 
 ### Part IV: Patterns for Hard Tasks
 - [Chapter 7: Error Recovery and Resilience — Skills That Survive Failure](07-error-recovery-and-resilience.md)
@@ -56,7 +65,7 @@ If you're short on time, read these chapters first:
 1. **Chapter 1** for the conceptual foundation
 2. **Chapter 2** for the practical format
 3. **Chapter 3** for the most important design principle
-4. **Chapter 6** for how the industry leaders do it
+4. **Chapter 6A** for deep dives into actual production skills with code
 5. **Appendix A** for the authoring checklist
 
 ## Sources
