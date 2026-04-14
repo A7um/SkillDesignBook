@@ -1,50 +1,62 @@
 # SkillDesignBook
 
-**The Skill Design Book**: A comprehensive guide to designing skills for long-running AI agents that tackle hard tasks.
+**How to Write SKILL.md Files for Long-Running AI Agents That Tackle Hard Tasks**
 
-This book covers the state-of-the-art in agent skill design philosophy, methodology, and practice from top-tier AI companies (OpenAI, Anthropic, Google, Cursor, Manus/Meta, Devin/Cognition), leading open-source frameworks (LangGraph, CrewAI, AutoGen), and academic research labs.
+A deeply practical guide on writing agent skills, centered on the *craft* of authoring SKILL.md files. Drawn from production skills at OpenAI, Anthropic, Google, Cursor, Manus/Meta, Devin/Cognition, and leading open-source projects.
 
 ## Read the Book
 
 Start here: **[book/README.md](book/README.md)**
 
-## What You'll Learn
+## Core Content (Start Here)
 
-- The **three-layer architecture** (system prompts → skills → tools) that all major platforms have converged on
-- **Progressive disclosure**: how to scale agent capabilities within fixed context budgets
-- **Activation accuracy**: writing descriptions that route tasks to the right skill every time
-- **Context engineering**: managing the scarcest resource in agent design
-- How **OpenAI, Anthropic, Google, Cursor, Manus, and Devin** each approach skill design
-- **Error recovery patterns** for skills that survive failure in long-horizon tasks
-- **Memory and learning**: building skills that improve over time
-- **Multi-agent composition**: orchestrating skills across subagents and services
-- **Security**: defending against the emerging supply chain attacks on skill ecosystems
-- **Evaluation**: measuring skill quality with benchmarks and production metrics
+| Chapter | What It Covers |
+|---------|---------------|
+| [**Ch 20: Writing the Description**](book/20-writing-the-description.md) | The 1-1024 char routing boundary. Before/after examples. Testing methodology. Production descriptions annotated. |
+| [**Ch 21: Writing the Body**](book/21-writing-the-body.md) | Section ordering, imperative style, decision trees, I/O contracts, output templates, scripts vs. prose, constraint writing, anti-patterns. |
+| [**Ch 22: Skill Patterns**](book/22-skill-patterns.md) | 9 structural archetypes from production: Gate-keeper, Report-first, Decision gate, Think-before-act, Handoff automation, Debug-and-fix, Multi-axis review, Prompt augmentation, Empirical probe. |
+| [**Ch 15: Practitioner's Handbook**](book/15-practitioners-handbook.md) | Full unabridged production skills with line-by-line annotations. |
 
-## Who This Book Is For
+## Also Included
 
-Engineers, technical leads, and AI practitioners who design skills for autonomous agents that must plan, execute, recover from errors, and deliver results over extended time horizons.
+- Foundations (Ch 1-2): What skills are, the SKILL.md spec
+- Industry deep dives (Ch 6, 6A): How OpenAI/Anthropic/Cursor/Manus/Devin write skills
+- Advanced topics (Ch 3-5, 7-12): Progressive disclosure, context engineering, error recovery, memory, security, evaluation
+- [Source Catalog](book/14-source-catalog.md): 100+ hyperlinked references
 
 ## Structure
 
 ```
 book/
 ├── README.md                          # Table of Contents
-├── 00-preface.md                      # Preface
-├── 01-the-skill-layer.md              # Part I: Foundations
+│
+│  ── CORE: How to Write SKILL.md ──
+├── 20-writing-the-description.md      # Description engineering with before/after
+├── 21-writing-the-body.md             # Body craft: ordering, style, trees, I/O, scripts
+├── 22-skill-patterns.md               # 9 archetypes from production
+├── 15-practitioners-handbook.md       # Full annotated production skills
+│
+│  ── FOUNDATIONS ──
+├── 00-preface.md
+├── 01-the-skill-layer.md
 ├── 02-anatomy-of-a-skill.md
-├── 03-progressive-disclosure.md       # Part II: Design Principles
+│
+│  ── INDUSTRY PRACTICE ──
+├── 06-industry-practice.md
+├── 06a-deep-dive-production-skills.md
+│
+│  ── ADVANCED TOPICS ──
+├── 03-progressive-disclosure.md
 ├── 04-activation-and-routing.md
 ├── 05-context-engineering.md
-├── 06-industry-practice.md            # Part III: Industry Practice
-├── 06a-deep-dive-production-skills.md # Deep Dive: actual production skills dissected
-├── 07-error-recovery-and-resilience.md # Part IV: Patterns for Hard Tasks
+├── 07-error-recovery-and-resilience.md
 ├── 08-memory-and-learning.md
 ├── 09-multi-agent-composition.md
 ├── 10-security.md
-├── 11-evaluation-and-benchmarks.md    # Part V: Evaluation & Future
+├── 11-evaluation-and-benchmarks.md
 ├── 12-open-problems.md
-├── 13-appendix.md                     # Appendices A-E
-├── 14-source-catalog.md               # Hyperlinked references (100+ links)
-└── 15-practitioners-handbook.md       # Real production patterns with real code
+│
+│  ── REFERENCE ──
+├── 13-appendix.md                     # Checklists, examples, platform guide, glossary
+└── 14-source-catalog.md               # 100+ hyperlinked references
 ```
