@@ -209,3 +209,20 @@ Manus's distinguishing characteristic is **full sandbox execution**: every skill
 5. Cursor integrates skills into the IDE harness with rules/skills separation.
 6. Devin adds Planner/Critic architecture for iterative long-horizon tasks.
 7. Manus demonstrates full sandbox execution with auto-skill generation.
+
+---
+
+### Sources for This Chapter
+
+| Topic | Source |
+|-------|--------|
+| OpenAI skill catalog (9 skills) | [github.com/openai/openai-agents-python/.agents/skills](https://github.com/openai/openai-agents-python/tree/main/.agents/skills) |
+| OpenAI blog: Skills accelerate OSS maintenance | [developers.openai.com/blog/skills-agents-sdk](https://developers.openai.com/blog/skills-agents-sdk) |
+| Anthropic: Building effective agents | [anthropic.com/engineering/building-effective-agents](https://www.anthropic.com/engineering/building-effective-agents/) |
+| Anthropic: Writing tools for agents | [anthropic.com/engineering/writing-tools-for-agents](https://www.anthropic.com/engineering/writing-tools-for-agents) |
+| Google ADK overview | [cloud.google.com/agent-builder/agent-development-kit](https://cloud.google.com/agent-builder/agent-development-kit/overview) |
+| Cursor best practices | [cursor.com/blog/agent-best-practices](https://www.cursor.com/blog/agent-best-practices) |
+| Devin skills docs | [docs.devin.ai/product-guides/skills](https://docs.devin.ai/product-guides/skills) |
+| Devin rebuild for Sonnet 4.5 | [cognition.ai/blog/devin-sonnet-4-5-lessons-and-challenges](https://cognition.ai/blog/devin-sonnet-4-5-lessons-and-challenges) |
+| Manus skills blog | [manus.im/blog/manus-skills](https://manus.im/blog/manus-skills) |
+| Manus system prompt (leaked) | [gist.github.com/renschni](https://gist.github.com/renschni/a6c0157cdcdf2db2fc1e7c3e20bff602) |

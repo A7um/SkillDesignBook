@@ -197,6 +197,18 @@ When authoring a skill for long-horizon tasks:
 - [ ] Include a maximum retry count for iterative steps
 - [ ] Provide human escalation instructions for unrecoverable failures
 
+---
+
+### Sources for This Chapter
+
+| Topic | Source |
+|-------|--------|
+| Self-healing pipeline (5 failure categories) | [dev.to: Self-Healing AI Agent Pipeline](https://dev.to/miso_clawpod/how-to-build-a-self-healing-ai-agent-pipeline-a-complete-guide-95b) |
+| PALADIN framework (50K recovery trajectories) | [arXiv:2509.25238 (PALADIN)](https://arxiv.org/html/2509.25238v1) |
+| VIGIL self-healing runtime | [zylos.ai: Error Handling & Recovery](https://zylos.ai/research/2026-01-12-ai-agent-error-handling-recovery) |
+| Module-specific failure taxonomy | [zylos.ai: AgentErrorTaxonomy](https://zylos.ai/research/2026-01-12-ai-agent-error-handling-recovery) |
+| OpenAI final-release-review gate policy | [raw SKILL.md](https://raw.githubusercontent.com/openai/openai-agents-python/main/.agents/skills/final-release-review/SKILL.md) |
+
 ## Key Takeaways
 
 1. Long-running agents fail systematically. Skills must classify failures and respond appropriately.

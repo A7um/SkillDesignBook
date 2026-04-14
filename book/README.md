@@ -24,49 +24,49 @@
 
 ### Part III: Industry Practice
 - [Chapter 6: Industry Practice — How the Leaders Design Skills](06-industry-practice.md)
-  - 6.1 OpenAI: Skills as Reusable Procedures
-  - 6.2 Anthropic: Context Engineering and the Agent-Computer Interface
-  - 6.3 Google: Multi-Agent Systems and the A2A Protocol
-  - 6.4 Cursor: The IDE as Agent Harness
-  - 6.5 Devin (Cognition): The Planner-Critic Architecture
-  - 6.6 Manus (Meta): Skills in the Sandbox
-- [Chapter 6A: Deep Dive — Anatomy of Top-Tier Production Skills](06a-deep-dive-production-skills.md)
-  - 6A.1 OpenAI's Agents SDK Skills: The "Tiny CLI" Philosophy
-  - 6A.2 OpenAI's Curated Skills: The Media Production Pattern
-  - 6A.3 Anthropic's Philosophy: The Agent-Computer Interface (ACI)
-  - 6A.4 Cursor's Philosophy: Dynamic Context Discovery
-  - 6A.5 Manus's Philosophy: The Event-Driven Agent Loop
-  - 6A.6 Devin's Philosophy: Planning Mode and Confidence
-  - 6A.7 Addy Osmani's Engineering Skills: Process Over Prose
-  - 6A.8 The `skills-best-practices` Meta-Skill
+  - 6.1 OpenAI · 6.2 Anthropic · 6.3 Google · 6.4 Cursor · 6.5 Devin · 6.6 Manus
+- [**Chapter 6A: Deep Dive — Anatomy of Top-Tier Production Skills**](06a-deep-dive-production-skills.md)
+  - 6A.1 OpenAI's "Tiny CLI" Skills · 6A.2 Media Production Pattern · 6A.3 Anthropic's ACI · 6A.4 Cursor's Dynamic Context · 6A.5 Manus's Event Loop · 6A.6 Devin's Planning Mode · 6A.7 Osmani's Lifecycle Skills · 6A.8 Gechev's Validation
 
 ### Part IV: Patterns for Hard Tasks
-- [Chapter 7: Error Recovery and Resilience — Skills That Survive Failure](07-error-recovery-and-resilience.md)
-- [Chapter 8: Memory and Learning — Skills That Improve Over Time](08-memory-and-learning.md)
-- [Chapter 9: Multi-Agent Composition — Skills That Orchestrate](09-multi-agent-composition.md)
-- [Chapter 10: Security — The Supply Chain Risk You Can't Ignore](10-security.md)
+- [Chapter 7: Error Recovery and Resilience](07-error-recovery-and-resilience.md)
+- [Chapter 8: Memory and Learning](08-memory-and-learning.md)
+- [Chapter 9: Multi-Agent Composition](09-multi-agent-composition.md)
+- [Chapter 10: Security](10-security.md)
 
 ### Part V: Evaluation and the Future
-- [Chapter 11: Evaluation and Benchmarks — Measuring What Matters](11-evaluation-and-benchmarks.md)
+- [Chapter 11: Evaluation and Benchmarks](11-evaluation-and-benchmarks.md)
 - [Chapter 12: Open Problems and the Research Frontier](12-open-problems.md)
 
+### Part VI: Practice
+- [**Chapter 15: Practitioner's Handbook — Real Patterns with Real Code**](15-practitioners-handbook.md)
+  - 15.1 OpenAI `implementation-strategy` — complete annotated text
+  - 15.2 OpenAI `final-release-review` — deterministic gate policy
+  - 15.3 Osmani `code-review-and-quality` — 5-axis review with labels
+  - 15.4 Manus event-driven agent loop — full architecture
+  - 15.5 Devin two-mode system — planning vs. execution
+  - 15.6 Cursor dynamic context discovery — 4 techniques
+  - 15.7 Anthropic tool design checklist — build/define/validate
+  - 15.8 Skill validation methodology — 4-step with prompts
+  - 15.9 Cross-platform skill installation commands
+  - 15.10 Writing your first production skill — step by step
+
 ### Appendices
-- [Appendix A: Skill Authoring Checklist](13-appendix.md#appendix-a-skill-authoring-checklist)
-- [Appendix B: Reference Skill Examples](13-appendix.md#appendix-b-reference-skill-examples)
-- [Appendix C: Platform Quick Reference](13-appendix.md#appendix-c-platform-quick-reference)
-- [Appendix D: Glossary](13-appendix.md#appendix-d-glossary)
-- [Appendix E: Further Reading](13-appendix.md#appendix-e-further-reading)
+- [Appendix A–E: Checklists, Examples, Platform Guide, Glossary, Reading List](13-appendix.md)
+- [**Source Catalog — Hyperlinked References for Every Topic**](14-source-catalog.md)
+  - Official Specs · OpenAI (16 links) · Anthropic (10 links) · Google (4 links) · Cursor (7 links) · Devin (6 links) · Manus (6 links) · Frameworks (5 links) · Community Libraries (4 links) · Academic Papers (11 links) · Security Research (5 links) · Design Patterns (10 links) · Benchmarks (4 links) · CLAUDE.md Practices (5 links)
 
 ---
 
 ## Quick Start
 
-If you're short on time, read these chapters first:
-1. **Chapter 1** for the conceptual foundation
-2. **Chapter 2** for the practical format
-3. **Chapter 3** for the most important design principle
-4. **Chapter 6A** for deep dives into actual production skills with code
-5. **Appendix A** for the authoring checklist
+**If you want to understand the theory first**: Ch 1 → Ch 3 → Ch 5
+
+**If you want production patterns immediately**: Ch 15 (Practitioner's Handbook) → Ch 6A (Deep Dives)
+
+**If you want to look up a specific source**: [Source Catalog](14-source-catalog.md)
+
+---
 
 ## Sources
 
@@ -74,19 +74,14 @@ This book synthesizes research and production practice from:
 
 | Source | What We Drew From |
 |--------|------------------|
-| **OpenAI** (Codex, Agents SDK) | SKILL.md format, AGENTS.md patterns, routing design, shell+skills+compaction |
-| **Anthropic** (Claude Code, MCP) | Context engineering, progressive disclosure, subagent isolation, tool design |
+| **OpenAI** (Codex, Agents SDK) | 9 production skills dissected with full text, AGENTS.md, shell+skills+compaction |
+| **Anthropic** (Claude Code, MCP) | ACI tool design, context engineering, 5 tool principles, subagent architecture |
 | **Google** (ADK, A2A, Gemini CLI) | Multi-agent orchestration, agent cards, A2A protocol |
-| **Cursor** | IDE-as-harness, rules vs. skills separation, cloud agents |
-| **Manus / Meta** | Sandbox execution, auto-skill generation, five-layer architecture |
-| **Devin / Cognition** | Planner-critic loop, large-context ingestion, self-healing test loops |
+| **Cursor** | Dynamic context discovery, Priompt, self-driving codebases research |
+| **Manus / Meta** | Leaked system prompt, event-driven agent loop, sandbox execution |
+| **Devin / Cognition** | Leaked prompt, two-mode architecture, managed Devins, Sonnet 4.5 rebuild |
 | **LangGraph / LangChain** | Graph-based orchestration, tools-first pattern, checkpointing |
 | **CrewAI** | Role-based agents, rapid prototyping, pipeline design |
-| **Agent Skills Standard** | Open specification (agentskills.io) |
-| **Academic Research** | SoK surveys, PALADIN, Memento-Skills, VIGIL, SWE-bench, METR |
-| **OWASP** | Agentic Skills Top 10 security risks |
-| **Snyk** | ToxicSkills supply chain audit |
-
-## License
-
-This work is provided as-is for educational purposes.
+| **Community** | addyosmani/agent-skills (5K★), VoltAgent (15K★), mgechev (1.8K★) |
+| **Academic** | 20+ papers from NeurIPS, ACL, arXiv |
+| **Security** | OWASP AST10, Snyk ToxicSkills, ClawHavoc |

@@ -175,3 +175,16 @@ The industry is responding: OWASP's AST10, NIST's RFI on AI agent security (Janu
 3. Defense requires five layers: audit, least privilege, sandboxing, supply chain governance, and runtime monitoring.
 4. Apply a tiered trust model based on skill provenance.
 5. When authoring skills: minimize privileges, avoid embedded secrets, prefer instructions over scripts, and version everything.
+
+---
+
+### Sources for This Chapter
+
+| Topic | Source |
+|-------|--------|
+| Snyk ToxicSkills audit (36%, 1467 malicious) | [snyk.io: ToxicSkills Report](https://snyk.io/blog/toxicskills-malicious-ai-agent-skills-clawhub/) |
+| OWASP AST10 | [owasp.org: Agentic Skills Top 10](https://owasp.org/www-project-agentic-skills-top-10/) |
+| PurpleBox: Supply chain timeline | [prplbx.com: Hidden Supply Chain Risk](https://www.prplbx.com/blog/agent-skills-supply-chain) |
+| Red Hat: Security threats and controls | [developers.redhat.com](https://developers.redhat.com/articles/2026/03/10/agent-skills-explore-security-threats-and-controls) |
+| Promptfoo: Supply chain attack DB | [promptfoo.dev](https://www.promptfoo.dev/lm-security-db/vuln/agent-skill-supply-chain-attack-f0c66804) |
+| Skill Trust Framework (Xu et al.) | [arXiv:2602.12430](https://arxiv.org/pdf/2602.12430) |

@@ -154,3 +154,17 @@ UX research shows that progressive disclosure beyond 2-3 layers causes user frus
 3. The pattern enables 98%+ token savings compared to eager loading at 100+ skills.
 4. Agents perform *worse* with more irrelevant context—this is empirically demonstrated, not intuition.
 5. Design descriptions as routing logic, SKILL.md as a table of contents, and reference files as free-until-read deep expertise.
+
+---
+
+### Sources for This Chapter
+
+| Topic | Source |
+|-------|--------|
+| "Same Task, More Tokens" (accuracy 0.92→0.68) | Referenced in [agent-layer.dev/skill-design](https://agent-layer.dev/skill-design/) |
+| Progressive Disclosure in AI agents | [Medium: Progressive Disclosure (Feb 2026)](https://medium.com/@martia_es/progressive-disclosure-the-technique-that-helps-control-context-and-tokens-in-ai-agents-8d6108b09289) |
+| Token economics table (10/100/1000 skills) | [jayminwest: Progressive Disclosure Pattern](https://www.jayminwest.com/agentic-engineering-book/7-patterns/7-progressive-disclosure) |
+| Code execution with MCP (Code Mode) | [Anthropic: Code Execution with MCP (Nov 2025)](https://www.anthropic.com/engineering/code-execution-with-mcp) |
+| Cloudflare Code Mode (~1000 tokens) | [web4agents.org: MCP docs](https://www.web4agents.org/en/docs/mcp) |
+| Cursor dynamic context discovery | [cursor.com/blog/dynamic-context-discovery](https://cursor.com/blog/dynamic-context-discovery) |
+| Why agents need progressive disclosure | [honra.io: Progressive Disclosure](https://www.honra.io/articles/progressive-disclosure-for-ai-agents) |

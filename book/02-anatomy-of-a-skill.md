@@ -230,3 +230,16 @@ For perspective: with 100 installed skills, the metadata layer costs approximate
 4. Structure the body for primacy/recency: hard constraints first, guardrails last.
 5. Use scripts for deterministic behavior, instructions for judgment-requiring tasks.
 6. Keep SKILL.md under 500 lines; move detailed references to separate files.
+
+---
+
+### Sources for This Chapter
+
+| Topic | Source |
+|-------|--------|
+| SKILL.md specification (fields, constraints) | [agentskills.io/specification](https://agentskills.io/specification) |
+| Primacy/recency effects on instruction-following | [agent-layer.dev/skill-design](https://agent-layer.dev/skill-design/) (refs ComplexBench, IFScale) |
+| Anthropic skill authoring best practices | [platform.claude.com: Skill Best Practices](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices) |
+| OpenAI skill creation docs | [developers.openai.com/codex/skills/create-skill](https://developers.openai.com/codex/skills/create-skill) |
+| Real SKILL.md examples (imagegen, speech, doc) | [github.com/openai/skills](https://github.com/openai/skills/tree/main/skills/.curated) |
+| What Is SKILL.md? Complete Guide | [dev.to: Complete Guide to Agent Skills](https://dev.to/samuel_rose_b30991db2b25b/what-is-skillmd-a-complete-guide-to-ai-agent-skills-2i93) |

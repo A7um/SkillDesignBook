@@ -44,5 +44,7 @@ book/
 ├── 10-security.md
 ├── 11-evaluation-and-benchmarks.md    # Part V: Evaluation & Future
 ├── 12-open-problems.md
-└── 13-appendix.md                     # Appendices A-E
+├── 13-appendix.md                     # Appendices A-E
+├── 14-source-catalog.md               # Hyperlinked references (100+ links)
+└── 15-practitioners-handbook.md       # Real production patterns with real code
 ```

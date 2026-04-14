@@ -93,3 +93,16 @@ This formalization captures what production systems have converged on: a skill m
 3. Skills solve context bloat through progressive disclosure, drift through version control, and reuse through portability.
 4. The Agent Skills open standard (December 2025) unified the industry around a single format: SKILL.md.
 5. A skill is formally defined as (applicability conditions, policy, tool requirements, success criteria).
+
+---
+
+### Sources for This Chapter
+
+| Topic | Source |
+|-------|--------|
+| "Context engineering" concept | [Anthropic: Context Engineering for Agents (Sep 2025)](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents) |
+| Agent Skills open standard | [agentskills.io/specification](https://agentskills.io/specification) |
+| Skill formalization S=(C,π,T,R) | [SoK: Agentic Skills (arXiv:2602.20867)](https://arxiv.org/html/2602.20867v1) |
+| Anthropic's original Skills launch | [Manus blog on open standard adoption (Jan 2026)](https://manus.im/blog/manus-skills) |
+| Cursor 2.4 Skills support | [Cursor changelog 2.4 (Jan 2026)](https://www.cursor.so/changelog/2-4) |
+| "Stop Engineering Prompts" | [Medium: Context Engineering Guide](https://medium.com/@muhammad.shafat/stop-engineering-prompts-start-engineering-context-a-guide-to-the-agent-skills-standard-bc8e2056f40a) |

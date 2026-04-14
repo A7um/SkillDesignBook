@@ -164,3 +164,16 @@ If your skill produces verbose tool outputs, plan accordingly:
 4. Put always-on guidance in AGENTS.md; put task-specific procedures in skills.
 5. Use subagents for context isolation—verbose intermediate work stays in the subagent, only summaries return.
 6. Plan your token budget explicitly, leaving ample room for tool results and model reasoning.
+
+---
+
+### Sources for This Chapter
+
+| Topic | Source |
+|-------|--------|
+| "Smallest possible set of high-signal tokens" | [Anthropic: Context Engineering (Sep 2025)](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents) |
+| Tool Search Tool (85% token reduction) | [Anthropic: Advanced Tool Use (Nov 2025)](https://www.anthropic.com/engineering/advanced-tool-use) |
+| Shell + Skills + Compaction tips | [OpenAI: Long-running agent tips](https://developers.openai.com/blog/skills-shell-tips) |
+| AGENTS.md vs Skills separation | [OpenAI: Customization docs](https://developers.openai.com/codex/concepts/customization) |
+| Claude Code subagent isolation | [Claude Code: Custom Subagents](https://code.claude.com/docs/en/sub-agents.md) |
+| ACE framework (+12.5% on AppWorld) | [jayminwest: Advanced Context Patterns](https://jayminwest.com/agentic-engineering-book/4-context/3-context-patterns) |
