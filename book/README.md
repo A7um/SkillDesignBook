@@ -19,8 +19,11 @@ Everything in this book was learned by inspecting production skills from OpenAI,
 - [**Chapter 4: Skill Patterns**](04-skill-patterns.md) — **27 patterns** validated across **58,593 ClawHub skills** (full corpus programmatic analysis) + 80+ deep-read skills. Each pattern has What/Why/How + corpus frequency data + cited skills
 - [**Chapter 5: File Architecture and Testing**](05-file-architecture-and-testing.md) — directory structure, scripts (when/how), reference files (when/how), cross-platform paths, AGENTS.md integration, 4-step testing methodology, authoring checklist
 
+### Part III: Empirical Analysis
+- [**Chapter 6: Top 1,000 Downloaded Skills — Data-Driven Analysis**](06-top1000-analysis.md) — Top 20 skills table · Aggregate stats vs corpus · Pattern frequency (990 skills) · Script analysis (327 scripted, Python 56%) · 3 new patterns · Self-improving-agent case study (398K dl) · 8 takeaways
+
 ### Reference
-- [**Source Catalog**](14-source-catalog.md) — 100+ hyperlinked references to every primary source
+- [**Source Catalog**](14-source-catalog.md) — 110+ hyperlinked references to every primary source
 
 ---
 
