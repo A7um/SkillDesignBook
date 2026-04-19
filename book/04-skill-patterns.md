@@ -1,650 +1,407 @@
-# Part II, Chapter 4: Skill Patterns — Recurring Structures Across 58,593 Skills
+# Part II, Chapter 4: Writing Patterns Discovered in the Top 1,000 Downloaded Skills
 
-A pattern must appear in **at least 5 independently-authored skills** (or 1%+ of the full corpus), unless it is a pioneering pattern from a top-tier skill that others are copying. Every pattern is structured as **What** / **Why** / **How**, and every claim cites the skill by name with a link.
+This chapter presents patterns discovered empirically by analyzing the **top 1,000 most-downloaded ClawHub skills** (12.5M downloads, 990 matched SKILL.md files + 889 script files).
 
-### Skills Corpus
+Each pattern below was discovered from the data — not imported from existing literature. Every pattern cites frequency and specific skills.
 
-**Full corpus analysis**: 58,593 SKILL.md files from [openclaw/skills](https://github.com/openclaw/skills) — every skill published on ClawHub — analyzed programmatically by cloning the repo and running pattern detection across all files.
+### Data Sources
 
-**Deep-read corpus** (full SKILL.md read + structural annotation):
-
-| Source | Count | Link |
-|--------|-------|------|
-| OpenAI Agents SDK | 9 | [github](https://github.com/openai/openai-agents-python/tree/main/.agents/skills) |
-| OpenAI curated catalog | 5 | [github](https://github.com/openai/skills/tree/main/skills/.curated) |
-| Addy Osmani | 19 | [github](https://github.com/addyosmani/agent-skills) |
-| ClawHub top downloads | 30+ | [clawhub.ai](https://clawhub.ai/skills?sort=downloads), [openclaw/skills](https://github.com/openclaw/skills) |
-| Anthropic, Vercel, Stripe, Sentry, etc. | 18 | [VoltAgent list](https://github.com/VoltAgent/awesome-agent-skills) |
-
-### Corpus-Level Pattern Frequency (58,593 skills)
-
-| Pattern | Count | % of corpus |
-|---------|-------|-------------|
-| Em-dash rationale style (4+ uses) | 21,440 | 36.6% |
-| `scripts/` directory | 18,204 | 31.1% |
-| `references/` directory | 12,591 | 21.5% |
-| ✅/❌ or GOOD/BAD code contrast | 11,605 | 19.8% |
-| Quick Start / Quick Reference | 10,121 | 17.3% |
-| Error Handling section | 8,400 | 14.3% |
-| When to Use section | 7,755 | 13.2% |
-| Best Practices section | 6,926 | 11.8% |
-| Output Format / Template | 5,665 | 9.7% |
-| Workflow section | 5,510 | 9.4% |
-| Troubleshooting section | 5,296 | 9.0% |
-| Checklist items `[ ]` | 3,716 | 6.3% |
-| When NOT to Use | 2,895 | 4.9% |
-| Common Traps / Gotchas | 2,256 | 3.9% |
-| Local memory directory (`~/name/`) | 2,096 | 3.6% |
-| Approval gate | 1,842 | 3.1% |
-| Related Skills | 1,716 | 2.9% |
-| Security & Privacy | 853 | 1.5% |
-
-### Top 1,000 Skills Statistics
-
-| Metric | Value |
-|--------|-------|
-| Average lines | 1,164 |
-| Median lines | 957 |
-| Average ## sections | 18.2 |
-| Average code blocks | 38.8 |
-| Range | 749 – 9,935 lines |
+- **ClawHub API**: [clawhub.atomicbot.ai/api/skills?sort=downloads&dir=desc](https://clawhub.atomicbot.ai/api/skills?sort=downloads&dir=desc)
+- **Skills repository**: [github.com/openclaw/skills](https://github.com/openclaw/skills) (58,593 skills cloned, 990 top-1000 matched)
+- **Scripts analyzed**: 889 files across 326 skills with `scripts/` directories
 
 ---
 
-## Pattern 1: When to Use / When NOT to Use (30+/50)
+## Pattern A: The "API Scaffold" Skill (75 skills, 7.6%)
 
-**What**: The description field includes both positive triggers ("Use when...") and negative boundaries ("Don't use when..." or "NOT for...").
+**What**: A consistent 7-section scaffold used specifically by skills that wrap external APIs. The sections appear together with extremely high co-occurrence.
 
-**Why**: Without negative triggers, skills collide. The agent cannot distinguish "review code" from "fix code" from "test code." Negative triggers draw the decision boundary between this skill and its neighbors. OpenAI found that making skills available can initially *reduce* correct triggering — negative examples fix this ([source](https://developers.openai.com/blog/skills-shell-tips)).
+**Evidence**: 67+ skills have both `Authentication` + `Base URL` + `API Reference` sections. 68 have `Base URL` + `Code Examples` + `Connection Management`. This co-occurrence is too tight to be coincidence — it's a learned template.
 
-**How**: Combine three components: (1) what it does, (2) when to trigger, (3) when NOT to trigger or redirect.
+**The scaffold**:
+```
+## Quick Start
+## Base URL
+## Authentication
+## Connection Management
+## API Reference (or Commands)
+## Code Examples
+## Error Handling
+## Rate Limits
+## Notes / Troubleshooting
+```
+
+**Why it works**: API skills share a consumption pattern — agent reads auth setup, then endpoint reference, then code examples. Skills that deviate from this scaffold make the agent hunt for info.
 
 **Skills demonstrating this:**
+- [api-gateway](https://clawhub.ai/skills/api-gateway) (70K dl, 635 lines, 124 API references): The canonical scaffold
+- [stripe-api](https://clawhub.ai/skills/stripe-api) (19K dl, 4 scaffold signals): Full scaffold
+- [gmail](https://clawhub.ai/skills/gmail) (31K dl, 3 signals)
+- [outlook-api](https://clawhub.ai/skills/outlook-api) (21K dl, 3 signals)
+- [whatsapp-business](https://clawhub.ai/skills/whatsapp-business) (21K dl, 3 signals)
+- [stripe-best-practices](https://github.com/stripe/ai) (official Stripe skill): Same scaffold
+- [xero](https://clawhub.ai/skills/xero) (18K dl, 3 signals)
+- [google-slides](https://clawhub.ai/skills/google-slides) (18K dl, 3 signals)
 
-- [implementation-strategy](https://raw.githubusercontent.com/openai/openai-agents-python/main/.agents/skills/implementation-strategy/SKILL.md): "Use when a task changes exported APIs, runtime behavior, serialized state, tests, or docs"
-- [pr-draft-summary](https://raw.githubusercontent.com/openai/openai-agents-python/main/.agents/skills/pr-draft-summary/SKILL.md): "skip only for trivial or conversation-only tasks, repo-meta/doc-only tasks without behavior impact"
-- [docs-sync](https://raw.githubusercontent.com/openai/openai-agents-python/main/.agents/skills/docs-sync/SKILL.md): "Only update English docs... never touch translated docs"
-- [github](https://raw.githubusercontent.com/openclaw/openclaw/main/skills/github/SKILL.md): ✅ "USE this skill when: Checking PR status..." / ❌ "DON'T use: Local git operations → use git directly"
-- [code-review-and-quality](https://github.com/addyosmani/agent-skills/blob/main/skills/code-review-and-quality/SKILL.md): "Use before merging any change"
-- [review-code](https://clawhub.ai/skills/review-code): "code review, PR review, merge-readiness check, or bug-risk audit before shipping"
-- [skill-reviewer](https://raw.githubusercontent.com/openclaw/skills/main/skills/gitgoodordietrying/skill-reviewer/SKILL.md): "Use when evaluating a skill before publishing, reviewing someone else's skill, scoring skill quality"
-- All 19 Osmani skills, all 9 OpenAI SDK skills
+**When to use this pattern**: If your skill wraps an HTTP API, use this scaffold verbatim. Don't invent a new structure.
 
 ---
 
-## Pattern 2: Numbered Step-by-Step Workflow (25+/50)
+## Pattern B: The "CLI Passthrough" Skill (~150 skills, ~15%)
 
-**What**: The body is a numbered, imperative sequence — each step starts with a verb, not a description.
+**What**: Skills that are effectively thin prose wrappers around a single existing CLI tool. Characteristic: very short (<60 lines), 0-3 `##` sections, 90%+ bash code blocks, no scripts.
 
-**Why**: LLMs execute numbered sequences more reliably than prose. They track position in the sequence and know what comes next. Research shows imperative instructions are followed more consistently than declarative descriptions ([source](https://agent-layer.dev/skill-design/)).
+**Evidence**: Among top-30 downloaded skills, 12 are under 60 lines. Examples: `github` (48 lines), `gog` (37 lines, 0 sections), `weather` (50 lines), `nano-pdf` (21 lines), `sonoscli` (27 lines), `openai-whisper` (20 lines), `mcporter` (39 lines), `video-frames` (30 lines).
 
-**How**: Number every step. Start each with a verb (Run, Identify, Confirm, Check, Report, Ask). Include exact commands inline. Add if/then for branches.
+**The minimal structure**:
+```markdown
+# <tool-name>
+
+One-sentence description of what the CLI does and when to use it.
+
+Quick start
+- `command1 arg` — what it does
+- `command2 arg` — what it does
+
+Common tasks
+- `command3 arg` — what it does
+```
+
+**Why it works**: Documenting an already-well-designed CLI doesn't require a 500-line skill. The skill exists to *tell the agent this CLI is available* and show 5-10 canonical invocations. Padding out to hit an arbitrary size hurts, not helps.
 
 **Skills demonstrating this:**
+- [github](https://clawhub.ai/skills/github) (160K dl): `gh` CLI, 48 lines
+- [gog](https://clawhub.ai/skills/gog) (158K dl): Google Workspace CLI, 37 lines, **zero `##` sections**
+- [nano-pdf](https://clawhub.ai/skills/nano-pdf) (92K dl): 21 lines, single `## Quick start`
+- [sonoscli](https://clawhub.ai/skills/sonoscli) (78K dl): 27 lines, no sections
+- [openai-whisper](https://clawhub.ai/skills/openai-whisper) (70K dl): 20 lines, no sections
+- [mcporter](https://clawhub.ai/skills/mcporter) (57K dl): 39 lines, no sections
+- [video-frames](https://clawhub.ai/skills/video-frames) (42K dl): 30 lines, 2 sections
+- [youtube-watcher](https://clawhub.ai/skills/youtube-watcher) (44K dl): 49 lines, 3 sections
 
-- [docs-sync](https://raw.githubusercontent.com/openclaw/openclaw/main/skills/github/SKILL.md): 7-step workflow (Confirm scope → Build inventory → Doc-first pass → Code-first pass → Detect gaps → Report → Apply if approved)
-- [gh-fix-ci](https://raw.githubusercontent.com/openai/skills/main/skills/.curated/gh-fix-ci/SKILL.md): 8-step workflow (Verify auth → Resolve PR → Inspect checks → Scope → Summarize → Plan → Implement → Recheck)
-- [gh-issues](https://raw.githubusercontent.com/openclaw/openclaw/main/skills/gh-issues/SKILL.md): 6 numbered phases (Parse → Fetch → Present → Pre-flight → Spawn → Monitor)
-- [test-coverage-improver](https://raw.githubusercontent.com/openai/openai-agents-python/main/.agents/skills/test-coverage-improver/SKILL.md): 6-step Quick Start
-- [solo-review](https://clawhub.ai/skills/solo-review): 12 numbered "Review Dimensions" each with sub-steps
-- [skill-reviewer](https://raw.githubusercontent.com/openclaw/skills/main/skills/gitgoodordietrying/skill-reviewer/SKILL.md): 5-step review process
-- All 19 Osmani skills, all 9 OpenAI SDK skills
+**Key insight**: Download count does NOT correlate with length. These skills have 42K-160K downloads each, rivaling 600+ line sophisticated skills.
 
 ---
 
-## Pattern 3: Structured Output Template (20+/50)
+## Pattern C: Backtick-Wrapped Command Identifier in Description (30% of skills)
 
-**What**: The skill specifies the exact shape of its output — field names, structure, and often example values.
+**What**: Descriptions reference the specific CLI tool or function by wrapping its name in backticks.
 
-**Why**: Without a template, the agent produces a different format every run. With one, output is consistent, parseable, and comparable across runs. The template also constrains the agent's reasoning — it must fill every field, which prevents skipping important aspects.
+**Evidence**: 30% of top-1000 descriptions contain backtick-wrapped field names (e.g., `` `gh` ``, `` `nano-pdf` ``, `` `wttr.in` ``). 27% explicitly reference a specific tool/CLI/API.
 
-**How**: Define the exact output structure with placeholder field names. Use emoji for visual scanning. Require specific fields like "Evidence" and "Action" to force concreteness.
+**Why**: The backtick signals to the agent "this specific string is what you invoke." It also helps the agent match user intent when users ask "use `gh` to check CI" — the skill description matches literally.
 
 **Skills demonstrating this:**
-
-- [final-release-review](https://raw.githubusercontent.com/openai/openai-agents-python/main/.agents/skills/final-release-review/SKILL.md): Full report template — `### Release call: **<🟢 GREEN LIGHT | 🔴 BLOCKED>** <rationale>` → Risk assessment with `Risk:`, `Evidence:`, `Files:`, `Action:` per finding → Unblock checklist with exit criteria
-- [pr-draft-summary](https://raw.githubusercontent.com/openai/openai-agents-python/main/.agents/skills/pr-draft-summary/SKILL.md): Paste-ready PR block — `## Branch name suggestion` / `## Title` / `## Description`
-- [docs-sync](https://raw.githubusercontent.com/openai/openai-agents-python/main/.agents/skills/docs-sync/SKILL.md): Categorized report — Doc-first findings / Code-first gaps / Incorrect-outdated / Structural suggestions / Proposed edits
-- [implementation-strategy](https://raw.githubusercontent.com/openai/openai-agents-python/main/.agents/skills/implementation-strategy/SKILL.md): One-liner — `Compatibility boundary: latest release tag v0.x.y; branch-local rewrite, no shim needed.`
-- [solo-review](https://clawhub.ai/skills/solo-review): 12-section report with per-dimension `Status: {PASS / WARN / FAIL}` → `Verdict: {SHIP / FIX FIRST / BLOCK}`
-- [skill-reviewer](https://raw.githubusercontent.com/openclaw/skills/main/skills/gitgoodordietrying/skill-reviewer/SKILL.md): `SKILL REVIEW SCORECARD` with Category/Score/Max table → TOTAL/53 → RATING → VERDICT
-- [review-code](https://clawhub.ai/skills/review-code): Findings with severity + confidence + evidence + fix path
-- [code-review-and-quality](https://github.com/addyosmani/agent-skills/blob/main/skills/code-review-and-quality/SKILL.md): Review checklist template with category checkboxes → Verdict
+- [github](https://clawhub.ai/skills/github): "Interact with GitHub using the `gh` CLI."
+- [mcporter](https://clawhub.ai/skills/mcporter): "Use the `mcporter` CLI..."
+- [nano-pdf](https://clawhub.ai/skills/nano-pdf): "Edit PDFs...using the `nano-pdf` CLI."
+- [obsidian](https://clawhub.ai/skills/obsidian): "...and automate via `obsidian-cli`."
+- [weather](https://clawhub.ai/skills/weather): Mentions `wttr.in` and Open-Meteo by name
+- [himalaya](https://clawhub.ai/skills/himalaya): "CLI to manage emails via IMAP/SMTP. Use `himalaya` to list, read..."
 
 ---
 
-## Pattern 4: Report-Then-Ask-Approval Gate (15+/50)
+## Pattern D: The Arrow Notation (`→`) for Cause/Effect (34% of skills)
 
-**What**: The skill separates analysis from action with an explicit pause: "Report findings, then ask user for approval before modifying anything."
+**What**: Using the `→` arrow character to indicate cause/effect, input/output, or trap/fix relationships.
 
-**Why**: Skills that modify files or state are dangerous without a checkpoint. The gate makes the skill testable in two phases (analysis quality, then action quality). It also builds trust — users review before irreversible changes.
+**Evidence**: **339 skills (34%)** contain `→` in their content. This is dramatically higher than the em-dash rationale pattern (which uses `—`). The arrow is specifically used for directional relationships.
 
-**How**: Insert a "Report" step and an "Ask" step between analysis and action. Use words like "pause", "ask for approval", "wait for confirmation."
+**Why**: The arrow is visually distinct and unambiguous. `Command --dry-run → preview only` tells the agent "when you see this flag, expect this behavior" faster than any prose.
 
 **Skills demonstrating this:**
+- [skill-vetter](https://clawhub.ai/skills/skill-vetter): Arrow-heavy RED FLAGS list — behaviors → reject decision
+- [self-improving-agent](https://clawhub.ai/skills/self-improving-agent): "Workflow improvements → Promote to `AGENTS.md`"
+- [stock-analysis](https://clawhub.ai/skills/stock-analysis): Command/option → outcome mappings
+- [proactive-agent](https://clawhub.ai/skills/proactive-agent): "Autonomous vs Prompted Crons → Know when to use systemEvent vs isolated agentTurn"
 
-- [docs-sync](https://raw.githubusercontent.com/openai/openai-agents-python/main/.agents/skills/docs-sync/SKILL.md): "Provide a report and ask for approval before editing docs."
-- [test-coverage-improver](https://raw.githubusercontent.com/openai/openai-agents-python/main/.agents/skills/test-coverage-improver/SKILL.md): "Ask the user for approval to implement the proposed tests; pause until they agree."
-- [gh-fix-ci](https://raw.githubusercontent.com/openai/skills/main/skills/.curated/gh-fix-ci/SKILL.md): "Create a plan... Implement after approval."
-- [review-code](https://clawhub.ai/skills/review-code): "Before creating or changing local files, present the planned write and ask for user confirmation."
-- [gh-issues](https://raw.githubusercontent.com/openclaw/openclaw/main/skills/gh-issues/SKILL.md): Phase 3 — "Ask the user to confirm which issues to process"
-- [implementation-strategy](https://raw.githubusercontent.com/openai/openai-agents-python/main/.agents/skills/implementation-strategy/SKILL.md): "When to stop and confirm" section listing escalation triggers
-- [solo-review](https://clawhub.ai/skills/solo-review): Reports verdict then signals pipeline (never auto-fixes code — "Review only modifies plan.md, never source code")
+**Usage patterns** (from top-1000):
+- Command → expected output
+- Input/trigger → action to take
+- Condition → destination/target
+- Problem → fix
 
 ---
 
-## Pattern 5: Quick Start / Fast Path (12+/50)
+## Pattern E: The "Quick Start" as Primary Entry Point (21% of skills)
 
-**What**: A compressed 4-6 step version of the full workflow, placed before the detailed instructions.
+**What**: A `## Quick Start` section placed immediately after the title, containing the minimum commands needed to use the skill.
 
-**Why**: Strong models may only need the fast path for straightforward cases. The Quick Start is the "table of contents" for the full workflow — it shows the overall shape before diving into details. This also helps with context: if the model's context is compacted, the Quick Start survives better than detailed steps.
+**Evidence**: 21% of top-1000 skills have `## Quick Start` — the **#1 most common section header**. 14% have `## Notes`, 10% have `## Error Handling`, 10% have `## Setup`. Quick Start is nearly 2x more common than the next pattern.
 
-**How**: Place a `## Quick start` section after Overview with 4-6 numbered steps covering the happy path. Follow it with the detailed `## Workflow` section.
+**Why**: The Quick Start is the skill's ABI. It shows the agent (and the reader) the happy path in 3-6 bash commands. If the Quick Start works, everything else is gravy.
 
 **Skills demonstrating this:**
+- [nano-pdf](https://clawhub.ai/skills/nano-pdf): Entire skill is `## Quick start` + a single code block
+- [weather](https://clawhub.ai/skills/weather): Quick start for two services (wttr.in + Open-Meteo)
+- [video-frames](https://clawhub.ai/skills/video-frames): Quick start with absolute path to bundled script
+- [nano-banana-pro](https://clawhub.ai/skills/nano-banana-pro): "Quick start" then "Default Workflow"
+- [playwright-mcp](https://clawhub.ai/skills/playwright-mcp): Installation → Quick Start
+- [brave-search](https://clawhub.ai/skills/brave-search): Setup → Search
+- [skill-creator](https://clawhub.ai/skills/skill-creator) (72K dl): `## Quick start` is step 1
 
-- [implementation-strategy](https://raw.githubusercontent.com/openai/openai-agents-python/main/.agents/skills/implementation-strategy/SKILL.md): 5-step Quick Start (Identify surface → Determine release tag → Judge risk → Prefer simplest → Add compat only if needed)
-- [test-coverage-improver](https://raw.githubusercontent.com/openai/openai-agents-python/main/.agents/skills/test-coverage-improver/SKILL.md): 6-step Quick Start
-- [final-release-review](https://raw.githubusercontent.com/openai/openai-agents-python/main/.agents/skills/final-release-review/SKILL.md): Quick Start with tag + diff commands
-- [gh-fix-ci](https://raw.githubusercontent.com/openai/skills/main/skills/.curated/gh-fix-ci/SKILL.md): Quick Start with single script command
-- All 5 OpenAI curated skills ([imagegen](https://github.com/openai/skills/blob/main/skills/.curated/imagegen/SKILL.md), [sora](https://github.com/openai/skills/blob/main/skills/.curated/sora/SKILL.md), [speech](https://github.com/openai/skills/blob/main/skills/.curated/speech/SKILL.md), [doc](https://github.com/openai/skills/blob/main/skills/.curated/doc/SKILL.md), gh-fix-ci)
+**Recipe**:
+```markdown
+# <Skill Name>
+One paragraph of what and when.
+
+## Quick Start
+```bash
+<command 1>  # comment showing expected output
+<command 2>
+<command 3>
+```
+```
 
 ---
 
-## Pattern 6: Script-Backed Determinism (12+/50)
+## Pattern F: Scripts Use `argparse` + `--json` Flag (Python, 32% + 18%)
 
-**What**: Critical operations run via scripts (`scripts/run.sh`, `scripts/inspect.py`) rather than prose instructions.
+**What**: Python scripts in top-1000 skills overwhelmingly use `argparse` for CLI args and frequently support `--json` for machine-readable output.
 
-**Why**: The agent cannot improvise the verification sequence or API call format when it runs a script. Scripts handle failure modes (field drift, fallbacks, error formatting) that prose instructions handle unreliably. A single script eliminates an entire class of agent improvisation errors.
+**Evidence** (from 889 analyzed scripts):
+- **32%** of all scripts use `argparse`
+- **18%** implement a `--json` output flag
+- **45%** have a `main()` function or `if __name__ == "__main__":` entry
+- **12%** include a help/usage printer
+- Only **1%** use `click` (the more modern alternative)
 
-**How**: Place executable scripts in `scripts/`. Reference them from SKILL.md with exact invocation syntax. Provide a manual fallback in case the script is unavailable.
+**Why**: `argparse` produces consistent help text. Agents can call `script.py --help` and parse the output. The `--json` flag separates human-readable (default) from machine-consumable output — the same script serves both audiences.
 
 **Skills demonstrating this:**
-
-- [code-change-verification](https://playbooks.com/skills/openai/openai-agents-python/code-change-verification): `scripts/run.sh` (fail-fast format→lint→mypy→tests)
-- [gh-fix-ci](https://raw.githubusercontent.com/openai/skills/main/skills/.curated/gh-fix-ci/SKILL.md): `scripts/inspect_pr_checks.py` (GitHub API with field-drift fallbacks)
-- [final-release-review](https://raw.githubusercontent.com/openai/openai-agents-python/main/.agents/skills/final-release-review/SKILL.md): `scripts/find_latest_release_tag.sh` (tag lookup from remote)
-- [imagegen](https://github.com/openai/skills/blob/main/skills/.curated/imagegen/SKILL.md): `scripts/image_gen.py` (API wrapper)
-- [sora](https://github.com/openai/skills/blob/main/skills/.curated/sora/SKILL.md): `scripts/sora.py` (video generation CLI)
-- [speech](https://github.com/openai/skills/blob/main/skills/.curated/speech/SKILL.md): `scripts/text_to_speech.py`
-- [doc](https://github.com/openai/skills/blob/main/skills/.curated/doc/SKILL.md): `scripts/render_docx.py`
-- [pr-commit-workflow](https://github.com/openclaw/skills/tree/main/skills/joshp123/pr-commit-workflow/SKILL.md): `scripts/build_pr_body.sh`
-- [review-pr](https://playbooks.com/skills/openclaw/openclaw/review-pr): `scripts/pr-review`, `scripts/pr review-checkout-main`
+- [gh-fix-ci](https://raw.githubusercontent.com/openai/skills/main/skills/.curated/gh-fix-ci/SKILL.md) (OpenAI): `scripts/inspect_pr_checks.py` with `--json`
+- [stock-analysis](https://clawhub.ai/skills/stock-analysis): 7 Python scripts, all with argparse
+- [polymarket-trade](https://clawhub.ai/skills/polymarket-trade): `scripts/polymarket.py` with full argparse
+- [nano-banana-pro](https://clawhub.ai/skills/nano-banana-pro): `scripts/generate_image.py` with `--prompt` / `--filename` flags
+- [tavily-search](https://clawhub.ai/skills/openclaw-tavily-search): `scripts/tavily_search.py` with `--query` / `--max-results`
 
 ---
 
-## Pattern 7: Decision Table (Category → Action) (8+/50)
+## Pattern G: Bash Scripts Use `set -euo pipefail` (17% of scripts)
 
-**What**: When the workflow involves classification, the skill provides a lookup table where each row maps a category to a prescribed action. Critically, it includes what does NOT qualify alongside what does.
+**What**: Bash scripts in skills opt into fail-fast mode with `set -e` (exit on error), `set -u` (error on undefined vars), and `set -o pipefail` (pipe failures propagate).
 
-**Why**: Prose classification is unreliable — agents interpret ambiguous text differently on each run. A lookup table makes classification deterministic. The "non-qualifying" rows are as important as the qualifying ones — without them, agents default to the most conservative interpretation.
+**Evidence**: **17%** of analyzed scripts include `set -euo pipefail` or a subset. **90%** start with a shebang. Only **10%** use `time.sleep`/rate limiting.
 
-**How**: Create a table or bullet list where each row is `[Category]: [Action]`. Add a separate list for non-qualifying categories. Use concrete examples, not abstract descriptions.
+**Why**: Agents can't always distinguish partial success from complete success. A bash script that fails on line 3 but exits 0 because of silent pipe failures gives the agent a false "success" signal. `set -euo pipefail` eliminates this failure mode.
 
 **Skills demonstrating this:**
-
-- [implementation-strategy](https://raw.githubusercontent.com/openai/openai-agents-python/main/.agents/skills/implementation-strategy/SKILL.md): 5-row compatibility table — "Released public API → preserve" / "Branch-local changes → rewrite directly" / "Internal helpers → update directly"
-- [final-release-review](https://raw.githubusercontent.com/openai/openai-agents-python/main/.agents/skills/final-release-review/SKILL.md): Blocking triggers (4 conditions) + Non-blocking list (3 conditions that look scary but aren't blocking)
-- [imagegen](https://github.com/openai/skills/blob/main/skills/.curated/imagegen/SKILL.md): Image type taxonomy — photorealistic-natural / product-mockup / etc. → each maps to specific composition constraints
-- [code-review-and-quality](https://github.com/addyosmani/agent-skills/blob/main/skills/code-review-and-quality/SKILL.md): 5-axis review (correctness / readability / architecture / security / performance)
-- [solo-review](https://clawhub.ai/skills/solo-review): Verdict logic — SHIP when [all conditions] / FIX FIRST when [conditions] / BLOCK when [conditions]
-- [review-code](https://clawhub.ai/skills/review-code): Severity + confidence calibration table
-- [skill-reviewer](https://raw.githubusercontent.com/openclaw/skills/main/skills/gitgoodordietrying/skill-reviewer/SKILL.md): Score thresholds — 45+ Excellent / 35-44 Good / 25-34 Fair / <25 Poor → PUBLISH / REVISE / REWORK
-- [shipping-and-launch](https://github.com/addyosmani/agent-skills/blob/main/skills/shipping-and-launch/SKILL.md): Staged rollout strategy table
+- [code-change-verification](https://playbooks.com/skills/openai/openai-agents-python/code-change-verification) (OpenAI): `scripts/run.sh` with `set -euo pipefail`
+- [self-improving-agent](https://clawhub.ai/skills/self-improving-agent): `scripts/error-detector.sh` fails fast on missing env
+- [pollyreach](https://clawhub.ai/skills/pollyreach) (96K dl): 6 bash scripts with strict mode
+- [github-deploy-skill](https://playbooks.com/skills/openclaw/skills/github-deploy-skill): Fail-fast pattern
 
 ---
 
-## Pattern 8: Exact Input Collection Commands (8+/50)
+## Pattern H: Idempotent Setup Blocks (Evidence: top skills)
 
-**What**: The skill specifies exact shell commands to gather inputs, often with "(do not ask the user)."
+**What**: Initialization commands that check for existence before creating, making the setup script safe to run repeatedly.
 
-**Why**: Without exact commands, agents either ask the user for information they could gather themselves, or they improvise unreliable alternatives. The "(do not ask)" directive is critical — without it, agents default to prompting.
+**Evidence**: While specific patterns are hard to count corpus-wide, the top-downloaded memory skills all use this pattern.
 
-**How**: List each input with its exact command. Include fallbacks for when the primary command fails. Add "(do not ask the user)" when inputs should be auto-gathered.
+**Why**: Agents don't remember across sessions by default. On every new session, the skill may re-run its setup. If setup isn't idempotent, re-running overwrites user data.
 
 **Skills demonstrating this:**
+- [self-improving-agent](https://clawhub.ai/skills/self-improving-agent) (398K dl, #1 on ClawHub):
+  ```bash
+  mkdir -p .learnings
+  [ -f .learnings/LEARNINGS.md ] || printf "# Learnings\n..." > .learnings/LEARNINGS.md
+  [ -f .learnings/ERRORS.md ] || printf "# Errors\n..." > .learnings/ERRORS.md
+  ```
+  Explicitly notes: "Never overwrite existing files. This is a no-op if `.learnings/` is already initialised."
+- [proactive-agent](https://clawhub.ai/skills/proactive-agent): WAL protocol with idempotent init
+- [elite-longterm-memory](https://clawhub.ai/skills/elite-longterm-memory): Idempotent multi-layer setup
+- [memory-setup](https://clawhub.ai/skills/memory-setup): Config additions are non-destructive merges
 
-- [pr-draft-summary](https://raw.githubusercontent.com/openai/openai-agents-python/main/.agents/skills/pr-draft-summary/SKILL.md): 8 exact commands — `git rev-parse --abbrev-ref HEAD`, `git status -sb`, `git diff --name-only`, etc. Header: "Inputs to Collect Automatically (do not ask the user)"
-- [final-release-review](https://raw.githubusercontent.com/openai/openai-agents-python/main/.agents/skills/final-release-review/SKILL.md): `git diff --stat`, `git log --oneline --reverse`, `git diff --name-status`
-- [implementation-strategy](https://raw.githubusercontent.com/openai/openai-agents-python/main/.agents/skills/implementation-strategy/SKILL.md): Tag lookup with fallback — `$(.agents/skills/final-release-review/scripts/find_latest_release_tag.sh origin 'v*' 2>/dev/null || git tag -l 'v*' --sort=-v:refname | head -n1)`
-- [docs-sync](https://raw.githubusercontent.com/openai/openai-agents-python/main/.agents/skills/docs-sync/SKILL.md): Targeted search — `rg "Settings"`, `rg "Config"`, `rg "os.environ"`, `rg "OPENAI_"`
-- [gh-issues](https://raw.githubusercontent.com/openclaw/openclaw/main/skills/gh-issues/SKILL.md): `git remote get-url origin` with HTTPS/SSH parsing, `curl -s -H "Authorization: Bearer $GH_TOKEN"` for API calls
-- [solo-review](https://clawhub.ai/skills/solo-review): Per-stack commands — `npm test -- --coverage`, `uv run pytest`, `swift test`
-- [test-coverage-improver](https://raw.githubusercontent.com/openai/openai-agents-python/main/.agents/skills/test-coverage-improver/SKILL.md): `make coverage`, `coverage report -m`
-- [gh-fix-ci](https://raw.githubusercontent.com/openai/skills/main/skills/.curated/gh-fix-ci/SKILL.md): `gh auth status`, `gh pr view --json`, `gh run view --log`
+**The canonical idempotent pattern in bash**:
+```bash
+mkdir -p <dir>                           # -p = idempotent mkdir
+[ -f <file> ] || echo "<content>" > <file>  # create only if missing
+```
 
 ---
 
-## Pattern 9: Reference File Architecture (10+/50)
+## Pattern I: The "Overview / What's New" Header Stack (5% of skills)
 
-**What**: Large skills split into a lean SKILL.md (navigation + workflow) and reference files (depth). SKILL.md tells the agent *at which step* to read each reference.
+**What**: A header stack at the top of SKILL.md showing version, what's new in the latest release, what's new in previous releases — before any workflow content.
 
-**Why**: SKILL.md loads entirely into context on activation. If it's 1000 lines, that's ~5000 tokens competing with everything else. Reference files load only when explicitly read — zero cost until needed. This lets skills carry deep expertise without paying the context cost upfront.
+**Evidence**: Observed in mature/multi-version top skills. [proactive-agent](https://clawhub.ai/skills/proactive-agent) has: `## What's New in v3.1.0` → `## What's in v3.0.0` → `## The Three Pillars`. [stock-analysis](https://clawhub.ai/skills/stock-analysis) has: `## What's New in v6.2` → `## What's in v6.1` → `## What's in v6.0`. [self-improving-agent](https://clawhub.ai/skills/self-improving-agent) has 28 versions and uses the same pattern.
 
-**How**: Keep SKILL.md under 500 lines. Move detailed checklists, API docs, sample prompts, and templates to `references/`. In SKILL.md, reference files at the specific workflow step: "Walk through the categories in `references/checklist.md` when analyzing risk."
+**Why**: Skills evolve. A returning user (or agent with cached context) needs to know what changed. Placing version history at the top ensures deltas are seen first — before the main content.
 
 **Skills demonstrating this:**
+- [proactive-agent](https://clawhub.ai/skills/proactive-agent): "What's New in v3.1.0" / "What's in v3.0.0"
+- [stock-analysis](https://clawhub.ai/skills/stock-analysis): 3 "What's in vN" sections
+- [self-improving-agent](https://clawhub.ai/skills/self-improving-agent): 28 versions with changelog
 
-- [review-code](https://clawhub.ai/skills/review-code): **8 reference files** — `setup.md`, `memory-template.md`, `review-workflow.md`, `severity-and-confidence.md`, `language-risk-checklists.md`, `test-impact-playbook.md`, `comment-templates.md`, `patch-strategy.md`
-- [imagegen](https://github.com/openai/skills/blob/main/skills/.curated/imagegen/SKILL.md): 5 refs — `cli.md`, `image-api.md`, `prompting.md`, `sample-prompts.md`, `codex-network.md`
-- [sora](https://github.com/openai/skills/blob/main/skills/.curated/sora/SKILL.md): 5 refs — `cli.md`, `video-api.md`, `prompting.md`, `sample-prompts.md`, `troubleshooting.md`
-- [speech](https://github.com/openai/skills/blob/main/skills/.curated/speech/SKILL.md): 5 refs — `cli.md`, `audio-api.md`, `voice-directions.md`, `prompting.md`, `sample-prompts.md`
-- [runtime-behavior-probe](https://github.com/openai/openai-agents-python/blob/main/.agents/skills/runtime-behavior-probe/SKILL.md): 4 refs — `validation-matrix.md`, `error-cases.md`, `openai-runtime-patterns.md`, `reporting-format.md`
-- [final-release-review](https://raw.githubusercontent.com/openai/openai-agents-python/main/.agents/skills/final-release-review/SKILL.md): 1 ref — `references/review-checklist.md`
-- [docs-sync](https://raw.githubusercontent.com/openai/openai-agents-python/main/.agents/skills/docs-sync/SKILL.md): 1 ref — `references/doc-coverage-checklist.md`
+**The shape**:
+```markdown
+# Skill Name (optional emoji)
+Brief tagline.
+
+## What's New in v3.1.0
+- Bullet 1
+- Bullet 2
+
+## What's in v3.0.0  (keep for context)
+- Earlier features
+```
 
 ---
 
-## Pattern 10: Severity / Confidence Labeling (7+/50)
+## Pattern J: The "Three Pillars" / Branded Philosophy Opening (Top skills)
 
-**What**: Each finding gets a severity label, and often a confidence score. The labels have explicit definitions.
+**What**: Top-tier skills open with a branded conceptual framework — typically 3 principles — before any practical content. This differentiates the skill from its imitators.
 
-**Why**: Without labels, agents treat all findings as equally important. Users waste time on optional suggestions while missing critical issues. The labeling system creates a triage protocol inside the skill.
-
-**How**: Define 3-5 severity levels with one-line definitions. Optionally add confidence (high/medium/low). Require that every finding carries a label.
+**Evidence**: Observed in the most sophisticated top-20 skills but not in the commodity ones.
 
 **Skills demonstrating this:**
+- [proactive-agent](https://clawhub.ai/skills/proactive-agent) (145K dl): "The Three Pillars — Proactive / Persistent / Self-improving" with ✅ bullet points
+- [humanizer](https://clawhub.ai/skills/humanizer) (92K dl): Personality/Content/Language/Style/Communication pillars
+- [elite-longterm-memory](https://clawhub.ai/skills/elite-longterm-memory) (52K dl): "5 Memory Layers" framework
+- [self-improving-agent](https://clawhub.ai/skills/self-improving-agent): Learnings/Errors/Features — 3 entry types
 
-- [final-release-review](https://raw.githubusercontent.com/openai/openai-agents-python/main/.agents/skills/final-release-review/SKILL.md): **🟢 LOW** / **🟡 MODERATE** / **🔴 HIGH** with definitions — LOW: "low blast radius, clearly covered", MODERATE: "plausible regression, needs validation", HIGH: "confirmed release-blocking"
-- [code-review-and-quality](https://github.com/addyosmani/agent-skills/blob/main/skills/code-review-and-quality/SKILL.md): (no prefix)=required, `Critical:`=blocks, `Nit:`=optional, `Optional:`/`Consider:`=suggestion, `FYI`=informational
-- [solo-review](https://clawhub.ai/skills/solo-review): Per-dimension PASS/WARN/FAIL → overall SHIP/FIX FIRST/BLOCK
-- [review-code](https://clawhub.ai/skills/review-code): Severity + confidence calibration with rules in `references/severity-and-confidence.md`
-- [skill-reviewer](https://raw.githubusercontent.com/openclaw/skills/main/skills/gitgoodordietrying/skill-reviewer/SKILL.md): Defects categorized as Critical (blocks publishing) / Major (should fix) / Minor (nice to fix)
-- [review-pr](https://playbooks.com/skills/openclaw/openclaw/review-pr): Structured JSON findings with severity levels
-- Devin 2.1 confidence ratings: 🟢🟡🔴 ([source](https://cognition.ai/blog/devin-2-1))
+**Why**: This is marketing within the SKILL.md. A pillars framework makes the skill memorable and gives users vocabulary to describe it. It signals "this skill has a point of view."
+
+**When to use**: Only for skills that genuinely introduce a new concept. Don't invent pillars for a simple API wrapper.
 
 ---
 
-## Pattern 11: Anti-Sycophancy / Anti-Rationalization Clauses (5+/50, pioneering)
+## Pattern K: Aggressive Cross-Linking via Related Skills (5% of skills)
 
-**What**: Explicit instructions counteracting known LLM failure modes — agreeing too easily, softening criticism, claiming success without evidence.
+**What**: A `## Related Skills` section listing 4-8 complementary skills with install commands, creating explicit skill ecosystems.
 
-**Why**: LLMs are trained on helpful, agreeable text and default to rationalizing problems away. Without counter-instructions, review skills rubber-stamp, gate skills green-light everything, and verification skills declare success prematurely. This pattern names the failure mode and pre-programs the correct response.
+**Evidence**: 5% of top-1000 have this section — but within top-20 authors like steipete (44 skills) and byungkyu (70 skills), ALL skills cross-reference others in their family.
 
-**How**: Add a "Common Traps" or "Rationalizations" section. Each row: a thought the agent might have → the correct reality. Place near the bottom (recency bias helps it stick).
+**Why**: Skills work better together. A `review-code` skill that references `git`, `typescript`, `ci-cd`, and `devops` tells the agent the full toolchain. This creates upward pull: installing one skill creates gravitational interest in the author's others.
 
 **Skills demonstrating this:**
+- [review-code](https://clawhub.ai/skills/review-code): Links to `code`, `git`, `typescript`, `ci-cd`, `devops`
+- [docker](https://clawhub.ai/skills/docker): Links to devops, deploy, linux
+- [word-docx](https://clawhub.ai/skills/word-docx) (ivangdavila): Links to other Office skills
+- [excel-xlsx](https://clawhub.ai/skills/excel-xlsx) (ivangdavila): Same pattern — consistent author voice
 
-- [code-review-and-quality](https://github.com/addyosmani/agent-skills/blob/main/skills/code-review-and-quality/SKILL.md): "Don't rubber-stamp. 'LGTM' without evidence helps no one." / "Don't soften real issues. Sycophancy is a failure mode." / "Push back on approaches with clear problems."
-- [solo-review](https://clawhub.ai/skills/solo-review): Rationalizations Catalog — `"Tests were passing earlier" → Run them NOW` / `"Good enough to ship" → Quantify. Show the numbers.` / `"I already checked this" → Fresh evidence only.`
-- [review-code](https://clawhub.ai/skills/review-code): "Reporting opinions as facts → credibility drops" / "Calling something 'probably fine' without tests → silent regressions"
-- [implementation-strategy](https://raw.githubusercontent.com/openai/openai-agents-python/main/.agents/skills/implementation-strategy/SKILL.md): "Do not preserve a confusing abstraction just because it exists" / "If review feedback claims breaking, verify against release tag before accepting"
-- [final-release-review](https://raw.githubusercontent.com/openai/openai-agents-python/main/.agents/skills/final-release-review/SKILL.md): "never produce a BLOCKED call without concrete evidence" / "If evidence is incomplete, issue GREEN LIGHT with follow-ups instead of BLOCKED"
+**The format**:
+```markdown
+## Related Skills
+
+Install with `clawhub install <name>` if user confirms:
+
+- `code` — implementation workflow that complements review findings
+- `git` — safer branch, diff, and commit handling during remediation
+- `typescript` — stricter typing and runtime safety review for TS-heavy codebases
+```
 
 ---
 
-## Pattern 12: Post-Action Verification (10+/50)
+## Pattern L: Version Pinning in Title (16 skills in top 1000)
 
-**What**: After the skill acts, it re-runs a check to verify the action succeeded.
+**What**: Including the skill's version number in the `# Title`, making the version visible in the agent's rendered view.
 
-**Why**: Actions fail silently. Without verification, the agent declares success on a broken state. The verification step closes the loop.
+**Evidence**: 16 top-1000 skills have titles like `# Stock Analysis v6.1`, `# SkillScan v1.1.5`, `# Self-Improvement Skill`. Low frequency but distinct pattern.
 
-**How**: After the action step, add: "Run [verification command]. Compare output to expected result. If fails, return to step N. After 3 failed attempts, report and stop."
+**Why**: When the agent (or reader) sees a version in the title, they immediately know if the skill matches their expectations. Also signals "this is actively maintained."
 
 **Skills demonstrating this:**
-
-- [code-change-verification](https://playbooks.com/skills/openai/openai-agents-python/code-change-verification): The entire skill IS the verification step
-- [test-coverage-improver](https://raw.githubusercontent.com/openai/openai-agents-python/main/.agents/skills/test-coverage-improver/SKILL.md): "After implementation: Rerun coverage, report the updated summary."
-- [docs-sync](https://raw.githubusercontent.com/openai/openai-agents-python/main/.agents/skills/docs-sync/SKILL.md): "Build docs with `make build-docs` after edits to verify the docs site still builds."
-- [gh-fix-ci](https://raw.githubusercontent.com/openai/skills/main/skills/.curated/gh-fix-ci/SKILL.md): "After changes, suggest re-running the relevant tests and `gh pr checks` to confirm."
-- [solo-review](https://clawhub.ai/skills/solo-review): "Verification Gate: No verdict without fresh evidence. Run actual test/build/lint commands. Read full output. Confirm output matches your claim. Only then write the verdict."
-- [gh-issues](https://raw.githubusercontent.com/openclaw/openclaw/main/skills/gh-issues/SKILL.md): Sub-agent must "TEST — Run the relevant tests. If tests fail, attempt ONE retry."
+- [stock-analysis](https://clawhub.ai/skills/stock-analysis): `# Stock Analysis v6.1`
+- [skillscan](https://clawhub.ai/skills/skillscan): `# SkillScan v1.1.5`
+- [proactive-agent](https://clawhub.ai/skills/proactive-agent): Version in first `##` section
 
 ---
 
-## Pattern 13: Scoring Rubric with Numeric Grades (5+/50, pioneering)
+## Pattern M: Zero-Section Skills (~4%)
 
-**What**: The skill defines a numeric scoring system so the agent grades findings consistently across runs.
+**What**: Top-downloaded skills with **zero `##` section headers** — just a title, opening paragraph, and flat content.
 
-**Why**: "Is this good?" produces different answers every run. "Score this 0-8 on these criteria" produces consistent results. Rubrics make evaluation deterministic and comparable over time.
-
-**How**: Define scoring criteria as `[N points] condition`. Provide GOOD/BAD examples for each. Sum to a total with threshold verdicts.
+**Evidence**: 4% of top-1000 skills have zero `##` sections. These are not low-quality — they're deliberately flat for skills that wrap simple tools.
 
 **Skills demonstrating this:**
+- [gog](https://clawhub.ai/skills/gog) (158K dl)
+- [sonoscli](https://clawhub.ai/skills/sonoscli) (78K dl)
+- [openai-whisper](https://clawhub.ai/skills/openai-whisper) (70K dl)
+- [mcporter](https://clawhub.ai/skills/mcporter) (57K dl)
+- [blogwatcher](https://clawhub.ai/skills/blogwatcher) (35K dl)
 
-- [skill-reviewer](https://raw.githubusercontent.com/openclaw/skills/main/skills/gitgoodordietrying/skill-reviewer/SKILL.md): **53-point rubric** across 8 categories — Description/8 (e.g., "[2] Starts with active verb, GOOD: 'Write Makefiles...' BAD: 'This skill covers...'"), Metadata/4, Example density/3, Organization/6, Actionability/10, Tips/8. Thresholds: 45+ Excellent → PUBLISH, 35-44 Good → REVISE, <25 Poor → REWORK
-- [solo-review](https://clawhub.ai/skills/solo-review): Per-dimension status → three-level verdict
-- [review-code](https://clawhub.ai/skills/review-code): Calibrated severity + confidence scoring in `references/severity-and-confidence.md`
-- [code-review-and-quality](https://github.com/addyosmani/agent-skills/blob/main/skills/code-review-and-quality/SKILL.md): Implicit scoring — 5-axis pass/fail with severity labels
-- Devin 2.1 confidence scores (1-10 internal) → 🟢🟡🔴 external ([source](https://cognition.ai/blog/devin-2-1))
+**Why**: For a skill whose entire purpose is "here's a CLI tool and 5 canonical commands," section headers add structure without adding value. Flat content is easier to scan.
+
+**The lesson**: Section hierarchy is a tool, not a requirement. Use it when you have branches in the workflow. Skip it for linear content.
 
 ---
 
-## Pattern 14: Checklist as Structural Backbone (8+/50)
+## Pattern N: Structured Memory Entry IDs (pioneering, <1%)
 
-**What**: The workflow is organized as a checklist of binary checks. Each item is pass/fail.
+**What**: A structured ID format for log entries, enabling cross-reference and promotion across sessions. Format: `[LRN-YYYYMMDD-XXX]`, `[ERR-YYYYMMDD-XXX]`, `[FEAT-YYYYMMDD-XXX]`.
 
-**Why**: Checklists convert judgment into verification. The agent doesn't decide "is this good?" — it checks each condition. This is more reliable than open-ended evaluation and produces reproducible results.
+**Evidence**: Pioneered by [self-improving-agent](https://clawhub.ai/skills/self-improving-agent) (398K dl, #1 on ClawHub, 3,240 stars). Now copied by [self-improving](https://clawhub.ai/skills/self-improving) (167K dl) and several derivative skills.
 
-**How**: Use `[ ]` checkbox items. Each item is a specific, verifiable condition. Group into categories.
+**Why**: Memory systems accumulate entries. Without stable IDs, cross-referencing is impossible — "the correction from yesterday" is ambiguous. Structured IDs make every entry addressable, promotable, and deletable.
 
 **Skills demonstrating this:**
+- [self-improving-agent](https://clawhub.ai/skills/self-improving-agent): `[LRN-YYYYMMDD-XXX] category` / `[ERR-YYYYMMDD-XXX] skill_or_command_name` / `[FEAT-YYYYMMDD-XXX] capability_name`
+- [self-improving](https://clawhub.ai/skills/self-improving): Similar structured IDs
+- [hippocampus-memory](https://clawhub.ai/skills/hippocampus-memory) (3K dl, 10 scripts): ID-indexed memory
 
-- [skill-reviewer](https://raw.githubusercontent.com/openclaw/skills/main/skills/gitgoodordietrying/skill-reviewer/SKILL.md): `STRUCTURAL CHECKLIST` — `[ ] Valid YAML frontmatter` / `[ ] name field present` / `[ ] "When to Use" section present` / etc. (11 items)
-- [solo-review](https://clawhub.ai/skills/solo-review): 12 dimensions, each a checklist of verifiable conditions
-- [code-review-and-quality](https://github.com/addyosmani/agent-skills/blob/main/skills/code-review-and-quality/SKILL.md): `## The Review Checklist` template — `[ ] I understand what this change does` / `[ ] Edge cases handled` / `[ ] No injection vulnerabilities` / etc.
-- [final-release-review](https://raw.githubusercontent.com/openai/openai-agents-python/main/.agents/skills/final-release-review/SKILL.md): `references/review-checklist.md` — detailed signals organized by category
-- [gh-issues](https://raw.githubusercontent.com/openclaw/openclaw/main/skills/gh-issues/SKILL.md): Pre-flight checks (6 sequential verifications)
-- [openclaw-pr-maintainer](https://github.com/openclaw/openclaw/blob/main/.agents/skills/openclaw-pr-maintainer/SKILL.md): PR triage checklist
-- [shipping-and-launch](https://github.com/addyosmani/agent-skills/blob/main/skills/shipping-and-launch/SKILL.md): Pre-launch checklist
-- [security-and-hardening](https://github.com/addyosmani/agent-skills/blob/main/skills/security-and-hardening/SKILL.md): Security review checklist
+**Why this is pioneering**: Most memory skills use free-form timestamps. Structured IDs enable machine-readable memory operations — the skill can query "all LRN entries in category=correction from the last 30 days."
 
 ---
 
-## Pattern 15: Common Traps / Rationalizations Table (5+/50, pioneering)
+## Pattern O: Prompt Engineering Inside SKILL.md (~15% of skills)
 
-**What**: A two-column table pairing a tempting shortcut or rationalization with the correct reality. Placed near the bottom of the skill (recency bias).
+**What**: The SKILL.md contains first-person or second-person instructional text addressing the agent directly, such as "You are a writing editor..." or "When asked to review code...".
 
-**Why**: This is distinct from Pattern 11 (anti-sycophancy). Pattern 11 is about the agent being too agreeable. This pattern is about the agent taking shortcuts — skipping tests, accepting stale data, conflating "works" with "good." The table format is copy-paste-able and scannable.
+**Evidence**: 3% use first person ("You are a..."), but a broader ~15% address the agent in second person ("When asked to...", "You should...").
 
-**How**: Create a table: `| Rationalization | Reality |`. Each row names a specific tempting thought and its correction.
+**Why**: These skills are essentially system prompts for the agent's subtask. They set persona before giving procedure.
 
 **Skills demonstrating this:**
+- [humanizer](https://clawhub.ai/skills/humanizer) (92K dl): "# Humanizer: Remove AI Writing Patterns — You are a writing editor that identifies and removes signs of AI-generated text..."
+- [admapix](https://clawhub.ai/skills/admapix) (81K dl): "You are an ad intelligence and app analytics assistant..."
+- [clawddocs](https://clawhub.ai/skills/clawddocs) (36K dl): "You are an expert on Clawdbot documentation."
 
-- [solo-review](https://clawhub.ai/skills/solo-review): 6-row table including `"Tests were passing earlier" → "Run them NOW. Code changed since then."` and `"It's just a warning" → "Warnings become bugs. Report them."`
-- [code-review-and-quality](https://github.com/addyosmani/agent-skills/blob/main/skills/code-review-and-quality/SKILL.md): 5-row table including `"It works, that's good enough" → "Working unreadable code creates debt"` and `"AI-generated code is probably fine" → "AI code needs more scrutiny, not less"`
-- [review-code](https://clawhub.ai/skills/review-code): "Common Traps" section with 6 anti-patterns
-- [skill-reviewer](https://raw.githubusercontent.com/openclaw/skills/main/skills/gitgoodordietrying/skill-reviewer/SKILL.md): "Common Defects" catalog — Critical / Major / Minor with DETECT/FIX pairs
-- [implementation-strategy](https://raw.githubusercontent.com/openai/openai-agents-python/main/.agents/skills/implementation-strategy/SKILL.md): "Default implementation stance" countering the urge to add unnecessary shims
+**The shape**: `You are [role]. When [trigger], do [action].` — followed by procedural steps.
 
 ---
 
-## Pattern 16: Per-Stack Command Variants (6+/50)
+## Pattern P: Workspace-Injected Multi-File Memory (pioneering)
 
-**What**: When a skill applies to multiple technology stacks, it provides the exact command for each stack.
+**What**: The skill expects (and checks for) specific files at specific workspace paths — `SOUL.md`, `AGENTS.md`, `TOOLS.md`, `MEMORY.md` — treating them as different categories of long-term memory.
 
-**Why**: "Run your tests" doesn't help an agent — it doesn't know whether to use `npm test`, `pytest`, `swift test`, or `cargo test`. Per-stack commands with exact syntax eliminate guesswork and make the skill work across diverse codebases.
-
-**How**: Use if/then or tabular format. Each stack gets its own command block. Include a Makefile fallback where applicable.
+**Evidence**: Pioneered by [self-improving-agent](https://clawhub.ai/skills/self-improving-agent) (398K dl). The OpenClaw platform injects these files into every session. The skill promotes learnings into the appropriate file by category.
 
 **Skills demonstrating this:**
+- [self-improving-agent](https://clawhub.ai/skills/self-improving-agent): Promotes by category — Behavioral → SOUL.md, Workflow → AGENTS.md, Tool gotchas → TOOLS.md
+- [proactive-agent](https://clawhub.ai/skills/proactive-agent): Same workspace file integration
+- [memory-setup](https://clawhub.ai/skills/memory-setup): Configures the workspace file injection
 
-- [solo-review](https://clawhub.ai/skills/solo-review): 4+ stacks for each dimension — Tests: `npm test --coverage` / `uv run pytest` / `swift test`; Lint: `pnpm lint` / `uv run ruff check .` / `swiftlint` / `./gradlew detekt`; Build: `npm run build` / `uv run python -m py_compile`; Logs: `vercel logs` / `wrangler tail` / `fly logs`
-- [github](https://raw.githubusercontent.com/openclaw/openclaw/main/skills/github/SKILL.md): Install via `brew` or `apt`
-- [gh-issues](https://raw.githubusercontent.com/openclaw/openclaw/main/skills/gh-issues/SKILL.md): HTTPS vs SSH URL parsing; `jq` vs `node -e` for JSON parsing
-- [skill-reviewer](https://raw.githubusercontent.com/openclaw/skills/main/skills/gitgoodordietrying/skill-reviewer/SKILL.md): Cross-platform accuracy checklist — macOS `sed -i ''` vs Linux `sed -i`, brew vs apt vs pacman
-- [doc](https://github.com/openai/skills/blob/main/skills/.curated/doc/SKILL.md): `soffice` for DOCX→PDF, `pdftoppm` for PDF→PNG, Python fallback
-- [code-change-verification](https://playbooks.com/skills/openai/openai-agents-js/code-change-verification): `scripts/run.sh` (Unix) + `scripts/run.ps1` (Windows)
+**Why**: Having one `MEMORY.md` means the agent must scan everything for relevance. Categorized files mean the agent loads just the category needed.
 
 ---
 
-## Pattern Summary Table
-
-| # | Pattern | Freq | What | Why | Exemplar |
-|---|---------|------|------|-----|----------|
-| 1 | When to Use / NOT | 30+ | Positive + negative triggers in description | Prevents skill collision | [github](https://raw.githubusercontent.com/openclaw/openclaw/main/skills/github/SKILL.md) |
-| 2 | Numbered Workflow | 25+ | Imperative numbered steps | LLMs execute sequences reliably | [gh-issues](https://raw.githubusercontent.com/openclaw/openclaw/main/skills/gh-issues/SKILL.md) |
-| 3 | Output Template | 20+ | Exact output format with field names | Eliminates per-run variance | [final-release-review](https://raw.githubusercontent.com/openai/openai-agents-python/main/.agents/skills/final-release-review/SKILL.md) |
-| 4 | Report-Then-Approve | 15+ | Analysis → report → ask → act | Safety gate + testable phases | [docs-sync](https://raw.githubusercontent.com/openai/openai-agents-python/main/.agents/skills/docs-sync/SKILL.md) |
-| 5 | Quick Start | 12+ | Compressed fast path before details | Strong models skip detail | [implementation-strategy](https://raw.githubusercontent.com/openai/openai-agents-python/main/.agents/skills/implementation-strategy/SKILL.md) |
-| 6 | Script-Backed | 12+ | Scripts for deterministic operations | Prevents improvisation errors | [code-change-verification](https://playbooks.com/skills/openai/openai-agents-python/code-change-verification) |
-| 7 | Decision Table | 8+ | Category → action lookup | Deterministic classification | [implementation-strategy](https://raw.githubusercontent.com/openai/openai-agents-python/main/.agents/skills/implementation-strategy/SKILL.md) |
-| 8 | Exact Input Commands | 8+ | Shell commands to gather inputs | Prevents asking user + improvisation | [pr-draft-summary](https://raw.githubusercontent.com/openai/openai-agents-python/main/.agents/skills/pr-draft-summary/SKILL.md) |
-| 9 | Reference Files | 10+ | Depth in `references/`, nav in SKILL.md | Context budget efficiency | [review-code](https://clawhub.ai/skills/review-code) |
-| 10 | Severity Labels | 7+ | Graded finding severity | Triage protocol | [code-review-and-quality](https://github.com/addyosmani/agent-skills/blob/main/skills/code-review-and-quality/SKILL.md) |
-| 11 | Anti-Sycophancy | 5+★ | Counter agreeable defaults | LLMs rationalize problems | [solo-review](https://clawhub.ai/skills/solo-review) |
-| 12 | Post-Action Verify | 10+ | Re-check after acting | Catch silent failures | [test-coverage-improver](https://raw.githubusercontent.com/openai/openai-agents-python/main/.agents/skills/test-coverage-improver/SKILL.md) |
-| 13 | Scoring Rubric | 5+★ | Numeric grades per criteria | Deterministic evaluation | [skill-reviewer](https://raw.githubusercontent.com/openclaw/skills/main/skills/gitgoodordietrying/skill-reviewer/SKILL.md) |
-| 14 | Checklist Backbone | 8+ | Binary pass/fail checks | Converts judgment to verification | [skill-reviewer](https://raw.githubusercontent.com/openclaw/skills/main/skills/gitgoodordietrying/skill-reviewer/SKILL.md) |
-| 15 | Traps Table | 5+★ | Rationalization → reality rows | Inoculates against shortcuts | [solo-review](https://clawhub.ai/skills/solo-review) |
-| 16 | Per-Stack Commands | 6+ | Exact commands per technology | Eliminates guesswork | [solo-review](https://clawhub.ai/skills/solo-review) |
-
-★ = pioneering pattern
-
----
-
-*The following patterns were discovered by analyzing an additional 70+ skills from ClawHub community (code, git, docker, memory, python, react, nextjs, linux, deploy, ci-cd, plan, self-improving-agent, etc.), Anthropic official (docx, algorithmic-art, frontend-design), Vercel (react-best-practices, web-design-guidelines), Stripe (stripe-best-practices), Sentry (sentry-fix-issues), Trail of Bits (agentic-actions-auditor), and the full addyosmani/agent-skills pack (19 skills).*
-
----
-
-## Pattern 17: Common Traps / Gotchas as Primary Content (20+/50)
-
-**What**: A dedicated section (often the longest) listing domain-specific pitfalls, each as a one-liner pairing the trap with its fix, using an em-dash separator.
-
-**Why**: For reference/advisory skills (git, docker, linux, typescript), traps ARE the value. Developers don't need a workflow — they need to know what will bite them. Structuring content as traps is more useful than structuring it as tutorials, because agents encounter problems mid-task and need the specific fix.
-
-**How**: Create sections named "Common Traps", "Gotchas", or "\<Domain\> Traps". Each bullet: `Trap description — Fix or correct approach`. Group traps by subcategory.
-
-**Skills demonstrating this:**
-
-- [docker](https://clawhub.ai/skills/docker): **6 trap categories** — Image Traps, Runtime Traps, Networking Traps, Compose Traps, Volume Traps, Resource Leaks. E.g.: "Running as root in container — Add `USER nonroot` in Dockerfile"
-- [git](https://clawhub.ai/skills/git): "Common Traps" section + "Recovery Commands" section. E.g.: "Force-pushing shared branches — Use `--force-with-lease` instead"
-- [linux](https://clawhub.ai/skills/linux): ENTIRE skill is traps — Permission Traps, Process Gotchas, Filesystem Traps, SSH Traps, Commands That Lie
-- [typescript](https://clawhub.ai/skills/typescript): Stop Using `any`, Narrowing Failures, Literal Type Traps, Inference Limits
-- [python](https://clawhub.ai/skills/python): Anti-patterns to Avoid section with ✅/❌ code pairs
-- [react](https://clawhub.ai/skills/react): Common Traps (Rendering / Hooks / Data Fetching subsections)
-- [nextjs](https://clawhub.ai/skills/nextjs): Common Traps table (trap → fix)
-- [devops](https://clawhub.ai/skills/devops): Common Mistakes section
-- [ci-cd](https://clawhub.ai/skills/ci-cd): Common Pipeline Pitfalls table (mistake → impact → fix)
-- [deploy](https://clawhub.ai/skills/deploy): Common Mistakes section
-
----
-
-## Pattern 18: ✅/❌ Code Contrast Pairs (10+/50)
-
-**What**: Showing the wrong way and right way as adjacent code blocks, marked with ✅ and ❌.
-
-**Why**: Models learn by contrast. Showing ONLY the correct way leaves the agent uncertain about what to avoid. Showing both — with visual markers — creates a clear boundary. Research on instruction-following confirms that negative examples reduce misfires.
-
-**How**: Place bad example (❌) first, then good example (✅) immediately after. Use the same scenario for both so the contrast is clear.
-
-**Skills demonstrating this:**
-
-- [python](https://clawhub.ai/skills/python): ✅/❌ for PEP 8 patterns, import style, type hints
-- [react](https://clawhub.ai/skills/react): ✅/❌ for component patterns, hooks usage, state management
-- [typescript](https://clawhub.ai/skills/typescript): ✅/❌ for type narrowing, inference, strict mode
-- [github](https://raw.githubusercontent.com/openclaw/openclaw/main/skills/github/SKILL.md): ✅ "USE this skill when..." / ❌ "DON'T use this skill when..."
-- [skill-reviewer](https://raw.githubusercontent.com/openclaw/skills/main/skills/gitgoodordietrying/skill-reviewer/SKILL.md): GOOD/BAD example pairs for descriptions — `GOOD: "Write Makefiles for any project type." BAD: "This skill covers Makefiles."`
-- [code-review-and-quality](https://github.com/addyosmani/agent-skills/blob/main/skills/code-review-and-quality/SKILL.md): Bad/good comparison for change descriptions
-- All 19 [addyosmani/agent-skills](https://github.com/addyosmani/agent-skills): Bad → Good contrast in verification sections
-
----
-
-## Pattern 19: Rationalizations-to-Reject Table (12+/50)
-
-**What**: A two-column table of `Excuse | Reality` that names specific rationalizations the agent (or human) might use to skip important steps.
-
-**Why**: This is distinct from Pattern 15 (Traps Table) which focuses on *domain* traps. This pattern targets *process* traps — the temptation to skip testing, rubber-stamp reviews, or declare done prematurely. Found in 17/19 Osmani skills, making it one of the most consistent patterns in the most-starred skill pack.
-
-**How**: Table with `| Rationalization | Reality |`. Place near the end (recency bias helps it stick). Target the specific temptations of the skill's domain.
-
-**Skills demonstrating this:**
-
-- All 17 of 19 [addyosmani/agent-skills](https://github.com/addyosmani/agent-skills) — each has a "Common Rationalizations" section. Examples from [code-review-and-quality](https://github.com/addyosmani/agent-skills/blob/main/skills/code-review-and-quality/SKILL.md):
-  - `"It works, that's good enough" → "Working unreadable code creates compound debt"`
-  - `"AI-generated code is probably fine" → "AI code needs MORE scrutiny, not less"`
-  - `"We'll clean it up later" → "Later never comes. Require cleanup now."`
-- [solo-review](https://clawhub.ai/skills/solo-review): 6-row table
-- [review-code](https://clawhub.ai/skills/review-code): "Common Traps" framed as rationalizations
-
----
-
-## Pattern 20: Red Flags Section (8+/50)
-
-**What**: A list of observable warning signs (gerund-phrased behaviors) that indicate process failure, separate from the rationalizations table.
-
-**Why**: While rationalizations are internal thoughts, red flags are observable behaviors that can be detected. An agent can check for red flags in its own behavior or in the codebase it's reviewing. The gerund phrasing ("Skipping...", "Starting...") makes them pattern-matchable.
-
-**How**: List of `- [gerund phrase] [consequence]`. Placed after the main workflow, before or after rationalizations.
-
-**Skills demonstrating this:**
-
-- All 19 [addyosmani/agent-skills](https://github.com/addyosmani/agent-skills) have a "Red Flags" section. From [code-review-and-quality](https://github.com/addyosmani/agent-skills/blob/main/skills/code-review-and-quality/SKILL.md): "PRs merged without any review" / "LGTM without evidence of actual review" / "Large PRs that are too big to review properly (split them)" / "No regression tests with bug fix PRs"
-- [solo-review](https://clawhub.ai/skills/solo-review): Implicit red flags in verdict logic (security issue = BLOCK, failing tests = BLOCK)
-- [review-code](https://clawhub.ai/skills/review-code): "Missing migration and backward-compatibility checks → runtime failures after deploy"
-
----
-
-## Pattern 21: Local Memory / State Directory (8+/50)
-
-**What**: The skill declares a local directory (typically `~/skillname/`) for persisting preferences, findings, and session history across runs.
-
-**Why**: Skills that learn from past runs (coding style, review preferences, decision patterns) need persistent storage. Declaring the path explicitly makes storage transparent, auditable, and cleanable. It also enables skills to build up domain knowledge over time.
-
-**How**: Declare the path in an "Architecture" or "Data Storage" section. Define the file structure. Always require user confirmation before creating or modifying files.
-
-**Skills demonstrating this:**
-
-- [code](https://clawhub.ai/skills/code): `~/code/` — memory.md (preferences), findings/ (per-review logs)
-- [coding](https://clawhub.ai/skills/coding): Coding style memory that "adapts to your preferences, conventions, and patterns"
-- [memory](https://clawhub.ai/skills/memory): `~/memory/` — INDEX.md, categorized storage files. Most comprehensive memory architecture on ClawHub (9.7K downloads)
-- [review-code](https://clawhub.ai/skills/review-code): `~/review-code/` — memory.md, findings/, baselines/, sessions/
-- [decide](https://clawhub.ai/skills/decide): Decision pattern storage with promotion gates
-- [nextjs](https://clawhub.ai/skills/nextjs): `~/nextjs/` for framework-specific preferences
-- [plan](https://clawhub.ai/skills/plan): Outcome tracking with strategy learning
-- [self-improving-agent](https://clawhub.ai/skills/self-improving-agent): Logging format with entry types, ID generation, promotion to project memory (399K downloads, highest on ClawHub)
-
----
-
-## Pattern 22: Related Skills Cross-References (15+/50)
-
-**What**: A "Related Skills" section listing complementary skills with install commands.
-
-**Why**: Skills work better in ecosystems. A code review skill pairs with a git skill, a testing skill, and a CI/CD skill. Cross-references help users build complete workflows and help agents know which other skills to suggest.
-
-**How**: List skill names with one-line descriptions and install commands. Place at the end of the skill.
-
-**Skills demonstrating this:**
-
-- [review-code](https://clawhub.ai/skills/review-code): "code — implementation workflow" / "git — branch, diff, commit handling" / "typescript — typing and runtime safety" / "ci-cd — release-gate checks" / "devops — production risk"
-- [docker](https://clawhub.ai/skills/docker): Related to devops, deploy, linux
-- [git](https://clawhub.ai/skills/git): Related to github, deploy, ci-cd
-- [code](https://clawhub.ai/skills/code): Related to review-code, git, typescript, ci-cd
-- [react](https://clawhub.ai/skills/react): Related to typescript, nextjs, frontend
-- [nextjs](https://clawhub.ai/skills/nextjs): Related to react, typescript, deploy
-- [github-actions](https://clawhub.ai/skills/github-actions): Related to ci-cd, deploy, git
-- All 19 [addyosmani/agent-skills](https://github.com/addyosmani/agent-skills): Cross-reference by name (e.g., "For detailed security guidance, see `security-and-hardening`")
-- [skill-reviewer](https://raw.githubusercontent.com/openclaw/skills/main/skills/gitgoodordietrying/skill-reviewer/SKILL.md): "When comparing skills in the same category" — comparative review template
-
----
-
-## Pattern 23: Security & Privacy Declaration (10+/50)
-
-**What**: An explicit section declaring what data the skill sends externally, what it stores locally, and what it does NOT do.
-
-**Why**: Users and security teams need to audit skill behavior. Post-ClawHavoc (January 2026, 341 malicious skills), transparency declarations became standard on ClawHub. ClawHub's security scan checks whether declared behavior matches actual behavior.
-
-**How**: Three-part structure: "Data that leaves your machine" / "Data stored locally" / "This skill does NOT:" followed by explicit denials.
-
-**Skills demonstrating this:**
-
-- [review-code](https://clawhub.ai/skills/review-code): "Data that leaves: Nothing by default" / "Data stored locally: Review preferences in ~/review-code/" / "This skill does NOT: auto-approve code, make network calls, store credentials, modify its own instructions"
-- [code](https://clawhub.ai/skills/code): External Endpoints table (Endpoint / Data Sent / Purpose) — "None | None | N/A"
-- [github-actions](https://clawhub.ai/skills/github-actions): External Endpoints + Trust section
-- [coding](https://clawhub.ai/skills/coding): Security & Privacy section
-- [memory](https://clawhub.ai/skills/memory): Security & Privacy section
-- [decide](https://clawhub.ai/skills/decide): Security & Privacy section
-- [skill-reviewer](https://raw.githubusercontent.com/openclaw/skills/main/skills/gitgoodordietrying/skill-reviewer/SKILL.md): Includes "Trust" assessment as part of review framework
-- [agentic-actions-auditor](https://github.com/trailofbits/skills) (Trail of Bits): Security auditing skill — security is the core content
-- [stripe-best-practices](https://github.com/stripe/ai) (Stripe): Secret handling constraints
-
----
-
-## Pattern 24: AI-Mistakes-to-Avoid Section (5+/50, pioneering)
-
-**What**: A section explicitly targeting mistakes that AI agents (not humans) commonly make, addressing the agent as "you."
-
-**Why**: LLMs have known failure modes that differ from human mistakes: they hallucinate API parameters, use deprecated syntax, over-engineer simple tasks, and struggle with specific technical patterns (e.g., React hook dependency arrays). Naming these AI-specific mistakes directly reduces their frequency.
-
-**How**: Table or list of `AI Mistake → Correct Approach`, written addressing the agent: "You will be tempted to..." / "AI assistants commonly..."
-
-**Skills demonstrating this:**
-
-- [react](https://clawhub.ai/skills/react): "AI Mistakes to Avoid" — dedicated table of React patterns that AI agents specifically get wrong
-- [code-review-and-quality](https://github.com/addyosmani/agent-skills/blob/main/skills/code-review-and-quality/SKILL.md): "AI-generated code needs more scrutiny, not less"
-- [solo-review](https://clawhub.ai/skills/solo-review): "Never write 'tests should pass' — run them and show the output"
-- [coding](https://clawhub.ai/skills/coding): "Never infer from silence" — explicitly targets AI inference tendency
-- [AGI skill](https://clawhub.ai/skills/agi) (ClawHub): Meta-cognitive self-check — "Would a thoughtful human senior colleague respond this way?"
-
----
-
-## Pattern 25: Em-Dash Rationale Style (15+/50)
-
-**What**: Each rule or bullet point includes a brief rationale after an em-dash (`—`), on the same line.
-
-**Why**: Without rationale, rules feel arbitrary and agents may deprioritize them. With rationale, the agent understands *why* the rule exists and can apply it correctly to edge cases not explicitly covered. The em-dash format keeps it compact (one line per rule+reason).
-
-**How**: `Rule statement — one-line rationale why`. Keep the rationale to 5-15 words.
-
-**Skills demonstrating this:**
-
-- [docker](https://clawhub.ai/skills/docker): "Always pin image tags — `latest` changes without warning"
-- [git](https://clawhub.ai/skills/git): "Never force-push shared branches — rewrites others' history"
-- [devops](https://clawhub.ai/skills/devops): Every bullet uses this format
-- [linux](https://clawhub.ai/skills/linux): Every pitfall uses this format
-- [code](https://clawhub.ai/skills/code): Core Rules use this format
-- [memory](https://clawhub.ai/skills/memory): Core Rules use this format
-- [coding](https://clawhub.ai/skills/coding): Core Rules use this format
-- [deploy](https://clawhub.ai/skills/deploy): Strategy descriptions use this format
-
----
-
-## Pattern 26: Error Handling Section (8,400/58,593 = 14.3%)
-
-**What**: A dedicated section specifying what the agent should do when a step fails — classified by error type, with specific recovery actions.
-
-**Why**: Present in 14.3% of all 58,593 ClawHub skills — one of the most common sections after Quick Start. Without error handling instructions, agents either retry blindly, skip the step, or halt entirely. Explicit error handling turns failures into recoverable states.
-
-**How**: After each critical step, add: "If this fails: [specific recovery action]." For skills with multiple failure modes, create an Error Handling section with error type → action mappings.
-
-**Skills demonstrating this:**
-
-- [gh-issues](https://raw.githubusercontent.com/openclaw/openclaw/main/skills/gh-issues/SKILL.md): "If curl returns HTTP 401 or 403 → stop and tell user to check apiKey" / "If response is empty → report 'No issues found' and stop or loop if watch mode" / "If curl fails → report error verbatim and stop"
-- [gh-fix-ci](https://raw.githubusercontent.com/openai/skills/main/skills/.curated/gh-fix-ci/SKILL.md): "If a field is rejected, rerun with the available fields reported by gh"
-- [solo-review](https://clawhub.ai/skills/solo-review): "Error Handling" section — Tests won't run → check deps; Linter not configured → note as recommendation, not blocker; Build fails → report specific errors, BLOCK verdict
-- [code-change-verification](https://playbooks.com/skills/openai/openai-agents-python/code-change-verification): "If dependencies changed, run `make sync` first" — handles the dep-not-installed failure preemptively
-- [imagegen](https://github.com/openai/skills/blob/main/skills/.curated/imagegen/SKILL.md): References `references/codex-network.md` for network/sandbox troubleshooting
-- 8,400 skills across ClawHub corpus
-
----
-
-## Pattern 27: Troubleshooting Section (5,296/58,593 = 9.0%)
-
-**What**: A known-problem → fix lookup table that addresses specific errors the agent will encounter.
-
-**Why**: 9.0% of all ClawHub skills include this. Domain-specific tools have predictable failure modes. Providing a lookup table of known errors + fixes saves the agent from open-ended debugging. This is especially important for skills wrapping external APIs or CLI tools.
-
-**How**: Create a `## Troubleshooting` section with known errors. Each entry: error symptom → cause → fix command.
-
-**Skills demonstrating this:**
-
-- [sora](https://github.com/openai/skills/blob/main/skills/.curated/sora/SKILL.md): `references/troubleshooting.md` — dedicated troubleshooting reference file
-- [solo-review](https://clawhub.ai/skills/solo-review): "Error Handling" section organized by symptom (Tests won't run / Linter not configured / Build fails)
-- [docker](https://clawhub.ai/skills/docker): 6 trap categories which ARE the troubleshooting content
-- [git](https://clawhub.ai/skills/git): "Recovery Commands" section — specific git commands for specific failure states
-- [linux](https://clawhub.ai/skills/linux): Entire skill is troubleshooting organized by subsystem
-- 5,296 skills across ClawHub corpus
-
----
-
-## Updated Pattern Summary Table
-
-| # | Pattern | Freq | What | Why | Exemplar |
-|---|---------|------|------|-----|----------|
-| 1 | When to Use / NOT | 30+ | +/- triggers in description | Prevent collision | [github](https://raw.githubusercontent.com/openclaw/openclaw/main/skills/github/SKILL.md) |
-| 2 | Numbered Workflow | 25+ | Imperative numbered steps | Reliable execution | [gh-issues](https://raw.githubusercontent.com/openclaw/openclaw/main/skills/gh-issues/SKILL.md) |
-| 3 | Output Template | 20+ | Exact output format | Eliminate variance | [final-release-review](https://raw.githubusercontent.com/openai/openai-agents-python/main/.agents/skills/final-release-review/SKILL.md) |
-| 4 | Report-Then-Approve | 15+ | Analysis → report → ask → act | Safety gate | [docs-sync](https://raw.githubusercontent.com/openai/openai-agents-python/main/.agents/skills/docs-sync/SKILL.md) |
-| 5 | Quick Start | 12+ | Compressed fast path | Strong models skip detail | [implementation-strategy](https://raw.githubusercontent.com/openai/openai-agents-python/main/.agents/skills/implementation-strategy/SKILL.md) |
-| 6 | Script-Backed | 12+ | Scripts for determinism | Prevent improvisation | [code-change-verification](https://playbooks.com/skills/openai/openai-agents-python/code-change-verification) |
-| 7 | Decision Table | 8+ | Category → action lookup | Deterministic classification | [implementation-strategy](https://raw.githubusercontent.com/openai/openai-agents-python/main/.agents/skills/implementation-strategy/SKILL.md) |
-| 8 | Exact Input Commands | 8+ | Shell commands for inputs | Prevent asking/improvising | [pr-draft-summary](https://raw.githubusercontent.com/openai/openai-agents-python/main/.agents/skills/pr-draft-summary/SKILL.md) |
-| 9 | Reference Files | 10+ | Depth in `references/` | Context budget | [review-code](https://clawhub.ai/skills/review-code) |
-| 10 | Severity Labels | 7+ | Graded finding severity | Triage protocol | [code-review-and-quality](https://github.com/addyosmani/agent-skills/blob/main/skills/code-review-and-quality/SKILL.md) |
-| 11 | Anti-Sycophancy | 5+★ | Counter agreeable defaults | LLMs rationalize | [solo-review](https://clawhub.ai/skills/solo-review) |
-| 12 | Post-Action Verify | 10+ | Re-check after acting | Catch silent failures | [test-coverage-improver](https://raw.githubusercontent.com/openai/openai-agents-python/main/.agents/skills/test-coverage-improver/SKILL.md) |
-| 13 | Scoring Rubric | 5+★ | Numeric grades | Deterministic eval | [skill-reviewer](https://raw.githubusercontent.com/openclaw/skills/main/skills/gitgoodordietrying/skill-reviewer/SKILL.md) |
-| 14 | Checklist Backbone | 8+ | Binary pass/fail checks | Judgment → verification | [skill-reviewer](https://raw.githubusercontent.com/openclaw/skills/main/skills/gitgoodordietrying/skill-reviewer/SKILL.md) |
-| 15 | Traps Table | 5+★ | Rationalization → reality | Inoculate shortcuts | [solo-review](https://clawhub.ai/skills/solo-review) |
-| 16 | Per-Stack Commands | 6+ | Exact per-technology cmds | Eliminate guesswork | [solo-review](https://clawhub.ai/skills/solo-review) |
-| **17** | **Domain Traps as Content** | **20+** | **Pitfall + fix as primary content** | **Traps ARE the value** | **[docker](https://clawhub.ai/skills/docker)** |
-| **18** | **✅/❌ Code Contrast** | **10+** | **Bad/good code side-by-side** | **Models learn by contrast** | **[python](https://clawhub.ai/skills/python)** |
-| **19** | **Rationalizations Table** | **12+** | **Excuse → Reality for process traps** | **17/19 Osmani skills** | **[code-review-and-quality](https://github.com/addyosmani/agent-skills/blob/main/skills/code-review-and-quality/SKILL.md)** |
-| **20** | **Red Flags Section** | **8+** | **Observable warning signs** | **Pattern-matchable** | **[addyosmani all 19](https://github.com/addyosmani/agent-skills)** |
-| **21** | **Local Memory Directory** | **8+** | **~/skillname/ for persistence** | **Cross-session learning** | **[memory](https://clawhub.ai/skills/memory)** |
-| **22** | **Related Skills Cross-Refs** | **15+** | **Complementary skill links** | **Ecosystem building** | **[review-code](https://clawhub.ai/skills/review-code)** |
-| **23** | **Security & Privacy Decl.** | **10+** | **Data flow transparency** | **Post-ClawHavoc trust** | **[review-code](https://clawhub.ai/skills/review-code)** |
-| **24** | **AI-Mistakes-to-Avoid** | **5+★** | **Agent-specific failure modes** | **LLMs ≠ humans** | **[react](https://clawhub.ai/skills/react)** |
-| **25** | **Em-Dash Rationale** | **15+** | **Rule — reason in one line** | **Rules without reason feel arbitrary** | **[docker](https://clawhub.ai/skills/docker)** |
-| **26** | **Error Handling Section** | **8,400** | **What to do when steps fail** | **14.3% of all skills; silent failure = broken** | **[gh-issues](https://raw.githubusercontent.com/openclaw/openclaw/main/skills/gh-issues/SKILL.md)** |
-| **27** | **Troubleshooting Section** | **5,296** | **Known-problem → fix lookup table** | **9.0% of all skills; saves debugging time** | **[sora](https://github.com/openai/skills/blob/main/skills/.curated/sora/SKILL.md)** |
+## Pattern Frequency Summary
+
+| Pattern | % of top 1000 | Type |
+|---------|---------------|------|
+| E. Quick Start as primary entry | 21% | Structural |
+| D. Arrow notation (→) | 34% | Syntactic |
+| C. Backtick command identifier in desc | 30% | Description |
+| H. Idempotent setup (evidence in top skills) | 15%+ | Scripting |
+| O. Second-person agent instruction | 15% | Voice |
+| A. API scaffold (7 co-occurring sections) | 7.6% | Template |
+| B. CLI passthrough (<60 lines) | 15% | Minimalist |
+| F. argparse + `--json` (Python scripts) | 32% + 18% | Scripting |
+| G. `set -euo pipefail` (bash scripts) | 17% | Scripting |
+| K. Aggressive cross-linking | 5% | Ecosystem |
+| M. Zero-section skills | 4% | Minimalist |
+| I. Version/What's New header stack | 5% | Maturity signal |
+| L. Version in title | 1.6% | Maturity signal |
+| N. Structured memory entry IDs | <1% | Pioneering |
+| P. Workspace-injected memory files | <1% | Pioneering |
+| J. "Three Pillars" branded opening | <1% | Pioneering |
+
+### Key Takeaways
+
+1. **The API Scaffold** (Pattern A) is a learned template — if you wrap an API, use it verbatim.
+2. **CLI Passthrough** (Pattern B) is legitimate — 4 of the top 6 downloaded skills are under 60 lines.
+3. **Scripts are code, not prose** — 32% use argparse, 45% have main(), 17% use fail-fast bash mode.
+4. **Arrow notation (→) is universal** — 34% of top skills use `→` for cause/effect.
+5. **The top skill pioneered three patterns** that are now being copied: structured memory IDs, workspace-file promotion, and explicit privacy constraints.

@@ -1,296 +1,208 @@
-# Part I: Philosophy — What the Best Skills Teach Us
+# Part I: Philosophy — What the Top 1,000 Downloaded Skills Reveal
 
-This part distills the design philosophy behind the best production skills by inspecting them directly. Every principle here was extracted by reading the actual SKILL.md files that ship in OpenAI's Agents SDK, OpenAI's curated skill catalog, Addy Osmani's engineering skills, and the Anthropic/Cursor/Devin/Manus systems — then asking: *what did the author do, and why?*
+This chapter extracts design philosophy from the **actual top 1,000 most-downloaded skills on ClawHub** (12.5M total downloads, range 3,835–398,524). Data comes from programmatic analysis of 990 matched SKILL.md files plus deep reading of the top 50.
 
-### Sources Inspected
-
-| Skill Set | Where to Read | Star Count |
-|-----------|---------------|------------|
-| OpenAI Agents SDK (9 skills) | [github.com/openai/openai-agents-python/.agents/skills](https://github.com/openai/openai-agents-python/tree/main/.agents/skills) | 21K |
-| OpenAI curated skills (imagegen, sora, speech, doc, gh-fix-ci) | [github.com/openai/skills](https://github.com/openai/skills/tree/main/skills/.curated) | 16K |
-| Addy Osmani's engineering skills (19 skills) | [github.com/addyosmani/agent-skills](https://github.com/addyosmani/agent-skills) | 5K |
-| Anthropic skill authoring guide | [platform.claude.com: best practices](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices) | — |
-| Minko Gechev's authoring guide | [github.com/mgechev/skills-best-practices](https://github.com/mgechev/skills-best-practices) | 1.8K |
-| Manus system prompt (leaked) | [gist.github.com/renschni](https://gist.github.com/renschni/a6c0157cdcdf2db2fc1e7c3e20bff602) | — |
-| Devin system prompt (leaked) | [github.com/hussainasghar](https://github.com/hussainasghar/system-prompts-and-models-of-ai-tools/blob/main/Devin%20AI/devin.txt) | 70 |
-| Agent Skills specification | [agentskills.io/specification](https://agentskills.io/specification) | — |
+Every principle below is backed by empirical frequency across the corpus, not intuition.
 
 ---
 
-## 1.1 A Skill Is a Procedure, Not Documentation
+## Principle 1: Description Starts with an Action Verb or Tool Reference
 
-The single most consistent property of every top-tier skill: **it reads like a run-book, not a wiki page**.
+**Evidence**: 23% of top-1000 descriptions start with an action verb (Create, Build, Generate, Analyze, Search, Run, Manage, Fetch, Extract, Write, Edit, etc.). Another 27% reference a specific tool/CLI/API by backtick name. The average description length is **155 characters**.
 
-Look at [code-change-verification](https://playbooks.com/skills/openai/openai-agents-python/code-change-verification):
+**Why**: The description is the only text the agent reads at startup for every installed skill. An action verb lets the agent immediately determine *what this does*. A tool reference lets the agent match the user's intent (e.g., "use `gh`") directly to the skill.
 
-```markdown
-## Execution
-- If dependencies changed, run `make sync` first.
-- Run from repository root in this order:
-  `make format`, `make lint`, `make mypy`, `make tests`
-```
+**Skills demonstrating this:**
+- [weather](https://clawhub.ai/skills/weather) (136K dl): "Get current weather and forecasts (no API key required)."
+- [nano-pdf](https://clawhub.ai/skills/nano-pdf) (92K dl): "Edit PDFs with natural-language instructions using the `nano-pdf` CLI."
+- [github](https://clawhub.ai/skills/github) (160K dl): "Interact with GitHub using the `gh` CLI."
+- [video-frames](https://clawhub.ai/skills/video-frames) (42K dl): "Extract frames or short clips from videos using ffmpeg."
+- [mcporter](https://clawhub.ai/skills/mcporter) (57K dl): "Use the mcporter CLI to list, configure, auth, and call MCP servers/tools directly..."
 
-Four imperative commands. No background. No explanation of what linting is. No history of why this order was chosen. The agent doesn't need to understand — it needs to execute.
-
-Contrast this with how a junior engineer might write it:
-
-```markdown
-## About Verification
-The verification process is important to ensure code quality.
-Formatting ensures consistent style across the codebase, while
-linting catches common errors. Type checking with mypy provides
-additional safety. Tests verify that existing functionality is
-not broken by new changes.
-```
-
-The second version is informative to a human reader but useless to an agent. The agent can't extract "run `make format` first" from a paragraph about what formatting is.
-
-**Principle 1: Write procedures the agent can execute, not documents the agent can read.**
-
-Addy Osmani encodes this explicitly in [agent-skills](https://github.com/addyosmani/agent-skills): "**Process, not prose.** Skills are workflows agents follow, not reference docs they read."
+**What "Use when:" tells us**: 31% of descriptions include "Use when" — the second most common phrase after the initial verb. But only 0.4% include explicit "Don't use" or "NOT for" — a massive quality gap.
 
 ---
 
-## 1.2 One Job Per Skill
+## Principle 2: A Title Heading Is Mandatory; Everything Else Is Optional
 
-Every OpenAI Agents SDK skill does exactly one thing:
+**Evidence**: **93% of top-1000 skills open with a `# Title` heading** immediately after frontmatter. Only 4% open with `##` directly. This is the most universal formatting convention in the corpus.
 
-| Skill | One Job |
-|-------|---------|
-| `code-change-verification` | Run the verification stack |
-| `implementation-strategy` | Decide compatibility boundary |
-| `final-release-review` | Gate the release |
-| `docs-sync` | Find doc gaps |
-| `pr-draft-summary` | Generate PR description |
-| `test-coverage-improver` | Find and propose coverage improvements |
-| `gh-fix-ci` | Debug a failing CI check |
+**Why**: The title heading gives the skill a visible identity in tools that render Markdown, and serves as an anchor for the agent to know "this is where the skill begins."
 
-No skill tries to do two things. `docs-sync` finds gaps and proposes edits — it doesn't also run the linter. `final-release-review` gates the release — it doesn't also update the changelog.
+**Skills demonstrating this:**
+- Every top-20 skill starts with `# <Skill Name>` (often with emoji) followed by one paragraph of context.
 
-When OpenAI needs code review AND release gating, they use two separate skills with separate triggers. The AGENTS.md file orchestrates when each one runs:
+**Counter-examples (4 skills in top 30 with NO `##` sections at all):**
+- [gog](https://clawhub.ai/skills/gog) (158K dl, 37 lines): Just a title + bullet list
+- [sonoscli](https://clawhub.ai/skills/sonoscli) (78K dl, 27 lines): Title + flat bullet list
+- [openai-whisper](https://clawhub.ai/skills/openai-whisper) (70K dl, 20 lines): Title + quick start code block
+- [mcporter](https://clawhub.ai/skills/mcporter) (57K dl, 39 lines): Title + 3 bullet lists
 
-```markdown
-# From AGENTS.md:
-- Run `$code-change-verification` when runtime code changes.
-- Use `$implementation-strategy` before editing runtime or API changes.
-- Use `$final-release-review` before any release.
-```
-
-**Principle 2: One skill, one job. Orchestrate via AGENTS.md, not by cramming multiple workflows into one file.**
-
-OpenAI's official guidance: "Keep each skill focused on one job." ([Codex skill docs](https://developers.openai.com/codex/skills/create-skill))
+**The philosophy**: Structure is optional for simple CLI-wrapping skills. A 20-line skill wrapping a single CLI tool doesn't need sections — it needs copy-pasteable commands.
 
 ---
 
-## 1.3 The Description Is Routing Logic
+## Principle 3: Bash Code Blocks Are the Dominant Teaching Mechanism
 
-In every top-tier skill, the description field is written as **routing logic** — it tells the agent precisely when to activate, not what the skill conceptually does.
+**Evidence**: 66% of top-1000 skills contain bash/shell code blocks. 78% of all skills contain SOME kind of code block (`` ``` ``). 56% contain markdown tables. In aggregate, **top-1000 skills average 10.6 code blocks each** — roughly one code block per 23 lines.
 
-[pr-draft-summary](https://raw.githubusercontent.com/openai/openai-agents-python/main/.agents/skills/pr-draft-summary/SKILL.md):
+**Why**: Skills aren't documentation; they're procedures. Executable commands are the unit of transfer. Prose describing what `gh pr checks` does is useless — the exact command `gh pr checks 55 --repo owner/repo` is the value.
 
-```yaml
-description: >
-  Create the required PR-ready summary block, branch suggestion,
-  title, and draft description for openai-agents-python. Use in
-  the final handoff after moderate-or-larger changes to runtime
-  code, tests, examples, build/test configuration, or docs with
-  behavior impact; skip only for trivial or conversation-only
-  tasks, repo-meta/doc-only tasks without behavior impact, or
-  when the user explicitly says not to include the PR draft block.
-```
+**Skills demonstrating this:**
+- [github](https://clawhub.ai/skills/github) (48 lines total): 6 bash code blocks. That's 1 code block per 8 lines.
+- [weather](https://clawhub.ai/skills/weather) (50 lines): 4 code blocks covering `curl` invocations.
+- [nano-pdf](https://clawhub.ai/skills/nano-pdf) (21 lines): 1 code block — that IS the skill.
+- [mcporter](https://clawhub.ai/skills/mcporter) (39 lines): 0 code blocks, pure bullet list. Exception, not rule.
 
-This is a decision procedure: IF (moderate-or-larger changes AND touches runtime/tests/examples/config/docs-with-impact) AND NOT (trivial OR conversation-only OR user-says-no) THEN activate.
-
-**Principle 3: Write the description as an if/then activation rule, not a marketing tagline.**
-
-OpenAI's blog: "Your skill's description is effectively the model's decision boundary." ([Shell + Skills + Compaction Tips](https://developers.openai.com/blog/skills-shell-tips))
+**Implication**: If your skill has fewer than 1 code block per 25 lines, it's probably too abstract. Either add concrete examples or cut the prose.
 
 ---
 
-## 1.4 Scripts for Determinism, Prose for Judgment
+## Principle 4: Hard Emphasis Keywords Carry Real Weight
 
-OpenAI draws a sharp line between what goes in scripts and what stays in the SKILL.md body.
+**Evidence**: 
+- **41%** of top-1000 skills use `ALWAYS` or `MUST` (hard positive)
+- **33%** use `IMPORTANT`, `CRITICAL`, or `WARNING`
+- **28%** use `NEVER`, `DO NOT`, or `MUST NOT` (hard negative)
+- Combined: **~60% of top-1000 skills use emphasis keywords**
 
-**Scripts** handle things that must be deterministic:
-- `code-change-verification/scripts/run.sh` — the exact command sequence with fail-fast
-- `gh-fix-ci/scripts/inspect_pr_checks.py` — GitHub API calls with field-drift fallbacks
-- `final-release-review/scripts/find_latest_release_tag.sh` — tag lookup from remote
-- `imagegen/scripts/image_gen.py` — API call with structured parameters
+**Why**: LLMs respond differently to "prefer X" vs "ALWAYS X" vs "**ALWAYS X**". Emphasis keywords signal priority at the attention layer. Without them, every instruction has equal weight.
 
-**SKILL.md prose** handles things that require judgment:
-- Whether a change is a breaking change (requires reading and reasoning)
-- Which coverage gaps are highest-priority (requires understanding the codebase)
-- Whether a doc is "outdated" (requires comparing docs to code)
-- Whether a CI failure is in your code or upstream (requires log analysis)
+**Skills demonstrating this:**
+- [skill-vetter](https://clawhub.ai/skills/skill-vetter) (213K dl): `**Never install a skill without vetting it first.**`
+- [stock-analysis](https://clawhub.ai/skills/stock-analysis) (45K dl, 249 lines): Uses `IMPORTANT` and `CRITICAL` for risk warnings
+- [proactive-agent](https://clawhub.ai/skills/proactive-agent) (145K dl): Multiple `⭐ NEW` markers + hard constraints
+- [self-improving-agent](https://clawhub.ai/skills/self-improving-agent) (398K dl): "Never overwrite existing files" / "Do not log secrets, tokens..."
 
-**Principle 4: Use scripts when the output must be identical every time. Use prose instructions when the agent needs to reason about context.**
-
-OpenAI's guidance: "Prefer instructions over scripts unless you need deterministic behavior or external tooling." ([Codex skill docs](https://developers.openai.com/codex/skills/create-skill))
+**But**: Only **1%** wrap these in bold all-caps (`**NEVER**`). Most use plain caps. The visual noise of bold caps doesn't help — the keyword alone is sufficient.
 
 ---
 
-## 1.5 Report First, Act After Approval
+## Principle 5: The "Concise/Compact" Self-Instruction
 
-Three of OpenAI's nine SDK skills enforce a **report → approval → action** gate:
+**Evidence**: 32% of top-1000 skills include the words `concise`, `compact`, `brief`, `terse`, `short`, or `minimal` — usually as self-instructions to the agent about output length.
 
-- `docs-sync`: "Provide a report and ask for approval before editing docs."
-- `test-coverage-improver`: "Ask the user for approval to implement the proposed tests; pause until they agree."
-- `gh-fix-ci`: "Summarize failures... Create a plan... Implement after approval."
+**Why**: LLMs default to verbose output. Without explicit counter-instructions, agents write essays when users want a status line. Top skills actively constrain output verbosity.
 
-And `implementation-strategy` gates action at the conceptual level: you must decide the compatibility boundary *before* writing any code.
+**Skills demonstrating this:**
+- [github](https://clawhub.ai/skills/github): `# Output: London: ⛅️ +8°C` — single-line expected outputs
+- [weather](https://clawhub.ai/skills/weather): Documents compact format codes (`%c` for condition, `%t` for temp)
+- [skill-creator](https://clawhub.ai/skills/skill-creator) (72K dl): "Keep descriptions concise"
 
-This is not just safety. It's a skill design pattern that **splits analysis from action**, making each phase testable independently. A skill that reports well but acts wrong is easier to debug than one that silently does everything.
-
-**Principle 5: For skills that modify code or state, separate analysis from action with an explicit approval gate.**
-
----
-
-## 1.6 Hard Constraints at Top and Bottom, Workflow in Middle
-
-Research on LLM instruction-following shows **primacy bias** (instructions at the start are followed most) and **recency bias** (instructions at the end are recalled well). The middle is the weakest position. ([Skill Design Guide](https://agent-layer.dev/skill-design/), citing ComplexBench NeurIPS 2024, IFScale 2025)
-
-Every OpenAI skill puts its hardest constraints at the top:
-
-- [docs-sync](https://raw.githubusercontent.com/openai/openai-agents-python/main/.agents/skills/docs-sync/SKILL.md) — top: "Only update English docs under docs/** and never touch translated docs under docs/ja, docs/ko, or docs/zh."
-- [final-release-review](https://raw.githubusercontent.com/openai/openai-agents-python/main/.agents/skills/final-release-review/SKILL.md) — top: "Default to 🟢 GREEN LIGHT TO SHIP unless at least one blocking trigger below is satisfied."
-- [implementation-strategy](https://raw.githubusercontent.com/openai/openai-agents-python/main/.agents/skills/implementation-strategy/SKILL.md) — top: "Judge breaking-change risk against the latest release tag, not against unreleased branch churn."
-
-And edge cases / guardrails at the bottom:
-
-- [implementation-strategy](https://raw.githubusercontent.com/openai/openai-agents-python/main/.agents/skills/implementation-strategy/SKILL.md) — bottom: "Do not preserve a confusing abstraction just because it exists in the current branch diff."
-- [final-release-review](https://raw.githubusercontent.com/openai/openai-agents-python/main/.agents/skills/final-release-review/SKILL.md) — bottom: "If you cannot provide a concrete unblock checklist item, do not use BLOCKED."
-
-**Principle 6: Put MUST/NEVER constraints and defaults at the top. Put guardrails and edge cases at the bottom. Put the step-by-step workflow in the middle.**
+**The pattern**: Top skills don't just show what to do — they constrain how to present results.
 
 ---
 
-## 1.7 Explicit Output Formats Eliminate Variance
+## Principle 6: Memory Lives in Known Paths
 
-The best skills specify the **exact shape** of their output.
+**Evidence**: 21% of top-1000 skills reference literal file paths like `~/.something/`. 18% include patterns for memory/state persistence (`.learnings/`, `memory.md`, `~/<skillname>/`).
 
-[final-release-review](https://raw.githubusercontent.com/openai/openai-agents-python/main/.agents/skills/final-release-review/SKILL.md) defines a complete template:
+**Why**: Skills that learn across sessions need persistent storage. Rather than invent path conventions per skill, top skills use a shared convention: `~/<skill-name>/` or `~/.openclaw/workspace/`. Predictable paths enable cross-skill memory sharing.
 
-```markdown
-### Release readiness review (<tag> -> TARGET <ref>)
-### Release call:
-**<🟢 GREEN LIGHT TO SHIP | 🔴 BLOCKED>** <one-line rationale>
-### Risk assessment (ordered by impact):
-1) **<Finding title>**
-   - Risk: **<🟢 LOW | 🟡 MODERATE | 🔴 HIGH>**
-   - Evidence: <specific diff/test/commit signal>
-   - Action: <concrete next step with pass criteria>
-```
+**Skills demonstrating this:**
+- [self-improving-agent](https://clawhub.ai/skills/self-improving-agent) (398K dl): `~/.openclaw/workspace/.learnings/`
+- [self-improving](https://clawhub.ai/skills/self-improving) (167K dl): `~/self-improving/` with tiered structure
+- [elite-longterm-memory](https://clawhub.ai/skills/elite-longterm-memory) (52K dl): Multi-layer memory architecture
+- [ontology](https://clawhub.ai/skills/ontology) (167K dl): Typed entity storage with validation
+- [memory-setup](https://clawhub.ai/skills/memory-setup) (36K dl): Configures `memorySearch` with shared path conventions
+- [review-code](https://clawhub.ai/skills/review-code): `~/review-code/` for findings and preferences
 
-[implementation-strategy](https://raw.githubusercontent.com/openai/openai-agents-python/main/.agents/skills/implementation-strategy/SKILL.md) specifies a one-liner:
-
-```
-Compatibility boundary: latest release tag v0.x.y;
-branch-local interface rewrite, no shim needed.
-```
-
-`pr-draft-summary` provides a full PR block template with exact field names.
-
-Without these templates, the agent improvises a different format every time. With them, output is consistent, parseable, and comparable across runs.
-
-**Principle 7: Define the exact output format. The agent will follow a template faithfully; it will improvise inconsistently.**
+**The convention**: Most top memory skills use `~/<skill-slug>/memory.md` + optional subdirectories (`findings/`, `sessions/`, `baselines/`).
 
 ---
 
-## 1.8 Decision Tables Over Paragraphs
+## Principle 7: Scripts Carry 3x More Lines Than SKILL.md
 
-When a skill involves classification (is this a breaking change? should I block the release?), top skills use explicit **decision tables**, not prose descriptions.
+**Evidence**: Of the 326 top-1000 skills with a `scripts/` directory, the total script code is **211,969 lines** vs **65,783 lines** of SKILL.md content — a **3.22x ratio**.
 
-[implementation-strategy](https://raw.githubusercontent.com/openai/openai-agents-python/main/.agents/skills/implementation-strategy/SKILL.md):
+**Why**: SKILL.md is the agent's entry point. Scripts are the implementation. For skills that wrap APIs or automate tools, 80% of the engineering work lives in `scripts/`, not in the prose. The prose exists to route the agent to the right script with the right arguments.
 
-```markdown
-## Compatibility boundary rules
-- Released public API: preserve compatibility or migration path.
-- Interface changes on current branch only: rewrite directly.
-- Interface changes on `main` after latest release tag: rewrite directly.
-- Internal helpers, private types: update directly.
-- Unreleased persisted schema: may be renumbered.
-```
+**Skills demonstrating this:**
+- [windows-control](https://clawhub.ai/skills/windows-control) (7K dl): 23 Python scripts
+- [email-to-calendar](https://clawhub.ai/skills/email-to-calendar) (5K dl): 23 bash scripts
+- [automate-excel](https://clawhub.ai/skills/automate-excel) (5K dl): 18 Python scripts
+- [computer-use](https://clawhub.ai/skills/computer-use) (12K dl): 17 bash scripts
+- [stock-watcher](https://clawhub.ai/skills/stock-watcher) (28K dl): 8 scripts (Python + Bash)
 
-[final-release-review](https://raw.githubusercontent.com/openai/openai-agents-python/main/.agents/skills/final-release-review/SKILL.md):
+**Script languages**: Python 51%, Bash 30%, JavaScript 12%, Node variants 7%.
 
-```markdown
-Blocking triggers (at least one required):
- - Confirmed regression or bug
- - Breaking API change with missing versioning
- - Data-loss or security-impacting change
- - Release-critical build path broken
-
-Non-blocking by itself:
- - Large diff size
- - "Could regress" risk without evidence
- - Not running tests locally
-```
-
-Both are **lookup tables**: the agent identifies which row matches, then follows the prescribed action. No interpretation needed.
-
-**Principle 8: Express classifications as decision tables with category → action rows. Include what does NOT qualify (non-blocking, non-breaking) alongside what does.**
+**Implication**: For complex skills, the SKILL.md is a façade. Author scripts with the same care you'd give production code — they're the actual product.
 
 ---
 
-## 1.9 Context Budget Awareness
+## Principle 8: Scripts Must Self-Document for the Agent
 
-The SKILL.md body loads into the agent's context window alongside everything else — conversation history, tool results, other skills. Every token competes for attention.
+**Evidence in scripts**:
+- **90%** start with a shebang (`#!/usr/bin/env python3` or `#!/bin/bash`)
+- **45%** have a `main()` function or `if __name__ == "__main__":` entry point (Python)
+- **32%** use `argparse` for structured CLI args (Python)
+- **18%** support a `--json` flag for machine-readable output
+- **12%** include a help/usage text printer
+- **17%** use `set -euo pipefail` (fail-fast, bash)
 
-The [Agent Skills spec](https://agentskills.io/specification) recommends: body under 500 lines, under ~5,000 tokens.
+**Why**: Scripts are called by agents, not humans. Agents parse `--help` output, check exit codes, and react to structured JSON. A script that silently fails or produces inconsistent output breaks the skill.
 
-Anthropic's [skill authoring best practices](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices): "Once Claude loads [SKILL.md], every token competes with conversation history and your actual request."
+**Skills demonstrating this:**
+- [gh-fix-ci](https://raw.githubusercontent.com/openai/skills/main/skills/.curated/gh-fix-ci/SKILL.md) (OpenAI): `scripts/inspect_pr_checks.py` with `--json` flag for machine output
+- [polymarket-trade](https://clawhub.ai/skills/polymarket-trade) (122K dl): `scripts/polymarket.py` with argparse + structured JSON output
+- [self-improving-agent](https://clawhub.ai/skills/self-improving-agent): `scripts/error-detector.sh`, `scripts/activator.sh`, `scripts/extract-skill.sh` — each script has a single job
+- [code-change-verification](https://playbooks.com/skills/openai/openai-agents-python/code-change-verification) (OpenAI): `scripts/run.sh` with `set -euo pipefail` for fail-fast verification
+- [stock-analysis](https://clawhub.ai/skills/stock-analysis) (45K dl): 7 scripts, each with argparse and descriptive help text
 
-The solution: **keep SKILL.md as a table of contents that points to detail in reference files**.
-
-[runtime-behavior-probe](https://github.com/openai/openai-agents-python/blob/main/.agents/skills/runtime-behavior-probe/SKILL.md) has 4 reference files:
-```
-references/validation-matrix.md
-references/error-cases.md
-references/openai-runtime-patterns.md
-references/reporting-format.md
-```
-
-[imagegen](https://github.com/openai/skills/blob/main/skills/.curated/imagegen/SKILL.md) has 5:
-```
-references/cli.md
-references/image-api.md
-references/prompting.md
-references/sample-prompts.md
-references/codex-network.md
-```
-
-The SKILL.md body tells the agent *when* to read each file. The reference files hold the depth. The agent only loads what it needs, when it needs it.
-
-**Principle 9: Keep SKILL.md lean (<500 lines). Move detailed reference material, examples, and templates to files in `references/`. Load them just-in-time, not all-at-once.**
+**Anti-pattern**: 55% of scripts have error handling (`try/except` or `try/catch`), but only **14%** implement retry logic. Top skills lean on fail-fast + structured errors, not silent retries.
 
 ---
 
-## 1.10 Cross-Skill Script Reuse
+## Principle 9: Naming Follows the `short-hyphen-case` Convention
 
-Skills can reference scripts from other skills. `implementation-strategy` calls a script from `final-release-review`:
+**Evidence**: 47% of top-1000 skills use 2-word hyphenated names (e.g., `nano-pdf`, `brave-search`). 25% use 3 words. 22% are single-word. Only 3% use 4+ words.
 
-```bash
-BASE_TAG="$(.agents/skills/final-release-review/scripts/
-  find_latest_release_tag.sh origin 'v*')"
-```
+**Why**: Short names are invokable. Agents see `$skill-name` in system prompts; short names are memorable and distinguishable. Names longer than 3 words suggest the skill is trying to do too much (Pattern: One skill, one job).
 
-This avoids duplicating the tag-lookup logic. When the release tag format changes, only one script updates.
+**Skills demonstrating this:**
+- Steipete (a prolific top author) uses single-word skills: `github`, `gog`, `weather`, `obsidian`, `slack`, `notion`, `mcporter`, `sonoscli`, `brave-search`
+- Most-downloaded: `self-improving-agent` (3 words), `skill-vetter` (2), `ontology` (1), `proactive-agent` (2), `nano-pdf` (2)
 
-**Principle 10: Factor shared logic into scripts. Reference them by path from any skill that needs them. Don't duplicate.**
+**Counter-example**: [openclaw-tavily-search](https://clawhub.ai/skills/openclaw-tavily-search) (83K dl) — 3 words including a redundant `openclaw-` prefix. The skill works despite the clunky name.
+
+---
+
+## Principle 10: Authorship Concentrates
+
+**Evidence**: The top 15 authors account for **272 skills** (27% of top-1000) with **3.78M downloads** (30% of total). One author alone — **steipete** — has 44 skills with **1.77M combined downloads**.
+
+**Why**: Skill authoring is a craft. Top authors develop a consistent voice and re-apply patterns across their catalog. Their skills cross-reference each other (`Related Skills: see my `github` skill`), creating ecosystems.
+
+**Top authors and their patterns:**
+- **steipete** (44 skills, 1.77M dl): Single-word names, minimal sections, bash-heavy examples. Skills: `github`, `gog`, `weather`, `obsidian`, `slack`, `notion`, `nano-pdf`, `sonoscli`, `mcporter`, `brave-search`, `video-frames`, `youtube-watcher`, `openai-whisper`
+- **byungkyu** (70 skills, 840K dl): API-scaffold skills (authentication → base URL → api reference → rate limits → pagination). Skills: `api-gateway`, `gmail`, `stripe-api`, `slack`, dozens more
+- **ivangdavila** (50 skills, 737K dl): Word/Excel/PDF document skills with consistent "Core Rules → Common Traps → Related Skills" structure
+
+**The lesson for authors**: Pick a niche. Build a family of skills that share vocabulary, conventions, and cross-references. Individual skills benefit from being part of a family.
 
 ---
 
 ## Summary of the 10 Principles
 
-| # | Principle | Learned From |
-|---|-----------|-------------|
-| 1 | Write procedures, not documentation | All OpenAI skills |
-| 2 | One job per skill | OpenAI Agents SDK catalog |
-| 3 | Description is routing logic (if/then) | OpenAI `pr-draft-summary` |
-| 4 | Scripts for determinism, prose for judgment | OpenAI script/instruction split |
-| 5 | Report first, act after approval | `docs-sync`, `test-coverage-improver`, `gh-fix-ci` |
-| 6 | Hard constraints at top and bottom | Primacy/recency research + all OpenAI skills |
-| 7 | Explicit output formats eliminate variance | `final-release-review`, `implementation-strategy` |
-| 8 | Decision tables over paragraphs | `implementation-strategy`, `final-release-review` |
-| 9 | Keep SKILL.md lean, use reference files | `runtime-behavior-probe`, `imagegen` |
-| 10 | Cross-skill script reuse | `implementation-strategy` calling `final-release-review` |
+| # | Principle | Evidence |
+|---|-----------|----------|
+| 1 | Description starts with action verb or tool reference | 23% verb + 27% tool = 50% of top-1000 |
+| 2 | Title heading mandatory, sections optional | 93% start with `# Title` |
+| 3 | Bash code blocks are the teaching mechanism | 66% use bash blocks, avg 10.6 code blocks/skill |
+| 4 | Hard emphasis keywords carry weight | 60%+ use ALWAYS/NEVER/MUST/IMPORTANT |
+| 5 | "Concise/compact" self-instruction | 32% include conciseness directives |
+| 6 | Memory lives in predictable paths | 21% reference `~/<skill-name>/` or workspace paths |
+| 7 | Scripts carry 3x more lines than SKILL.md | 211K script lines vs 66K SKILL.md lines |
+| 8 | Scripts must self-document | 90% shebang, 32% argparse, 18% `--json` |
+| 9 | Names use `short-hyphen-case` | 47% 2-word, 22% 1-word, only 3% 4+ words |
+| 10 | Authorship concentrates | Top 15 authors = 27% of top-1000 |
+
+---
+
+### Source
+
+All evidence in this chapter is derived from:
+
+- **ClawHub API** for download counts: https://clawhub.atomicbot.ai/api/skills?sort=downloads&dir=desc
+- **openclaw/skills repository** for SKILL.md files: https://github.com/openclaw/skills (cloned, 58,593 skills)
+- Top 1,000 by downloads → 990 matched SKILL.md files → programmatic pattern detection + deep read of top 50
