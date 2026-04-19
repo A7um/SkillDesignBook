@@ -126,6 +126,24 @@ Every claim in this book links to a primary source. Use this catalog to jump dir
 
 ---
 
+## ClawHub & OpenClaw Skills
+
+| Skill | URL | Pattern / Notes |
+|-------|-----|-----------------|
+| ClawHub Skills Hub (sorted by downloads) | [clawhub.ai/skills?sort=downloads](https://clawhub.ai/skills?sort=downloads) | 3,286 skills, 1.5M+ total downloads |
+| `review-code` (ClawHub, 473 downloads) | [clawhub.ai/skills/review-code](https://clawhub.ai/skills/review-code) | Risk-first code review, 8 reference files, memory architecture |
+| `solo-review` (ClawHub, 645 downloads) | [clawhub.ai/skills/solo-review](https://clawhub.ai/skills/solo-review) | 12-dimension quality gate, SHIP/FIX/BLOCK verdict, rationalizations catalog |
+| OpenClaw `github` skill | [github.com/openclaw/openclaw](https://github.com/openclaw/openclaw/blob/main/skills/github/SKILL.md) | GitHub operations via `gh` CLI, JSON output patterns |
+| OpenClaw `gh-issues` skill | [github.com/openclaw/openclaw](https://github.com/openclaw/openclaw/blob/main/skills/gh-issues/SKILL.md) | 6-phase workflow, flag reference table, curl/Bearer token patterns |
+| OpenClaw `review-pr` skill | [playbooks.com](https://playbooks.com/skills/openclaw/openclaw/review-pr) | Script-first PR review, structured JSON findings |
+| OpenClaw `pr-commit-workflow` | [github.com/openclaw/skills](https://github.com/openclaw/skills/tree/main/skills/joshp123/pr-commit-workflow/SKILL.md) | Commit + PR enforcement with human-written intent requirements |
+| OpenClaw `openclaw-pr-maintainer` | [github.com/openclaw/openclaw](https://github.com/openclaw/openclaw/blob/9098e948/.agents/skills/openclaw-pr-maintainer/SKILL.md) | Triage, label, land PRs with bug-fix evidence requirements |
+| Best ClawHub Skills Guide (March 2026) | [medium.com/@tentenco](https://medium.com/@tentenco/the-best-clawhub-skills-worth-installing-now-a-category-by-category-guide-5221c4850d21) | Category-by-category guide, security vetting, 100/3 rule |
+| SkillCompass Analysis of Top 100 | [dev.to/john_spaghetti](https://dev.to/john_spaghetti/i-ran-skillcompass-on-the-top-100-clawhub-skills-heres-what-i-found-18fo) | Quality analysis of top ClawHub skills |
+| Top 5 Downloaded Skills Review | [dev.to/99rebels](https://dev.to/99rebels/i-installed-the-5-most-downloaded-skills-on-clawhub-only-one-did-anything-49e4) | Critical review — download-to-install ratio averaging 59:1 |
+
+---
+
 ## Academic Papers
 
 | Paper | URL | Key Finding |

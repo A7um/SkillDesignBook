@@ -16,7 +16,7 @@ Everything in this book was learned by inspecting production skills from OpenAI,
 ### Part II: Methodology — How to Write Each Part
 - [**Chapter 2: Writing the Description**](02-writing-the-description.md) — the 1-1024 char routing boundary, 6 production descriptions dissected component-by-component, before/after rewrites, testing methodology
 - [**Chapter 3: Writing the Body**](03-writing-the-body.md) — section ordering, imperative style, input collection with exact commands, 3 decision tree patterns, output templates, approval gates, verification steps, constraint language, anti-patterns, complete body template
-- [**Chapter 4: Skill Patterns**](04-skill-patterns.md) — 8 structural archetypes from production (Gate-keeper, Report-first, Decision gate, Think-before-act, Handoff automation, Debug-and-fix, Multi-axis review, Prompt augmentation), each with exemplar skill, structural analysis, and reusable template
+- [**Chapter 4: Skill Patterns**](04-skill-patterns.md) — 12 recurring patterns identified across 50+ production skills, each backed by 5+ independent examples (or pioneering status). Patterns: When-to-use/not-use, Numbered workflow, Output template, Report-then-approve, Quick start, Script-backed determinism, Decision table, Exact input commands, Reference file architecture, Severity labeling, Anti-sycophancy clauses, Post-action verification
 - [**Chapter 5: File Architecture and Testing**](05-file-architecture-and-testing.md) — directory structure, scripts (when/how), reference files (when/how), cross-platform paths, AGENTS.md integration, 4-step testing methodology, authoring checklist
 
 ### Reference
