@@ -1,208 +1,288 @@
-# Part I: Philosophy — What the Top 1,000 Downloaded Skills Reveal
+# Part I: Philosophy — What the Top Skills Declare About Themselves
 
-This chapter extracts design philosophy from the **actual top 1,000 most-downloaded skills on ClawHub** (12.5M total downloads, range 3,835–398,524). Data comes from programmatic analysis of 990 matched SKILL.md files plus deep reading of the top 50.
+This chapter extracts design philosophy from the top 1,000 downloaded skills by reading what they **explicitly say** about their own stance — their "Core Principle", "Core Philosophy", "Approach", "Why This Exists" sections, plus their first-paragraph self-descriptions and their "Never"/"Always"/"Treat"/"Instead of" declarations.
 
-Every principle below is backed by empirical frequency across the corpus, not intuition.
-
----
-
-## Principle 1: Description Starts with an Action Verb or Tool Reference
-
-**Evidence**: 23% of top-1000 descriptions start with an action verb (Create, Build, Generate, Analyze, Search, Run, Manage, Fetch, Extract, Write, Edit, etc.). Another 27% reference a specific tool/CLI/API by backtick name. The average description length is **155 characters**.
-
-**Why**: The description is the only text the agent reads at startup for every installed skill. An action verb lets the agent immediately determine *what this does*. A tool reference lets the agent match the user's intent (e.g., "use `gh`") directly to the skill.
-
-**Skills demonstrating this:**
-- [weather](https://clawhub.ai/skills/weather) (136K dl): "Get current weather and forecasts (no API key required)."
-- [nano-pdf](https://clawhub.ai/skills/nano-pdf) (92K dl): "Edit PDFs with natural-language instructions using the `nano-pdf` CLI."
-- [github](https://clawhub.ai/skills/github) (160K dl): "Interact with GitHub using the `gh` CLI."
-- [video-frames](https://clawhub.ai/skills/video-frames) (42K dl): "Extract frames or short clips from videos using ffmpeg."
-- [mcporter](https://clawhub.ai/skills/mcporter) (57K dl): "Use the mcporter CLI to list, configure, auth, and call MCP servers/tools directly..."
-
-**What "Use when:" tells us**: 31% of descriptions include "Use when" — the second most common phrase after the initial verb. But only 0.4% include explicit "Don't use" or "NOT for" — a massive quality gap.
+Every principle below is a philosophy that multiple top-ranked skills explicitly declare. Each is quoted directly from the corpus.
 
 ---
 
-## Principle 2: A Title Heading Is Mandatory; Everything Else Is Optional
+## Principle 1: Shift the Agent's Mindset, Don't Prescribe Steps
 
-**Evidence**: **93% of top-1000 skills open with a `# Title` heading** immediately after frontmatter. Only 4% open with `##` directly. This is the most universal formatting convention in the corpus.
+**Evidence**: The highest-downloaded skills with philosophy sections describe a *mental shift*, not a procedure.
 
-**Why**: The title heading gives the skill a visible identity in tools that render Markdown, and serves as an anchor for the agent to know "this is where the skill begins."
+[proactive-agent](https://clawhub.ai/skills/proactive-agent) (145K downloads) opens its Core Philosophy with:
 
-**Skills demonstrating this:**
-- Every top-20 skill starts with `# <Skill Name>` (often with emoji) followed by one paragraph of context.
+> **The mindset shift:** Don't ask "what should I do?" Ask "what would genuinely delight my human that they haven't thought to ask for?"
 
-**Counter-examples (4 skills in top 30 with NO `##` sections at all):**
-- [gog](https://clawhub.ai/skills/gog) (158K dl, 37 lines): Just a title + bullet list
-- [sonoscli](https://clawhub.ai/skills/sonoscli) (78K dl, 27 lines): Title + flat bullet list
-- [openai-whisper](https://clawhub.ai/skills/openai-whisper) (70K dl, 20 lines): Title + quick start code block
-- [mcporter](https://clawhub.ai/skills/mcporter) (57K dl, 39 lines): Title + 3 bullet lists
+Then offers another mindset reframe:
 
-**The philosophy**: Structure is optional for simple CLI-wrapping skills. A 20-line skill wrapping a single CLI tool doesn't need sections — it needs copy-pasteable commands.
+> **Instead of waiting for requests, surface ideas your human didn't know to ask for.**
 
----
+[data-analysis](https://clawhub.ai/skills/data-analysis) (27K downloads) opens with:
 
-## Principle 3: Bash Code Blocks Are the Dominant Teaching Mechanism
+> **Core Principle**: Analysis without a decision is just arithmetic. Always clarify: **What would change if this analysis shows X vs Y?**
 
-**Evidence**: 66% of top-1000 skills contain bash/shell code blocks. 78% of all skills contain SOME kind of code block (`` ``` ``). 56% contain markdown tables. In aggregate, **top-1000 skills average 10.6 code blocks each** — roughly one code block per 23 lines.
+[backtest-expert](https://clawhub.ai/skills/backtest-expert) (9K downloads):
 
-**Why**: Skills aren't documentation; they're procedures. Executable commands are the unit of transfer. Prose describing what `gh pr checks` does is useless — the exact command `gh pr checks 55 --repo owner/repo` is the value.
+> **Core Philosophy — Goal**: Find strategies that "break the least", not strategies that "profit the most" on paper.
 
-**Skills demonstrating this:**
-- [github](https://clawhub.ai/skills/github) (48 lines total): 6 bash code blocks. That's 1 code block per 8 lines.
-- [weather](https://clawhub.ai/skills/weather) (50 lines): 4 code blocks covering `curl` invocations.
-- [nano-pdf](https://clawhub.ai/skills/nano-pdf) (21 lines): 1 code block — that IS the skill.
-- [mcporter](https://clawhub.ai/skills/mcporter) (39 lines): 0 code blocks, pure bullet list. Exception, not rule.
+[thinking-partner](https://clawhub.ai/skills/thinking-partner) (8K downloads):
 
-**Implication**: If your skill has fewer than 1 code block per 25 lines, it's probably too abstract. Either add concrete examples or cut the prose.
+> The goal is not to have answers but to help discover them.
+
+[who-is-actor](https://clawhub.ai/skills/who-is-actor) (13K downloads):
+
+> The goal is to improve team collaboration processes and individual work methods, not to judge a person's worth.
+
+**What these have in common**: They reframe the question the agent asks itself. None of them open with "do step 1, then step 2." They change what the agent is *trying to accomplish* before it picks a method.
 
 ---
 
-## Principle 4: Hard Emphasis Keywords Carry Real Weight
+## Principle 2: Opinionated Defaults With Explicit Reasoning
 
-**Evidence**: 
-- **41%** of top-1000 skills use `ALWAYS` or `MUST` (hard positive)
-- **33%** use `IMPORTANT`, `CRITICAL`, or `WARNING`
-- **28%** use `NEVER`, `DO NOT`, or `MUST NOT` (hard negative)
-- Combined: **~60% of top-1000 skills use emphasis keywords**
+**Evidence**: Top skills don't offer menus of options — they pick defaults and say why.
 
-**Why**: LLMs respond differently to "prefer X" vs "ALWAYS X" vs "**ALWAYS X**". Emphasis keywords signal priority at the attention layer. Without them, every instruction has equal weight.
+[nextjs-expert](https://clawhub.ai/skills/nextjs-expert) (8K downloads) Core Principle:
 
-**Skills demonstrating this:**
-- [skill-vetter](https://clawhub.ai/skills/skill-vetter) (213K dl): `**Never install a skill without vetting it first.**`
-- [stock-analysis](https://clawhub.ai/skills/stock-analysis) (45K dl, 249 lines): Uses `IMPORTANT` and `CRITICAL` for risk warnings
-- [proactive-agent](https://clawhub.ai/skills/proactive-agent) (145K dl): Multiple `⭐ NEW` markers + hard constraints
-- [self-improving-agent](https://clawhub.ai/skills/self-improving-agent) (398K dl): "Never overwrite existing files" / "Do not log secrets, tokens..."
+> 1. **Server-first**: Components are Server Components by default. Only add `'use client'` when you need hooks, event handlers, or browser APIs.
+> 2. **Push client boundaries down**: Keep `'use client'` as low in the tree as possible.
 
-**But**: Only **1%** wrap these in bold all-caps (`**NEVER**`). Most use plain caps. The visual noise of bold caps doesn't help — the keyword alone is sufficient.
+[database-operations](https://clawhub.ai/skills/database-operations) (10K downloads):
 
----
+> 1. **Measure first** — always use `EXPLAIN ANALYZE` before optimizing
+> 2. **Index strategically** — based on query patterns, not every column
+> 3. **Denormalize selectively** — only when justified by read patterns
 
-## Principle 5: The "Concise/Compact" Self-Instruction
+[security-auditor](https://clawhub.ai/skills/security-auditor) (21K downloads):
 
-**Evidence**: 32% of top-1000 skills include the words `concise`, `compact`, `brief`, `terse`, `short`, or `minimal` — usually as self-instructions to the agent about output length.
+> - Apply defense in depth with multiple security layers
+> - Follow principle of least privilege for all access controls
+> - Never trust user input — validate everything rigorously
 
-**Why**: LLMs default to verbose output. Without explicit counter-instructions, agents write essays when users want a status line. Top skills actively constrain output verbosity.
-
-**Skills demonstrating this:**
-- [github](https://clawhub.ai/skills/github): `# Output: London: ⛅️ +8°C` — single-line expected outputs
-- [weather](https://clawhub.ai/skills/weather): Documents compact format codes (`%c` for condition, `%t` for temp)
-- [skill-creator](https://clawhub.ai/skills/skill-creator) (72K dl): "Keep descriptions concise"
-
-**The pattern**: Top skills don't just show what to do — they constrain how to present results.
+**The pattern**: Strong stance + short rationale, repeated across 4-6 points. Not "consider X or Y" — rather "prefer X, because Y."
 
 ---
 
-## Principle 6: Memory Lives in Known Paths
+## Principle 3: State the Scope as Definition, Not Disclaimer
 
-**Evidence**: 21% of top-1000 skills reference literal file paths like `~/.something/`. 18% include patterns for memory/state persistence (`.learnings/`, `memory.md`, `~/<skillname>/`).
+**Evidence**: Top skills define themselves by what they are — even when that means rejecting common expectations.
 
-**Why**: Skills that learn across sessions need persistent storage. Rather than invent path conventions per skill, top skills use a shared convention: `~/<skill-name>/` or `~/.openclaw/workspace/`. Predictable paths enable cross-skill memory sharing.
+[who-is-actor](https://clawhub.ai/skills/who-is-actor) (13K downloads):
 
-**Skills demonstrating this:**
-- [self-improving-agent](https://clawhub.ai/skills/self-improving-agent) (398K dl): `~/.openclaw/workspace/.learnings/`
-- [self-improving](https://clawhub.ai/skills/self-improving) (167K dl): `~/self-improving/` with tiered structure
-- [elite-longterm-memory](https://clawhub.ai/skills/elite-longterm-memory) (52K dl): Multi-layer memory architecture
-- [ontology](https://clawhub.ai/skills/ontology) (167K dl): Typed entity storage with validation
-- [memory-setup](https://clawhub.ai/skills/memory-setup) (36K dl): Configures `memorySearch` with shared path conventions
-- [review-code](https://clawhub.ai/skills/review-code): `~/review-code/` for findings and preferences
+> **Install nothing, run no scripts.** All data collection is done exclusively through native git commands (`git log`, `git shortlog`, `git diff --stat`, etc.). The AI is responsible for interpretation and evaluation.
 
-**The convention**: Most top memory skills use `~/<skill-slug>/memory.md` + optional subdirectories (`findings/`, `sessions/`, `baselines/`).
+[academic-deep-research](https://clawhub.ai/skills/academic-deep-research) (17K downloads) declares:
 
----
+> This is an investigation framework, **not a black-box API wrapper**.
 
-## Principle 7: Scripts Carry 3x More Lines Than SKILL.md
+[proactivity](https://clawhub.ai/skills/proactivity) (16K downloads):
 
-**Evidence**: Of the 326 top-1000 skills with a `scripts/` directory, the total script code is **211,969 lines** vs **65,783 lines** of SKILL.md content — a **3.22x ratio**.
+> **Not a Prompt Follower** — Notice what is likely to matter next.
 
-**Why**: SKILL.md is the agent's entry point. Scripts are the implementation. For skills that wrap APIs or automate tools, 80% of the engineering work lives in `scripts/`, not in the prose. The prose exists to route the agent to the right script with the right arguments.
+[data-analysis](https://clawhub.ai/skills/data-analysis) (27K downloads):
 
-**Skills demonstrating this:**
-- [windows-control](https://clawhub.ai/skills/windows-control) (7K dl): 23 Python scripts
-- [email-to-calendar](https://clawhub.ai/skills/email-to-calendar) (5K dl): 23 bash scripts
-- [automate-excel](https://clawhub.ai/skills/automate-excel) (5K dl): 18 Python scripts
-- [computer-use](https://clawhub.ai/skills/computer-use) (12K dl): 17 bash scripts
-- [stock-watcher](https://clawhub.ai/skills/stock-watcher) (28K dl): 8 scripts (Python + Bash)
+> This skill does not require local folders, persistent memory, or setup state.
 
-**Script languages**: Python 51%, Bash 30%, JavaScript 12%, Node variants 7%.
+[agent-team-orchestration](https://clawhub.ai/skills/agent-team-orchestration) (20K downloads):
 
-**Implication**: For complex skills, the SKILL.md is a façade. Author scripts with the same care you'd give production code — they're the actual product.
+> This skill is for sustained workflows with multiple handoffs.
+
+**The pattern**: Top skills have a clear identity. The "not a..." construction appears in 32 skills (44 instances) — used to sharpen identity by contrast. Stating what the skill isn't helps the agent know when to reach for it.
 
 ---
 
-## Principle 8: Scripts Must Self-Document for the Agent
+## Principle 4: Treat Artifacts as Their Actual Type, Not a Proxy
 
-**Evidence in scripts**:
-- **90%** start with a shebang (`#!/usr/bin/env python3` or `#!/bin/bash`)
-- **45%** have a `main()` function or `if __name__ == "__main__":` entry point (Python)
-- **32%** use `argparse` for structured CLI args (Python)
-- **18%** support a `--json` flag for machine-readable output
-- **12%** include a help/usage text printer
-- **17%** use `set -euo pipefail` (fail-fast, bash)
+**Evidence**: 30 instances across 23 skills use the "Treat X as Y, not Z" construction — forcing a mental model reset.
 
-**Why**: Scripts are called by agents, not humans. Agents parse `--help` output, check exit codes, and react to structured JSON. A script that silently fails or produces inconsistent output breaks the skill.
+[word-docx](https://clawhub.ai/skills/word-docx) (62K downloads):
 
-**Skills demonstrating this:**
-- [gh-fix-ci](https://raw.githubusercontent.com/openai/skills/main/skills/.curated/gh-fix-ci/SKILL.md) (OpenAI): `scripts/inspect_pr_checks.py` with `--json` flag for machine output
-- [polymarket-trade](https://clawhub.ai/skills/polymarket-trade) (122K dl): `scripts/polymarket.py` with argparse + structured JSON output
-- [self-improving-agent](https://clawhub.ai/skills/self-improving-agent): `scripts/error-detector.sh`, `scripts/activator.sh`, `scripts/extract-skill.sh` — each script has a single job
-- [code-change-verification](https://playbooks.com/skills/openai/openai-agents-python/code-change-verification) (OpenAI): `scripts/run.sh` with `set -euo pipefail` for fail-fast verification
-- [stock-analysis](https://clawhub.ai/skills/stock-analysis) (45K dl): 7 scripts, each with argparse and descriptive help text
+> **Treat DOCX as OOXML, not plain text** — A `.docx` file is a ZIP of XML parts, so structure matters as much as visible text.
 
-**Anti-pattern**: 55% of scripts have error handling (`try/except` or `try/catch`), but only **14%** implement retry logic. Top skills lean on fail-fast + structured errors, not silent retries.
+[excel-xlsx](https://clawhub.ai/skills/excel-xlsx) (56K downloads):
 
----
+> **Treat CSV as plain data exchange, not as an Excel feature-complete format.**
 
-## Principle 9: Naming Follows the `short-hyphen-case` Convention
+[playwright](https://clawhub.ai/skills/playwright) (28K downloads):
 
-**Evidence**: 47% of top-1000 skills use 2-word hyphenated names (e.g., `nano-pdf`, `brave-search`). 25% use 3 words. 22% are single-word. Only 3% use 4+ words.
+> **Treat rendered-page extraction as a secondary use case, not the default identity.**
 
-**Why**: Short names are invokable. Agents see `$skill-name` in system prompts; short names are memorable and distinguishable. Names longer than 3 words suggest the skill is trying to do too much (Pattern: One skill, one job).
+[bilibili-all-in-one](https://clawhub.ai/skills/bilibili-all-in-one) (15K downloads):
 
-**Skills demonstrating this:**
-- Steipete (a prolific top author) uses single-word skills: `github`, `gog`, `weather`, `obsidian`, `slack`, `notion`, `mcporter`, `sonoscli`, `brave-search`
-- Most-downloaded: `self-improving-agent` (3 words), `skill-vetter` (2), `ontology` (1), `proactive-agent` (2), `nano-pdf` (2)
+> **Treat them with the same care as your account password.**
 
-**Counter-example**: [openclaw-tavily-search](https://clawhub.ai/skills/openclaw-tavily-search) (83K dl) — 3 words including a redundant `openclaw-` prefix. The skill works despite the clunky name.
+**The pattern**: The "Treat X as Y, not Z" construction forces the agent to switch reasoning frames. Instead of "here's how to handle Excel files," top skills tell the agent "your mental model is wrong — stop treating Excel as a spreadsheet feature-complete format when CSV is involved." This kind of reframing is more durable than any list of rules.
 
 ---
 
-## Principle 10: Authorship Concentrates
+## Principle 5: Name the Failure Modes; They Aren't Edge Cases
 
-**Evidence**: The top 15 authors account for **272 skills** (27% of top-1000) with **3.78M downloads** (30% of total). One author alone — **steipete** — has 44 skills with **1.77M combined downloads**.
+**Evidence**: "Never..." appears 131 times across 96 top skills. "Don't..." appears 250 times across 133 skills. These aren't edge case warnings — they're the core teaching.
 
-**Why**: Skill authoring is a craft. Top authors develop a consistent voice and re-apply patterns across their catalog. Their skills cross-reference each other (`Related Skills: see my `github` skill`), creating ecosystems.
+[self-improving-agent](https://clawhub.ai/skills/self-improving-agent) (#1, 398K downloads):
 
-**Top authors and their patterns:**
-- **steipete** (44 skills, 1.77M dl): Single-word names, minimal sections, bash-heavy examples. Skills: `github`, `gog`, `weather`, `obsidian`, `slack`, `notion`, `nano-pdf`, `sonoscli`, `mcporter`, `brave-search`, `video-frames`, `youtube-watcher`, `openai-whisper`
-- **byungkyu** (70 skills, 840K dl): API-scaffold skills (authentication → base URL → api reference → rate limits → pagination). Skills: `api-gateway`, `gmail`, `stripe-api`, `slack`, dozens more
-- **ivangdavila** (50 skills, 737K dl): Word/Excel/PDF document skills with consistent "Core Rules → Common Traps → Related Skills" structure
+> **Never overwrite existing files.**
+> **Prefer short summaries or redacted excerpts over raw command output or full transcripts.**
 
-**The lesson for authors**: Pick a niche. Build a family of skills that share vocabulary, conventions, and cross-references. Individual skills benefit from being part of a family.
+[skill-vetter](https://clawhub.ai/skills/skill-vetter) (#2, 213K downloads):
 
----
+> **Never install a skill without vetting it first.** Paranoia is a feature.
 
-## Summary of the 10 Principles
+[self-improving](https://clawhub.ai/skills/self-improving) (167K downloads):
 
-| # | Principle | Evidence |
-|---|-----------|----------|
-| 1 | Description starts with action verb or tool reference | 23% verb + 27% tool = 50% of top-1000 |
-| 2 | Title heading mandatory, sections optional | 93% start with `# Title` |
-| 3 | Bash code blocks are the teaching mechanism | 66% use bash blocks, avg 10.6 code blocks/skill |
-| 4 | Hard emphasis keywords carry weight | 60%+ use ALWAYS/NEVER/MUST/IMPORTANT |
-| 5 | "Concise/compact" self-instruction | 32% include conciseness directives |
-| 6 | Memory lives in predictable paths | 21% reference `~/<skill-name>/` or workspace paths |
-| 7 | Scripts carry 3x more lines than SKILL.md | 211K script lines vs 66K SKILL.md lines |
-| 8 | Scripts must self-document | 90% shebang, 32% argparse, 18% `--json` |
-| 9 | Names use `short-hyphen-case` | 47% 2-word, 22% 1-word, only 3% 4+ words |
-| 10 | Authorship concentrates | Top 15 authors = 27% of top-1000 |
+> **Never infer from silence alone** — After 3 identical lessons → ask to confirm as rule.
+
+[humanizer](https://clawhub.ai/skills/humanizer) (92K downloads):
+
+> **Don't just remove bad patterns; inject actual personality.** Avoiding AI patterns is only half the job.
+
+**The pattern**: The "Never/Don't" statement points to a specific failure mode the model keeps falling into. It's not defensive — it's the skill's most load-bearing teaching. A skill that has zero "Never" statements probably hasn't encountered failure yet.
 
 ---
 
-### Source
+## Principle 6: Write for "What Changes Next" Not "What Looks Good"
 
-All evidence in this chapter is derived from:
+**Evidence**: Multiple top skills explicitly reject theoretical outputs in favor of actionable decisions.
 
-- **ClawHub API** for download counts: https://clawhub.atomicbot.ai/api/skills?sort=downloads&dir=desc
-- **openclaw/skills repository** for SKILL.md files: https://github.com/openclaw/skills (cloned, 58,593 skills)
-- Top 1,000 by downloads → 990 matched SKILL.md files → programmatic pattern detection + deep read of top 50
+[data-analysis](https://clawhub.ai/skills/data-analysis) (27K downloads):
+
+> Analysis without a decision is just arithmetic. Always clarify: **What would change if this analysis shows X vs Y?**
+
+[backtest-expert](https://clawhub.ai/skills/backtest-expert):
+
+> Find strategies that "break the least", not strategies that "profit the most" on paper.
+
+[automation-workflows](https://clawhub.ai/skills/automation-workflows) (67K downloads):
+
+> The goal is simple: **automate anything you do more than twice a week that doesn't require creative thinking.**
+
+[base-trader](https://clawhub.ai/skills/base-trader) (7K downloads):
+
+> The goal is not to make money on every trade.
+
+**The pattern**: Top skills have a decision criterion for when the output is *useful*, not just when it's *correct*. "Is this analysis actionable?" outranks "is this analysis complete?" This constrains the skill's behavior toward results that matter.
+
+---
+
+## Principle 7: Constrain Model Inertia With Explicit Negative Priors
+
+**Evidence**: Top skills name specific biases the model has and block them.
+
+[self-improving-agent](https://clawhub.ai/skills/self-improving-agent):
+
+> Do not log secrets, tokens, private keys, environment variables, or full source/config files unless the user explicitly asks for that level of detail.
+
+[skill-vetter](https://clawhub.ai/skills/skill-vetter) has a dedicated "RED FLAGS" section listing 14 specific behaviors to reject immediately:
+
+> **REJECT IMMEDIATELY IF YOU SEE:** curl/wget to unknown URLs, Sends data to external servers, Requests credentials/tokens/API keys, Reads ~/.ssh, ~/.aws, ~/.config without clear reason, Uses base64 decode on anything, Uses eval() or exec() with external input, Obfuscated code, Network calls to IPs instead of domains...
+
+[proactive-agent](https://clawhub.ai/skills/proactive-agent):
+
+> Never implement "security improvements" without human approval.
+
+**The pattern**: Top skills don't trust the model to default to safe behavior. They name specific unsafe defaults (log secrets, install unvetted skills, auto-approve changes) and block them explicitly.
+
+---
+
+## Principle 8: The Skill Is a Compact Philosophy, Then Minimal Facts
+
+**Evidence**: From reading the top 20 skills, there's a consistent shape:
+
+- **Title + tagline** (1-2 lines)
+- **Core philosophy or mindset** (3-7 lines, often in a `Core Principle` section)
+- **Commands / workflow / facts** (the rest)
+
+Short top skills do this in <50 lines. Long top skills ([self-improving-agent](https://clawhub.ai/skills/self-improving-agent) at 645 lines, [proactive-agent](https://clawhub.ai/skills/proactive-agent) at 633 lines) still frontload philosophy.
+
+From [proactive-agent](https://clawhub.ai/skills/proactive-agent)'s opening:
+
+> **A proactive, self-improving architecture for your AI agent.** Most agents just wait. This one anticipates your needs — and gets better at it over time.
+
+Then the Three Pillars framework. Only after that do commands and setup appear.
+
+From [pollyreach](https://clawhub.ai/skills/pollyreach):
+
+> PollyReach gives every AI agent a phone number and the ability to get things done over the phone — finding contacts, making calls, and completing tasks.
+
+Identity first. Setup second.
+
+**The pattern**: The first 5-15 lines of a top skill are philosophy: what this exists for, what mindset applies. The remaining 95% is facts and commands. The ratio is inverted from documentation; a skill is 5% philosophy and 95% facts — but the 5% comes first and colors everything after.
+
+---
+
+## Principle 9: Prefer Explicit Evidence Over Inference
+
+**Evidence**: Memory and learning skills all converge on one rule.
+
+[self-improving](https://clawhub.ai/skills/self-improving) (167K downloads):
+
+> **Never infer from silence** — don't conclude anything from absence of data.
+
+[self-improving-proactive-agent](https://clawhub.ai/skills/self-improving-proactive-agent):
+
+> Learn from: direct user corrections, explicit preferences, repeated successful workflows, self-reflection after meaningful work.
+
+[self-improving-agent](https://clawhub.ai/skills/self-improving-agent):
+
+> When the user explicitly corrects you ("No, that's wrong", "Actually...") → log to `.learnings/LEARNINGS.md` with category `correction`.
+
+[who-is-actor](https://clawhub.ai/skills/who-is-actor):
+
+> The AI is responsible for interpretation and evaluation. All data collection is done exclusively through native git commands.
+
+**The pattern**: When a skill accumulates knowledge over time, it learns only from **explicit signals** — user corrections, explicit preferences, documented outcomes. It explicitly forbids inferring patterns from noise, silence, or single occurrences. This is a strong counter to the model's natural tendency to over-generalize.
+
+---
+
+## Principle 10: Stakes Are the Skill's North Star
+
+**Evidence**: Top skills frame their work by what fails if they fail — not by what they do mechanically.
+
+[skill-vetter](https://clawhub.ai/skills/skill-vetter): "**Paranoia is a feature.**" — the stake is: install a malicious skill.
+
+[proactive-agent](https://clawhub.ai/skills/proactive-agent): "**Most agents just wait. This one anticipates.**" — the stake is: missing what mattered.
+
+[security-auditor](https://clawhub.ai/skills/security-auditor): "**Never trust user input — validate everything rigorously.**" — the stake is: injection.
+
+[backtest-expert](https://clawhub.ai/skills/backtest-expert): "**Find strategies that break the least, not profit the most.**" — the stake is: overfitting.
+
+[humanizer](https://clawhub.ai/skills/humanizer): "**Don't just remove bad patterns; inject actual personality.**" — the stake is: AI-laundered text that still sounds dead.
+
+[ai-persona-os](https://clawhub.ai/skills/ai-persona-os):
+
+> **Why This Exists** — I've trained thousands of people to build AI Personas through the AI Persona Method. The #1 problem I see: [the stake the skill addresses].
+
+**The pattern**: Top skills are oriented around a specific failure they exist to prevent. This isn't a "why" section — it's the lens through which every decision in the skill is made. Understanding the failure mode makes the skill's defaults, rules, and structure feel inevitable rather than arbitrary.
+
+---
+
+## The Meta-Principle: Skills Are Authored Claims, Not Documentation
+
+Looking at all 10 principles above, a meta-pattern emerges:
+
+**Documentation** describes what something is. It's neutral, complete, and safe.
+
+**A skill** makes claims. It asserts defaults, rejects alternatives, calls out the failure mode, and reframes how the model should think. The author has taken a position.
+
+[proactive-agent](https://clawhub.ai/skills/proactive-agent) asserts that agents shouldn't wait. [skill-vetter](https://clawhub.ai/skills/skill-vetter) asserts you should never install without vetting. [data-analysis](https://clawhub.ai/skills/data-analysis) asserts analysis without a decision is arithmetic. [word-docx](https://clawhub.ai/skills/word-docx) asserts DOCX is not plain text.
+
+These are **opinions the author has earned** through experience. Stripping the opinion out of a skill — making it "neutral" — makes it worse, because it removes the force that redirects the model's behavior.
+
+The top-ranked skills are opinionated. The ranking rewards that.
+
+---
+
+## Summary
+
+| # | Principle | Source of evidence |
+|---|-----------|-------------------|
+| 1 | Shift the agent's mindset | [proactive-agent](https://clawhub.ai/skills/proactive-agent), [data-analysis](https://clawhub.ai/skills/data-analysis), [backtest-expert](https://clawhub.ai/skills/backtest-expert), [thinking-partner](https://clawhub.ai/skills/thinking-partner) |
+| 2 | Opinionated defaults with reasoning | [nextjs-expert](https://clawhub.ai/skills/nextjs-expert), [database-operations](https://clawhub.ai/skills/database-operations), [security-auditor](https://clawhub.ai/skills/security-auditor) |
+| 3 | Scope as definition | [who-is-actor](https://clawhub.ai/skills/who-is-actor), [academic-deep-research](https://clawhub.ai/skills/academic-deep-research), [proactivity](https://clawhub.ai/skills/proactivity) |
+| 4 | "Treat X as Y, not Z" reframing | [word-docx](https://clawhub.ai/skills/word-docx), [excel-xlsx](https://clawhub.ai/skills/excel-xlsx), [playwright](https://clawhub.ai/skills/playwright) — 23 skills total |
+| 5 | Name failure modes | [self-improving-agent](https://clawhub.ai/skills/self-improving-agent), [skill-vetter](https://clawhub.ai/skills/skill-vetter), [humanizer](https://clawhub.ai/skills/humanizer) — 96+ skills |
+| 6 | Actionable > complete | [data-analysis](https://clawhub.ai/skills/data-analysis), [backtest-expert](https://clawhub.ai/skills/backtest-expert), [automation-workflows](https://clawhub.ai/skills/automation-workflows) |
+| 7 | Block specific model biases | [self-improving-agent](https://clawhub.ai/skills/self-improving-agent), [skill-vetter](https://clawhub.ai/skills/skill-vetter), [proactive-agent](https://clawhub.ai/skills/proactive-agent) |
+| 8 | Philosophy first, facts second | Top 20 skills by downloads |
+| 9 | Explicit evidence over inference | [self-improving](https://clawhub.ai/skills/self-improving), [self-improving-agent](https://clawhub.ai/skills/self-improving-agent), [who-is-actor](https://clawhub.ai/skills/who-is-actor) |
+| 10 | Stakes as north star | [skill-vetter](https://clawhub.ai/skills/skill-vetter), [backtest-expert](https://clawhub.ai/skills/backtest-expert), [ai-persona-os](https://clawhub.ai/skills/ai-persona-os) |
