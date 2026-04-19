@@ -6,7 +6,9 @@ Every principle below is a philosophy that multiple top-ranked skills explicitly
 
 ---
 
-## Principle 1: Shift the Agent's Mindset, Don't Prescribe Steps
+## Principle 1: Change How the Agent Thinks, Not Just What It Does
+
+**In plain words**: A good skill changes the *question the agent asks itself* before it picks a method. Telling the agent "do step 1, then step 2" gives it a procedure. Changing what the agent is trying to accomplish gives it judgment — which generalizes to situations the author never anticipated.
 
 **Evidence**: The highest-downloaded skills with philosophy sections describe a *mental shift*, not a procedure.
 
@@ -38,7 +40,9 @@ Then offers another mindset reframe:
 
 ---
 
-## Principle 2: Opinionated Defaults With Explicit Reasoning
+## Principle 2: Pick a Default and Explain Why — Don't Offer a Menu
+
+**In plain words**: Bad skills list options ("you could use X or Y or Z"). Good skills pick one ("use X by default, because..."). Offering a menu puts the choice on the agent, which turns into inconsistent behavior across runs. Picking a default with a one-line rationale gives the agent a stable starting point and still lets it deviate when the rationale doesn't apply.
 
 **Evidence**: Top skills don't offer menus of options — they pick defaults and say why.
 
@@ -63,7 +67,9 @@ Then offers another mindset reframe:
 
 ---
 
-## Principle 3: State the Scope as Definition, Not Disclaimer
+## Principle 3: Define the Skill by What It *Is*, Including What It Isn't
+
+**In plain words**: Top skills have a sharp identity. They don't just say "this skill does X" — they often add "this skill is **not** a Y" when users commonly mistake them for Y. Saying what the skill isn't is not a disclaimer or a liability shield; it's a positioning statement that helps the agent (and the user) know when to reach for it versus something else.
 
 **Evidence**: Top skills define themselves by what they are — even when that means rejecting common expectations.
 
@@ -91,7 +97,9 @@ Then offers another mindset reframe:
 
 ---
 
-## Principle 4: Treat Artifacts as Their Actual Type, Not a Proxy
+## Principle 4: Correct the Agent's Mental Model With "Treat X as Y, Not Z"
+
+**In plain words**: The model often has the wrong mental picture of a thing. A `.docx` file looks like a text document; it's actually a ZIP of XML. A CSV looks like an Excel file; it isn't. When the model's mental model is wrong, no amount of step-by-step instructions will fix the downstream mistakes. Top skills fix the mental model directly with the phrase "Treat X as Y, not Z" — forcing the agent to re-categorize the thing before it starts working.
 
 **Evidence**: 30 instances across 23 skills use the "Treat X as Y, not Z" construction — forcing a mental model reset.
 
@@ -115,7 +123,9 @@ Then offers another mindset reframe:
 
 ---
 
-## Principle 5: Name the Failure Modes; They Aren't Edge Cases
+## Principle 5: Name the Specific Ways the Agent Will Fail — These Are the Core Teaching, Not Edge Cases
+
+**In plain words**: Every domain has a handful of mistakes the model *keeps making* — not rare edge cases, but default behaviors that fail in this specific domain. Top skills put these front-and-center as "Never..." and "Don't..." statements. They're not footnotes or warnings; they're the load-bearing teaching of the skill. A skill with no "Never" statements either hasn't been used in production yet, or its author hasn't identified the failure modes.
 
 **Evidence**: "Never..." appears 131 times across 96 top skills. "Don't..." appears 250 times across 133 skills. These aren't edge case warnings — they're the core teaching.
 
@@ -140,7 +150,11 @@ Then offers another mindset reframe:
 
 ---
 
-## Principle 6: Write for "What Changes Next" Not "What Looks Good"
+## Principle 6: Make the Skill Produce Decisions People Act On, Not Reports That Look Impressive
+
+**In plain words**: It's easy to build a skill that produces polished, thorough output — a long analysis, a detailed report, a comprehensive summary. But if nobody changes what they do after reading it, the skill did nothing useful. Top skills define "success" as *someone makes a different decision because of the output*, not *the output looks complete*. This orientation changes everything about the skill — what data it gathers, what it emphasizes, when it stops.
+
+A stock analysis skill succeeds when you buy or sell. A code review skill succeeds when the author changes the code. A research skill succeeds when the user chooses a direction. If the output doesn't move a decision, the skill is generating arithmetic.
 
 **Evidence**: Multiple top skills explicitly reject theoretical outputs in favor of actionable decisions.
 
@@ -164,7 +178,11 @@ Then offers another mindset reframe:
 
 ---
 
-## Principle 7: Constrain Model Inertia With Explicit Negative Priors
+## Principle 7: Pre-Block the Agent's Default Mistakes, Don't Rely on It Remembering
+
+**In plain words**: LLMs have default behaviors — some good, some dangerous. They log detailed errors (which can leak secrets). They auto-approve "security improvements" when asked (which can break things). They install packages to solve problems (which can introduce supply-chain risk). These defaults are baked into the model; you can't remove them by training the agent once. Every new session, the defaults return.
+
+Top skills preempt this by explicitly *blocking* the specific default mistakes at the moment the agent reads the skill. Not "be careful with secrets" — "Do not log secrets, tokens, private keys, environment variables, or full source/config files unless explicitly asked." Specific defaults, specific blocks.
 
 **Evidence**: Top skills name specific biases the model has and block them.
 
@@ -184,7 +202,9 @@ Then offers another mindset reframe:
 
 ---
 
-## Principle 8: The Skill Is a Compact Philosophy, Then Minimal Facts
+## Principle 8: Put the "Why" First, Then the "How"
+
+**In plain words**: The first 5–15 lines of a top skill tell the agent *what this skill is for and how to think about it*. Only after that does the skill get into commands, setup, and procedures. This is the opposite of reference documentation, which typically starts with "Installation" or "Quick Start" and saves the "Philosophy" (if any) for the end. Skills reverse that because the agent's first reading colors every subsequent decision — if you lead with commands, the agent sees the skill as a command list. If you lead with philosophy, the agent sees a mindset plus supporting facts.
 
 **Evidence**: From reading the top 20 skills, there's a consistent shape:
 
@@ -210,7 +230,11 @@ Identity first. Setup second.
 
 ---
 
-## Principle 9: Prefer Explicit Evidence Over Inference
+## Principle 9: Only Learn From Things the User Actually Said or Did — Don't Guess
+
+**In plain words**: Skills that accumulate memory across sessions face a temptation: extrapolate from patterns. The user didn't mention style X once, so they must prefer style Y. Three tasks used tool Z, so Z is now the preferred tool. This kind of guessing corrupts the memory over time because the model keeps making inferences on top of inferences, and eventually the "memory" is full of beliefs the user never actually expressed.
+
+Top memory skills reject this. They learn only from **explicit signals**: direct corrections from the user ("No, that's wrong"), stated preferences ("I prefer X"), documented successful outcomes, and repeated identical patterns (not similar, identical). Everything else is noise.
 
 **Evidence**: Memory and learning skills all converge on one rule.
 
@@ -234,7 +258,9 @@ Identity first. Setup second.
 
 ---
 
-## Principle 10: Stakes Are the Skill's North Star
+## Principle 10: Design Around the Failure You're Preventing, Not the Task You're Performing
+
+**In plain words**: Ask a skill author "what does your skill do?" and they'll describe the task ("it reviews code", "it audits security", "it fetches stock data"). Ask "what failure does your skill exist to prevent?" and you get something sharper ("bugs that pass review because the reviewer only checked the tests", "installing a malicious skill", "trading on overfit backtests"). The second framing is more useful for every design decision. When you know the failure mode, you know which defaults to set, which rules to assert, which outputs to emphasize, and when the skill has actually succeeded.
 
 **Evidence**: Top skills frame their work by what fails if they fail — not by what they do mechanically.
 
@@ -256,13 +282,14 @@ Identity first. Setup second.
 
 ---
 
-## The Meta-Principle: Skills Are Authored Claims, Not Documentation
+## The Meta-Principle: A Skill Makes a Claim; Documentation Describes a Thing
 
-Looking at all 10 principles above, a meta-pattern emerges:
+**In plain words**: Looking at all 10 principles above, one idea runs through all of them:
 
-**Documentation** describes what something is. It's neutral, complete, and safe.
+- **Documentation** describes what something is. It's neutral, complete, and safe — aiming not to mislead anyone.
+- **A skill** is different. A skill makes claims. It says "here's the right default," "here's what not to do," "here's how to think about this." The author has taken a position based on experience.
 
-**A skill** makes claims. It asserts defaults, rejects alternatives, calls out the failure mode, and reframes how the model should think. The author has taken a position.
+This is why a neutrally-worded, comprehensive skill is usually worse than an opinionated, selective one. Neutrality removes the force that redirects the model's behavior. The skill becomes a second description of the tool, which the model didn't need — it already knew the tool.
 
 [proactive-agent](https://clawhub.ai/skills/proactive-agent) asserts that agents shouldn't wait. [skill-vetter](https://clawhub.ai/skills/skill-vetter) asserts you should never install without vetting. [data-analysis](https://clawhub.ai/skills/data-analysis) asserts analysis without a decision is arithmetic. [word-docx](https://clawhub.ai/skills/word-docx) asserts DOCX is not plain text.
 
@@ -274,15 +301,15 @@ The top-ranked skills are opinionated. The ranking rewards that.
 
 ## Summary
 
-| # | Principle | Source of evidence |
-|---|-----------|-------------------|
-| 1 | Shift the agent's mindset | [proactive-agent](https://clawhub.ai/skills/proactive-agent), [data-analysis](https://clawhub.ai/skills/data-analysis), [backtest-expert](https://clawhub.ai/skills/backtest-expert), [thinking-partner](https://clawhub.ai/skills/thinking-partner) |
-| 2 | Opinionated defaults with reasoning | [nextjs-expert](https://clawhub.ai/skills/nextjs-expert), [database-operations](https://clawhub.ai/skills/database-operations), [security-auditor](https://clawhub.ai/skills/security-auditor) |
-| 3 | Scope as definition | [who-is-actor](https://clawhub.ai/skills/who-is-actor), [academic-deep-research](https://clawhub.ai/skills/academic-deep-research), [proactivity](https://clawhub.ai/skills/proactivity) |
-| 4 | "Treat X as Y, not Z" reframing | [word-docx](https://clawhub.ai/skills/word-docx), [excel-xlsx](https://clawhub.ai/skills/excel-xlsx), [playwright](https://clawhub.ai/skills/playwright) — 23 skills total |
-| 5 | Name failure modes | [self-improving-agent](https://clawhub.ai/skills/self-improving-agent), [skill-vetter](https://clawhub.ai/skills/skill-vetter), [humanizer](https://clawhub.ai/skills/humanizer) — 96+ skills |
-| 6 | Actionable > complete | [data-analysis](https://clawhub.ai/skills/data-analysis), [backtest-expert](https://clawhub.ai/skills/backtest-expert), [automation-workflows](https://clawhub.ai/skills/automation-workflows) |
-| 7 | Block specific model biases | [self-improving-agent](https://clawhub.ai/skills/self-improving-agent), [skill-vetter](https://clawhub.ai/skills/skill-vetter), [proactive-agent](https://clawhub.ai/skills/proactive-agent) |
-| 8 | Philosophy first, facts second | Top 20 skills by downloads |
-| 9 | Explicit evidence over inference | [self-improving](https://clawhub.ai/skills/self-improving), [self-improving-agent](https://clawhub.ai/skills/self-improving-agent), [who-is-actor](https://clawhub.ai/skills/who-is-actor) |
-| 10 | Stakes as north star | [skill-vetter](https://clawhub.ai/skills/skill-vetter), [backtest-expert](https://clawhub.ai/skills/backtest-expert), [ai-persona-os](https://clawhub.ai/skills/ai-persona-os) |
+| # | Principle | One-line summary | Source of evidence |
+|---|-----------|------------------|-------------------|
+| 1 | Change how the agent thinks, not just what it does | Skills reframe the question; procedures don't | [proactive-agent](https://clawhub.ai/skills/proactive-agent), [data-analysis](https://clawhub.ai/skills/data-analysis), [backtest-expert](https://clawhub.ai/skills/backtest-expert) |
+| 2 | Pick a default and explain why | Menus create inconsistency; defaults with rationale stabilize behavior | [nextjs-expert](https://clawhub.ai/skills/nextjs-expert), [database-operations](https://clawhub.ai/skills/database-operations), [security-auditor](https://clawhub.ai/skills/security-auditor) |
+| 3 | Define the skill by what it *is*, including what it isn't | Identity + boundary, not just description | [who-is-actor](https://clawhub.ai/skills/who-is-actor), [academic-deep-research](https://clawhub.ai/skills/academic-deep-research), [proactivity](https://clawhub.ai/skills/proactivity) |
+| 4 | Correct the agent's mental model with "Treat X as Y, not Z" | The model's default category for X is wrong — fix it first | [word-docx](https://clawhub.ai/skills/word-docx), [excel-xlsx](https://clawhub.ai/skills/excel-xlsx), [playwright](https://clawhub.ai/skills/playwright) — 23 skills |
+| 5 | Name the specific failure modes — they're the core teaching | The mistakes the model keeps making, named explicitly | [self-improving-agent](https://clawhub.ai/skills/self-improving-agent), [skill-vetter](https://clawhub.ai/skills/skill-vetter), [humanizer](https://clawhub.ai/skills/humanizer) — 96 skills |
+| 6 | Produce decisions people act on, not reports that look impressive | Success = someone decides differently because of the output | [data-analysis](https://clawhub.ai/skills/data-analysis), [backtest-expert](https://clawhub.ai/skills/backtest-expert), [automation-workflows](https://clawhub.ai/skills/automation-workflows) |
+| 7 | Pre-block the agent's default mistakes | Specific defaults + specific blocks, not "be careful" | [self-improving-agent](https://clawhub.ai/skills/self-improving-agent), [skill-vetter](https://clawhub.ai/skills/skill-vetter), [proactive-agent](https://clawhub.ai/skills/proactive-agent) |
+| 8 | Put the "why" first, then the "how" | First reading sets the mindset for everything after | Top 20 skills by downloads |
+| 9 | Only learn from what the user actually said or did | No guessing, no extrapolation — explicit signals only | [self-improving](https://clawhub.ai/skills/self-improving), [self-improving-agent](https://clawhub.ai/skills/self-improving-agent), [who-is-actor](https://clawhub.ai/skills/who-is-actor) |
+| 10 | Design around the failure you prevent, not the task you perform | Framing by failure mode sharpens every design decision | [skill-vetter](https://clawhub.ai/skills/skill-vetter), [backtest-expert](https://clawhub.ai/skills/backtest-expert), [ai-persona-os](https://clawhub.ai/skills/ai-persona-os) |
