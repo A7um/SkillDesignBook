@@ -2,6 +2,8 @@
 
 **How to Write SKILL.md** — Philosophy, methodology, and practice for writing agent skills, learned by inspecting top-tier production skills from OpenAI, Anthropic, Cursor, Manus, Devin, and leading open-source projects.
 
+*By [Atum](https://atum.li)*
+
 ## Read the Book
 
 **[book/README.md](book/README.md)**

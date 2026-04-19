@@ -1,59 +1,40 @@
 # The Skill Design Book
 
-### How to Write SKILL.md — Philosophy, Methodology, and Practice from Top-Tier Skills
-
-*April 2026*
-
-Everything in this book was learned by inspecting production skills from OpenAI, Anthropic, Cursor, Manus, Devin, and leading open-source projects. Every principle links to the skill it was extracted from.
+**How to Write SKILL.md** — philosophy, methodology, and patterns extracted empirically from the **top 1,000 most-downloaded skills on ClawHub** (12.5M total downloads).
 
 ---
 
-## Table of Contents
+## What This Book Is
 
-### Part I: Philosophy — What the Best Skills Teach Us
-- [**Chapter 1: 10 Principles of Skill Design**](01-philosophy.md) — extracted by inspecting OpenAI's 9 SDK skills, their curated catalog, Osmani's 19 engineering skills, and Anthropic/Cursor/Devin/Manus system prompts
+A practical, data-backed guide to writing SKILL.md files for long-running AI agents. Every principle and pattern in this book is grounded in direct analysis of production skills from:
 
-### Part II: Methodology — How to Write Each Part
-- [**Chapter 2: Writing the Description**](02-writing-the-description.md) — the 1-1024 char routing boundary, 6 production descriptions dissected component-by-component, before/after rewrites, testing methodology
-- [**Chapter 3: Writing the Body**](03-writing-the-body.md) — section ordering, imperative style, input collection with exact commands, 3 decision tree patterns, output templates, approval gates, verification steps, constraint language, anti-patterns, complete body template
-- [**Chapter 4: Skill Patterns**](04-skill-patterns.md) — **27 patterns** validated across **58,593 ClawHub skills** (full corpus programmatic analysis) + 80+ deep-read skills. Each pattern has What/Why/How + corpus frequency data + cited skills
-- [**Chapter 5: File Architecture and Testing**](05-file-architecture-and-testing.md) — directory structure, scripts (when/how), reference files (when/how), cross-platform paths, AGENTS.md integration, 4-step testing methodology, authoring checklist
+- **OpenAI** — 14 skills (Agents SDK + curated catalog)
+- **Anthropic, Vercel, Stripe, Sentry, Trail of Bits** — 18 official company skills
+- **Addy Osmani** — 19 lifecycle engineering skills
+- **ClawHub community** — top 1,000 by download (12.5M downloads, 990 matched SKILL.md files, 889 analyzed scripts)
+- **Full corpus** — 58,593 skills analyzed programmatically
 
-### Part III: Empirical Analysis
-- [**Chapter 6: Top 1,000 Downloaded Skills — Data-Driven Analysis**](06-top1000-analysis.md) — Top 20 skills table · Aggregate stats vs corpus · Pattern frequency (990 skills) · Script analysis (327 scripted, Python 56%) · 3 new patterns · Self-improving-agent case study (398K dl) · 8 takeaways
+## How It's Organized
 
-### Reference
-- [**Source Catalog**](14-source-catalog.md) — 110+ hyperlinked references to every primary source
+**Part I — Philosophy** opens the book with 10 design principles mined from the skills' own "Core Philosophy" / "Core Principle" sections, plus their explicit "Never..." / "Treat X as Y, not Z" / "Not a..." declarations. Every principle is quoted directly from specific top skills.
 
----
+**Part II — Methodology** walks through the craft of writing each part of a SKILL.md file: the description (the routing boundary), the body (section ordering, instruction style, decision trees, output templates, scripts vs prose, constraint language), skill patterns (16 structural archetypes A–P discovered from corpus analysis), and file architecture (directory structure, scripts, references, testing).
+
+**Part III — Empirical Analysis** presents the data: top 20 downloaded skills, aggregate statistics, pattern frequency in the top 1,000 vs the full corpus, script analysis (Python 56%, Bash 32%, JS/TS 12%), and a case study of `self-improving-agent` (398K downloads — the #1 skill on ClawHub).
+
+**Reference** — a source catalog with 110+ hyperlinked references to every skill, blog post, and paper cited.
 
 ## Reading Paths
 
-**"I want to write my first skill":**
-Ch 1 (principles) → Ch 2 (description) → Ch 3 (body) → Ch 4 (pick a pattern) → Ch 5 (file structure + checklist)
+- **"I want to write my first skill"** → Chapter 1 (philosophy) → Chapter 2 (description) → Chapter 3 (body) → Chapter 4 (pick a pattern) → Chapter 5 (files and testing)
+- **"I want to understand the design principles"** → Chapter 1 only
+- **"I want to see patterns from real skills"** → Chapter 4 (patterns A–P) + Chapter 6 (data analysis)
+- **"I want to look up a specific skill"** → [Source Catalog](14-source-catalog.md)
 
-**"I want to understand the philosophy":**
-Ch 1 (all 10 principles with production evidence)
+## The Meta-Principle
 
-**"I want to see what real skills look like":**
-Every chapter links to the full text of the production skills it analyzes. Start with Ch 4 (patterns) for the broadest view.
-
-**"I want to look up a specific source":**
-[Source Catalog](14-source-catalog.md) — organized by company, topic, and type
+> A skill is not documentation. Documentation describes what something is; a skill makes claims. It asserts defaults, rejects alternatives, names failure modes, and corrects the model's mental model. The top-ranked skills are opinionated — the ranking rewards that.
 
 ---
 
-## Production Skills Referenced
-
-| Skill | Author | Pattern | Full Text |
-|-------|--------|---------|-----------|
-| `code-change-verification` | OpenAI | Gate-keeper | [source](https://playbooks.com/skills/openai/openai-agents-python/code-change-verification) |
-| `implementation-strategy` | OpenAI | Think-before-act | [source](https://raw.githubusercontent.com/openai/openai-agents-python/main/.agents/skills/implementation-strategy/SKILL.md) |
-| `final-release-review` | OpenAI | Decision gate | [source](https://raw.githubusercontent.com/openai/openai-agents-python/main/.agents/skills/final-release-review/SKILL.md) |
-| `docs-sync` | OpenAI | Report-first | [source](https://raw.githubusercontent.com/openai/openai-agents-python/main/.agents/skills/docs-sync/SKILL.md) |
-| `test-coverage-improver` | OpenAI | Report-first | [source](https://raw.githubusercontent.com/openai/openai-agents-python/main/.agents/skills/test-coverage-improver/SKILL.md) |
-| `pr-draft-summary` | OpenAI | Handoff automation | [source](https://raw.githubusercontent.com/openai/openai-agents-python/main/.agents/skills/pr-draft-summary/SKILL.md) |
-| `gh-fix-ci` | OpenAI | Debug-and-fix | [source](https://raw.githubusercontent.com/openai/skills/main/skills/.curated/gh-fix-ci/SKILL.md) |
-| `imagegen` | OpenAI | Prompt augmentation | [source](https://github.com/openai/skills/blob/main/skills/.curated/imagegen/SKILL.md) |
-| `runtime-behavior-probe` | OpenAI | Empirical probe | [source](https://github.com/openai/openai-agents-python/blob/main/.agents/skills/runtime-behavior-probe/SKILL.md) |
-| `code-review-and-quality` | Addy Osmani | Multi-axis review | [source](https://github.com/addyosmani/agent-skills/blob/main/skills/code-review-and-quality/SKILL.md) |
+*By [Atum](https://atum.li) — Source: [github.com/A7um/SkillDesignBook](https://github.com/A7um/SkillDesignBook)*
