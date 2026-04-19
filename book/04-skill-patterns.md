@@ -1,16 +1,53 @@
-# Part II, Chapter 4: Skill Patterns — Recurring Structures Across 50+ Production Skills
+# Part II, Chapter 4: Skill Patterns — Recurring Structures Across 58,593 Skills
 
-A pattern must appear in **at least 5 independently-authored skills**, unless it is a pioneering pattern from a top-tier skill that others are copying. Every pattern is structured as **What** / **Why** / **How**, and every claim cites the skill by name with a link.
+A pattern must appear in **at least 5 independently-authored skills** (or 1%+ of the full corpus), unless it is a pioneering pattern from a top-tier skill that others are copying. Every pattern is structured as **What** / **Why** / **How**, and every claim cites the skill by name with a link.
 
 ### Skills Corpus
+
+**Full corpus analysis**: 58,593 SKILL.md files from [openclaw/skills](https://github.com/openclaw/skills) — every skill published on ClawHub — analyzed programmatically by cloning the repo and running pattern detection across all files.
+
+**Deep-read corpus** (full SKILL.md read + structural annotation):
 
 | Source | Count | Link |
 |--------|-------|------|
 | OpenAI Agents SDK | 9 | [github](https://github.com/openai/openai-agents-python/tree/main/.agents/skills) |
 | OpenAI curated catalog | 5 | [github](https://github.com/openai/skills/tree/main/skills/.curated) |
 | Addy Osmani | 19 | [github](https://github.com/addyosmani/agent-skills) |
-| ClawHub / OpenClaw | 10 | [clawhub.ai](https://clawhub.ai/skills?sort=downloads), [github](https://github.com/openclaw/skills) |
-| Anthropic official | 6 | [VoltAgent list](https://github.com/VoltAgent/awesome-agent-skills) |
+| ClawHub top downloads | 30+ | [clawhub.ai](https://clawhub.ai/skills?sort=downloads), [openclaw/skills](https://github.com/openclaw/skills) |
+| Anthropic, Vercel, Stripe, Sentry, etc. | 18 | [VoltAgent list](https://github.com/VoltAgent/awesome-agent-skills) |
+
+### Corpus-Level Pattern Frequency (58,593 skills)
+
+| Pattern | Count | % of corpus |
+|---------|-------|-------------|
+| Em-dash rationale style (4+ uses) | 21,440 | 36.6% |
+| `scripts/` directory | 18,204 | 31.1% |
+| `references/` directory | 12,591 | 21.5% |
+| ✅/❌ or GOOD/BAD code contrast | 11,605 | 19.8% |
+| Quick Start / Quick Reference | 10,121 | 17.3% |
+| Error Handling section | 8,400 | 14.3% |
+| When to Use section | 7,755 | 13.2% |
+| Best Practices section | 6,926 | 11.8% |
+| Output Format / Template | 5,665 | 9.7% |
+| Workflow section | 5,510 | 9.4% |
+| Troubleshooting section | 5,296 | 9.0% |
+| Checklist items `[ ]` | 3,716 | 6.3% |
+| When NOT to Use | 2,895 | 4.9% |
+| Common Traps / Gotchas | 2,256 | 3.9% |
+| Local memory directory (`~/name/`) | 2,096 | 3.6% |
+| Approval gate | 1,842 | 3.1% |
+| Related Skills | 1,716 | 2.9% |
+| Security & Privacy | 853 | 1.5% |
+
+### Top 1,000 Skills Statistics
+
+| Metric | Value |
+|--------|-------|
+| Average lines | 1,164 |
+| Median lines | 957 |
+| Average ## sections | 18.2 |
+| Average code blocks | 38.8 |
+| Range | 749 – 9,935 lines |
 
 ---
 
@@ -542,6 +579,44 @@ A pattern must appear in **at least 5 independently-authored skills**, unless it
 
 ---
 
+## Pattern 26: Error Handling Section (8,400/58,593 = 14.3%)
+
+**What**: A dedicated section specifying what the agent should do when a step fails — classified by error type, with specific recovery actions.
+
+**Why**: Present in 14.3% of all 58,593 ClawHub skills — one of the most common sections after Quick Start. Without error handling instructions, agents either retry blindly, skip the step, or halt entirely. Explicit error handling turns failures into recoverable states.
+
+**How**: After each critical step, add: "If this fails: [specific recovery action]." For skills with multiple failure modes, create an Error Handling section with error type → action mappings.
+
+**Skills demonstrating this:**
+
+- [gh-issues](https://raw.githubusercontent.com/openclaw/openclaw/main/skills/gh-issues/SKILL.md): "If curl returns HTTP 401 or 403 → stop and tell user to check apiKey" / "If response is empty → report 'No issues found' and stop or loop if watch mode" / "If curl fails → report error verbatim and stop"
+- [gh-fix-ci](https://raw.githubusercontent.com/openai/skills/main/skills/.curated/gh-fix-ci/SKILL.md): "If a field is rejected, rerun with the available fields reported by gh"
+- [solo-review](https://clawhub.ai/skills/solo-review): "Error Handling" section — Tests won't run → check deps; Linter not configured → note as recommendation, not blocker; Build fails → report specific errors, BLOCK verdict
+- [code-change-verification](https://playbooks.com/skills/openai/openai-agents-python/code-change-verification): "If dependencies changed, run `make sync` first" — handles the dep-not-installed failure preemptively
+- [imagegen](https://github.com/openai/skills/blob/main/skills/.curated/imagegen/SKILL.md): References `references/codex-network.md` for network/sandbox troubleshooting
+- 8,400 skills across ClawHub corpus
+
+---
+
+## Pattern 27: Troubleshooting Section (5,296/58,593 = 9.0%)
+
+**What**: A known-problem → fix lookup table that addresses specific errors the agent will encounter.
+
+**Why**: 9.0% of all ClawHub skills include this. Domain-specific tools have predictable failure modes. Providing a lookup table of known errors + fixes saves the agent from open-ended debugging. This is especially important for skills wrapping external APIs or CLI tools.
+
+**How**: Create a `## Troubleshooting` section with known errors. Each entry: error symptom → cause → fix command.
+
+**Skills demonstrating this:**
+
+- [sora](https://github.com/openai/skills/blob/main/skills/.curated/sora/SKILL.md): `references/troubleshooting.md` — dedicated troubleshooting reference file
+- [solo-review](https://clawhub.ai/skills/solo-review): "Error Handling" section organized by symptom (Tests won't run / Linter not configured / Build fails)
+- [docker](https://clawhub.ai/skills/docker): 6 trap categories which ARE the troubleshooting content
+- [git](https://clawhub.ai/skills/git): "Recovery Commands" section — specific git commands for specific failure states
+- [linux](https://clawhub.ai/skills/linux): Entire skill is troubleshooting organized by subsystem
+- 5,296 skills across ClawHub corpus
+
+---
+
 ## Updated Pattern Summary Table
 
 | # | Pattern | Freq | What | Why | Exemplar |
@@ -571,3 +646,5 @@ A pattern must appear in **at least 5 independently-authored skills**, unless it
 | **23** | **Security & Privacy Decl.** | **10+** | **Data flow transparency** | **Post-ClawHavoc trust** | **[review-code](https://clawhub.ai/skills/review-code)** |
 | **24** | **AI-Mistakes-to-Avoid** | **5+★** | **Agent-specific failure modes** | **LLMs ≠ humans** | **[react](https://clawhub.ai/skills/react)** |
 | **25** | **Em-Dash Rationale** | **15+** | **Rule — reason in one line** | **Rules without reason feel arbitrary** | **[docker](https://clawhub.ai/skills/docker)** |
+| **26** | **Error Handling Section** | **8,400** | **What to do when steps fail** | **14.3% of all skills; silent failure = broken** | **[gh-issues](https://raw.githubusercontent.com/openclaw/openclaw/main/skills/gh-issues/SKILL.md)** |
+| **27** | **Troubleshooting Section** | **5,296** | **Known-problem → fix lookup table** | **9.0% of all skills; saves debugging time** | **[sora](https://github.com/openai/skills/blob/main/skills/.curated/sora/SKILL.md)** |

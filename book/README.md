@@ -16,7 +16,7 @@ Everything in this book was learned by inspecting production skills from OpenAI,
 ### Part II: Methodology — How to Write Each Part
 - [**Chapter 2: Writing the Description**](02-writing-the-description.md) — the 1-1024 char routing boundary, 6 production descriptions dissected component-by-component, before/after rewrites, testing methodology
 - [**Chapter 3: Writing the Body**](03-writing-the-body.md) — section ordering, imperative style, input collection with exact commands, 3 decision tree patterns, output templates, approval gates, verification steps, constraint language, anti-patterns, complete body template
-- [**Chapter 4: Skill Patterns**](04-skill-patterns.md) — 12 recurring patterns identified across 50+ production skills, each backed by 5+ independent examples (or pioneering status). Patterns: When-to-use/not-use, Numbered workflow, Output template, Report-then-approve, Quick start, Script-backed determinism, Decision table, Exact input commands, Reference file architecture, Severity labeling, Anti-sycophancy clauses, Post-action verification
+- [**Chapter 4: Skill Patterns**](04-skill-patterns.md) — **27 patterns** validated across **58,593 ClawHub skills** (full corpus programmatic analysis) + 80+ deep-read skills. Each pattern has What/Why/How + corpus frequency data + cited skills
 - [**Chapter 5: File Architecture and Testing**](05-file-architecture-and-testing.md) — directory structure, scripts (when/how), reference files (when/how), cross-platform paths, AGENTS.md integration, 4-step testing methodology, authoring checklist
 
 ### Reference
