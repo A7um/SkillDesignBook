@@ -131,10 +131,11 @@ Every claim in this book links to a primary source. Use this catalog to jump dir
 | Skill | URL | Pattern / Notes |
 |-------|-----|-----------------|
 | ClawHub Skills Hub (sorted by downloads) | [clawhub.ai/skills?sort=downloads](https://clawhub.ai/skills?sort=downloads) | 3,286 skills, 1.5M+ total downloads |
-| `review-code` (ClawHub, 473 downloads) | [clawhub.ai/skills/review-code](https://clawhub.ai/skills/review-code) | Risk-first code review, 8 reference files, memory architecture |
-| `solo-review` (ClawHub, 645 downloads) | [clawhub.ai/skills/solo-review](https://clawhub.ai/skills/solo-review) | 12-dimension quality gate, SHIP/FIX/BLOCK verdict, rationalizations catalog |
-| OpenClaw `github` skill | [github.com/openclaw/openclaw](https://github.com/openclaw/openclaw/blob/main/skills/github/SKILL.md) | GitHub operations via `gh` CLI, JSON output patterns |
-| OpenClaw `gh-issues` skill | [github.com/openclaw/openclaw](https://github.com/openclaw/openclaw/blob/main/skills/gh-issues/SKILL.md) | 6-phase workflow, flag reference table, curl/Bearer token patterns |
+| `review-code` (ClawHub, 473 downloads) | [clawhub.ai](https://clawhub.ai/skills/review-code), [raw SKILL.md](https://raw.githubusercontent.com/openclaw/skills/main/skills/review-code/SKILL.md) | Risk-first code review, 8 reference files, memory architecture, severity+confidence calibration |
+| `solo-review` (ClawHub, 645 downloads) | [clawhub.ai](https://clawhub.ai/skills/solo-review) | 12-dimension quality gate (tests, lint, build, security, acceptance, code quality, plan, logs, principles, commits, docs, visual), SHIP/FIX/BLOCK verdict, rationalizations catalog, per-stack commands |
+| `skill-reviewer` (ClawHub) | [raw SKILL.md](https://raw.githubusercontent.com/openclaw/skills/main/skills/gitgoodordietrying/skill-reviewer/SKILL.md) | 53-point scoring rubric, structural checklist, description audit, example density/quality metrics, common defects catalog |
+| OpenClaw `github` skill | [raw SKILL.md](https://raw.githubusercontent.com/openclaw/openclaw/main/skills/github/SKILL.md) | ✅/❌ When to Use / NOT sections, common commands with JSON output, PR review + issue triage templates |
+| OpenClaw `gh-issues` skill | [raw SKILL.md](https://raw.githubusercontent.com/openclaw/openclaw/main/skills/gh-issues/SKILL.md) | 6-phase orchestrator, flag reference table, sub-agent spawning with full prompt template, claims-based dedup, fork mode, cron mode |
 | OpenClaw `review-pr` skill | [playbooks.com](https://playbooks.com/skills/openclaw/openclaw/review-pr) | Script-first PR review, structured JSON findings |
 | OpenClaw `pr-commit-workflow` | [github.com/openclaw/skills](https://github.com/openclaw/skills/tree/main/skills/joshp123/pr-commit-workflow/SKILL.md) | Commit + PR enforcement with human-written intent requirements |
 | OpenClaw `openclaw-pr-maintainer` | [github.com/openclaw/openclaw](https://github.com/openclaw/openclaw/blob/9098e948/.agents/skills/openclaw-pr-maintainer/SKILL.md) | Triage, label, land PRs with bug-fix evidence requirements |

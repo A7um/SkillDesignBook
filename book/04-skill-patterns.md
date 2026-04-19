@@ -9,11 +9,10 @@ This chapter identifies patterns by frequency: a pattern must appear in **at lea
 | OpenAI Agents SDK | 9 skills | [github](https://github.com/openai/openai-agents-python/tree/main/.agents/skills) |
 | OpenAI curated catalog | 5 skills (imagegen, sora, speech, doc, gh-fix-ci) | [github](https://github.com/openai/skills/tree/main/skills/.curated) |
 | Addy Osmani | 19 skills | [github](https://github.com/addyosmani/agent-skills) |
-| ClawHub top skills | review-code, solo-review, github, gh-issues, gitclaw, pr-commit-workflow, review-pr, requesting-code-review | [clawhub.ai](https://clawhub.ai/skills?sort=downloads) |
-| OpenClaw built-in | github, gh-issues, openclaw-pr-maintainer, review-pr | [github](https://github.com/openclaw/openclaw/tree/main/skills) |
+| ClawHub / OpenClaw (full SKILL.md read) | `review-code`, `solo-review`, `github`, `gh-issues`, `skill-reviewer`, `pr-commit-workflow`, `review-pr`, `requesting-code-review`, `openclaw-pr-maintainer`, `github-deploy-skill` | [clawhub.ai](https://clawhub.ai/skills?sort=downloads), [github.com/openclaw/skills](https://github.com/openclaw/skills), [github.com/openclaw/openclaw/skills](https://github.com/openclaw/openclaw/tree/main/skills) |
 | Anthropic official | docx, pptx, xlsx, pdf, canvas-design, slack-gif-creator | [VoltAgent list](https://github.com/VoltAgent/awesome-agent-skills) |
 
-Total: **50+ skills** inspected. Patterns below are ordered by frequency.
+Total: **50+ skills** with full SKILL.md text read. Patterns below are ordered by frequency.
 
 ---
 
@@ -391,6 +390,153 @@ After the skill acts, it re-runs a check to verify the action succeeded.
 
 ---
 
+---
+
+## Pattern 13: Scoring Rubric with Numeric Grades
+
+**Frequency: 5+/50 (pioneering pattern, growing rapidly)**
+
+The skill defines a numeric scoring system so the agent can grade its findings consistently.
+
+**Skills demonstrating this pattern:**
+
+- ClawHub `skill-reviewer` ([source](https://raw.githubusercontent.com/openclaw/skills/main/skills/gitgoodordietrying/skill-reviewer/SKILL.md)): 53-point rubric across 8 categories (Structure/11, Description/8, Metadata/4, Example density/3, Example quality/3, Organization/6, Actionability/10, Tips/8). Verdict thresholds: 45+ Excellent, 35-44 Good, 25-34 Fair, <25 Poor.
+- Osmani `code-review-and-quality`: Implicit scoring via 5-axis pass/fail + severity labels
+- ClawHub `solo-review`: Per-dimension PASS/WARN/FAIL → three-level verdict (SHIP/FIX FIRST/BLOCK)
+- ClawHub `review-code`: Severity + confidence calibration with explicit numeric rules
+- Devin: 🟢🟡🔴 confidence scoring (1-10 scale internally)
+
+**What the rubric looks like** (from `skill-reviewer`):
+
+```markdown
+DESCRIPTION SCORING:
+[2] Starts with what the skill does (active verb)
+    GOOD: "Write Makefiles for any project type."
+    BAD:  "This skill covers Makefiles."
+[2] Includes trigger phrases ("Use when...")
+[2] Specific scope (mentions concrete tools/languages)
+[1] Reasonable length (50-200 characters)
+[1] Contains searchable keywords naturally
+Score: __/8
+```
+
+**Why this is a distinct pattern**: The rubric makes evaluation deterministic. Two different agent runs produce the same score for the same input. Without a rubric, "review this skill" produces inconsistent assessments.
+
+---
+
+## Pattern 14: Checklist as Structural Backbone
+
+**Frequency: 8+/50**
+
+The entire workflow is organized as a checklist. Each item is a binary check (pass/fail) that the agent executes and marks.
+
+**Skills demonstrating this pattern:**
+
+- ClawHub `skill-reviewer`: `STRUCTURAL CHECKLIST` with `[ ]` items for every required element
+- ClawHub `solo-review`: 12-dimension checklist, each with specific commands to verify
+- Osmani `code-review-and-quality`: `Review Checklist` template with checkbox per category
+- OpenAI `final-release-review`: `references/review-checklist.md` (a checklist referenced from SKILL.md)
+- OpenAI `test-coverage-improver`: coverage → gap list → proposed tests (checklist of gaps)
+- OpenClaw `gh-issues`: Phase checklist (6 phases, each with verification)
+- OpenClaw `openclaw-pr-maintainer`: triage checklist per PR
+- ClawHub `review-code`: "Core Rules" each with sub-checks
+
+**The pattern:**
+```markdown
+### Step 1: Structural Check
+[ ] Valid YAML frontmatter
+[ ] `name` field present and valid
+[ ] `description` field present and non-empty
+[ ] Title heading after frontmatter
+[ ] "When to Use" section present
+[ ] At least 3 main content sections
+```
+
+**Why it works**: Checklists convert judgment into verification. The agent doesn't decide "is this good?" — it checks each binary condition. This is more reliable than open-ended evaluation.
+
+---
+
+## Pattern 15: Common Traps / Rationalizations Table
+
+**Frequency: 5+/50 (pioneering pattern)**
+
+The skill includes a table of known failure modes where agents (or humans) deceive themselves, paired with the correct reality.
+
+**Skills demonstrating this pattern:**
+
+- ClawHub `solo-review` ([source](https://clawhub.ai/skills/solo-review)):
+  ```
+  | "Tests were passing earlier" | Run them NOW. Code changed. |
+  | "It's just a warning"        | Warnings become bugs. Report. |
+  | "Good enough to ship"        | Quantify. Show the numbers.   |
+  | "I already checked this"     | Fresh evidence only.           |
+  ```
+
+- Osmani `code-review-and-quality`:
+  ```
+  | "It works, that's good enough" | Working code that's unreadable creates debt. |
+  | "We'll clean it up later"       | Later never comes. Require cleanup now.      |
+  | "AI-generated code is fine"    | AI code needs MORE scrutiny, not less.        |
+  ```
+
+- ClawHub `review-code`:
+  ```
+  - Reporting opinions as facts → credibility drops
+  - Calling something "probably fine" without tests → silent regressions
+  - Suggesting large rewrites for local defects → good fixes postponed
+  ```
+
+- OpenAI `implementation-strategy`: "Do not preserve a confusing abstraction just because it exists in the current branch diff."
+
+- OpenAI `final-release-review`: "If evidence is incomplete, issue GREEN LIGHT with follow-ups instead of BLOCKED."
+
+**Why this is powerful**: LLMs are trained on optimistic, agreeable text. They default to rationalizing problems away. This pattern names the specific rationalizations the agent will encounter and pre-programs the correct response. It's an **inoculation** against known failure modes.
+
+---
+
+## Pattern 16: Per-Stack Command Variants
+
+**Frequency: 6+/50**
+
+When a skill applies to multiple technology stacks, it provides the exact command for each stack rather than generic instructions.
+
+**Skills demonstrating this pattern:**
+
+- ClawHub `solo-review`:
+  ```markdown
+  ### Tests
+  # If Makefile exists — use it
+  make test 2>&1 || true
+  # Fallback: Next.js / Node
+  npm test -- --coverage 2>&1 || true
+  # Python
+  uv run pytest --tb=short -q 2>&1 || true
+  # Swift
+  swift test 2>&1 || true
+  ```
+
+- ClawHub `solo-review` (linting):
+  ```markdown
+  # Next.js
+  pnpm lint 2>&1 || true
+  pnpm tsc --noEmit 2>&1 || true
+  # Python
+  uv run ruff check . 2>&1 || true
+  # Swift
+  swiftlint lint --strict 2>&1 || true
+  # Kotlin
+  ./gradlew detekt 2>&1 || true
+  ```
+
+- OpenClaw `github`: `brew` and `apt` install paths for `gh`
+- OpenClaw `gh-issues`: HTTPS and SSH URL parsing patterns
+- ClawHub `skill-reviewer`: cross-platform accuracy checklist (macOS sed vs Linux sed, brew vs apt)
+- Osmani skills: various stack-specific patterns
+
+**Why this matters**: Generic "run your tests" doesn't help an agent. Per-stack commands with exact syntax eliminate guesswork.
+
+---
+
 ## Pattern Summary Table
 
 | # | Pattern | Frequency | Exemplar |
@@ -405,5 +551,9 @@ After the skill acts, it re-runs a check to verify the action succeeded.
 | 8 | Exact Input Collection Commands | 8+/50 | pr-draft-summary, final-release-review, solo-review |
 | 9 | Reference File Architecture | 10+/50 | imagegen, sora, speech, review-code |
 | 10 | Severity/Confidence Labeling | 7+/50 | final-release-review, code-review-and-quality, solo-review |
-| 11 | Anti-Sycophancy Clauses | 5+/50 (pioneering) | code-review-and-quality, solo-review, final-release-review |
+| 11 | Anti-Sycophancy / Anti-Rationalization | 5+/50 (pioneering) | code-review-and-quality, solo-review, final-release-review |
 | 12 | Post-Action Verification | 10+/50 | test-coverage-improver, docs-sync, solo-review |
+| 13 | Scoring Rubric with Numeric Grades | 5+/50 (pioneering) | skill-reviewer, solo-review |
+| 14 | Checklist as Structural Backbone | 8+/50 | skill-reviewer, solo-review, code-review-and-quality |
+| 15 | Common Traps / Rationalizations Table | 5+/50 (pioneering) | solo-review, code-review-and-quality, review-code |
+| 16 | Per-Stack Command Variants | 6+/50 | solo-review, github, gh-issues, skill-reviewer |
