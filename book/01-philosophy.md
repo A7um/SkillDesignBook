@@ -21,7 +21,7 @@ This part distills the design philosophy behind the best production skills by in
 
 The single most consistent property of every top-tier skill: **it reads like a run-book, not a wiki page**.
 
-Look at OpenAI's `code-change-verification` ([source](https://playbooks.com/skills/openai/openai-agents-python/code-change-verification)):
+Look at [code-change-verification](https://playbooks.com/skills/openai/openai-agents-python/code-change-verification):
 
 ```markdown
 ## Execution
@@ -47,7 +47,7 @@ The second version is informative to a human reader but useless to an agent. The
 
 **Principle 1: Write procedures the agent can execute, not documents the agent can read.**
 
-Addy Osmani encodes this explicitly: "**Process, not prose.** Skills are workflows agents follow, not reference docs they read." ([source](https://github.com/addyosmani/agent-skills))
+Addy Osmani encodes this explicitly in [agent-skills](https://github.com/addyosmani/agent-skills): "**Process, not prose.** Skills are workflows agents follow, not reference docs they read."
 
 ---
 
@@ -78,7 +78,7 @@ When OpenAI needs code review AND release gating, they use two separate skills w
 
 **Principle 2: One skill, one job. Orchestrate via AGENTS.md, not by cramming multiple workflows into one file.**
 
-OpenAI's official guidance: "Keep each skill focused on one job." ([source](https://developers.openai.com/codex/skills/create-skill))
+OpenAI's official guidance: "Keep each skill focused on one job." ([Codex skill docs](https://developers.openai.com/codex/skills/create-skill))
 
 ---
 
@@ -86,7 +86,7 @@ OpenAI's official guidance: "Keep each skill focused on one job." ([source](http
 
 In every top-tier skill, the description field is written as **routing logic** — it tells the agent precisely when to activate, not what the skill conceptually does.
 
-OpenAI's `pr-draft-summary` ([source](https://raw.githubusercontent.com/openai/openai-agents-python/main/.agents/skills/pr-draft-summary/SKILL.md)):
+[pr-draft-summary](https://raw.githubusercontent.com/openai/openai-agents-python/main/.agents/skills/pr-draft-summary/SKILL.md):
 
 ```yaml
 description: >
@@ -103,7 +103,7 @@ This is a decision procedure: IF (moderate-or-larger changes AND touches runtime
 
 **Principle 3: Write the description as an if/then activation rule, not a marketing tagline.**
 
-OpenAI's blog: "Your skill's description is effectively the model's decision boundary." ([source](https://developers.openai.com/blog/skills-shell-tips))
+OpenAI's blog: "Your skill's description is effectively the model's decision boundary." ([Shell + Skills + Compaction Tips](https://developers.openai.com/blog/skills-shell-tips))
 
 ---
 
@@ -125,7 +125,7 @@ OpenAI draws a sharp line between what goes in scripts and what stays in the SKI
 
 **Principle 4: Use scripts when the output must be identical every time. Use prose instructions when the agent needs to reason about context.**
 
-OpenAI's guidance: "Prefer instructions over scripts unless you need deterministic behavior or external tooling." ([source](https://developers.openai.com/codex/skills/create-skill))
+OpenAI's guidance: "Prefer instructions over scripts unless you need deterministic behavior or external tooling." ([Codex skill docs](https://developers.openai.com/codex/skills/create-skill))
 
 ---
 
@@ -147,35 +147,18 @@ This is not just safety. It's a skill design pattern that **splits analysis from
 
 ## 1.6 Hard Constraints at Top and Bottom, Workflow in Middle
 
-Research on LLM instruction-following shows **primacy bias** (instructions at the start are followed most) and **recency bias** (instructions at the end are recalled well). The middle is the weakest position. ([source: agent-layer.dev/skill-design](https://agent-layer.dev/skill-design/), citing ComplexBench NeurIPS 2024, IFScale 2025)
+Research on LLM instruction-following shows **primacy bias** (instructions at the start are followed most) and **recency bias** (instructions at the end are recalled well). The middle is the weakest position. ([Skill Design Guide](https://agent-layer.dev/skill-design/), citing ComplexBench NeurIPS 2024, IFScale 2025)
 
 Every OpenAI skill puts its hardest constraints at the top:
 
-```markdown
-# docs-sync — top:
-"Only update English docs under docs/** and never touch
-translated docs under docs/ja, docs/ko, or docs/zh."
-
-# final-release-review — top:
-"Default to 🟢 GREEN LIGHT TO SHIP unless at least one
-blocking trigger below is satisfied."
-
-# implementation-strategy — top:
-"Judge breaking-change risk against the latest release tag,
-not against unreleased branch churn."
-```
+- [docs-sync](https://raw.githubusercontent.com/openai/openai-agents-python/main/.agents/skills/docs-sync/SKILL.md) — top: "Only update English docs under docs/** and never touch translated docs under docs/ja, docs/ko, or docs/zh."
+- [final-release-review](https://raw.githubusercontent.com/openai/openai-agents-python/main/.agents/skills/final-release-review/SKILL.md) — top: "Default to 🟢 GREEN LIGHT TO SHIP unless at least one blocking trigger below is satisfied."
+- [implementation-strategy](https://raw.githubusercontent.com/openai/openai-agents-python/main/.agents/skills/implementation-strategy/SKILL.md) — top: "Judge breaking-change risk against the latest release tag, not against unreleased branch churn."
 
 And edge cases / guardrails at the bottom:
 
-```markdown
-# implementation-strategy — bottom:
-"Do not preserve a confusing abstraction just because it
-exists in the current branch diff."
-
-# final-release-review — bottom:
-"If you cannot provide a concrete unblock checklist item,
-do not use BLOCKED."
-```
+- [implementation-strategy](https://raw.githubusercontent.com/openai/openai-agents-python/main/.agents/skills/implementation-strategy/SKILL.md) — bottom: "Do not preserve a confusing abstraction just because it exists in the current branch diff."
+- [final-release-review](https://raw.githubusercontent.com/openai/openai-agents-python/main/.agents/skills/final-release-review/SKILL.md) — bottom: "If you cannot provide a concrete unblock checklist item, do not use BLOCKED."
 
 **Principle 6: Put MUST/NEVER constraints and defaults at the top. Put guardrails and edge cases at the bottom. Put the step-by-step workflow in the middle.**
 
@@ -185,7 +168,7 @@ do not use BLOCKED."
 
 The best skills specify the **exact shape** of their output.
 
-`final-release-review` defines a complete template:
+[final-release-review](https://raw.githubusercontent.com/openai/openai-agents-python/main/.agents/skills/final-release-review/SKILL.md) defines a complete template:
 
 ```markdown
 ### Release readiness review (<tag> -> TARGET <ref>)
@@ -198,7 +181,7 @@ The best skills specify the **exact shape** of their output.
    - Action: <concrete next step with pass criteria>
 ```
 
-`implementation-strategy` specifies a one-liner:
+[implementation-strategy](https://raw.githubusercontent.com/openai/openai-agents-python/main/.agents/skills/implementation-strategy/SKILL.md) specifies a one-liner:
 
 ```
 Compatibility boundary: latest release tag v0.x.y;
@@ -217,7 +200,7 @@ Without these templates, the agent improvises a different format every time. Wit
 
 When a skill involves classification (is this a breaking change? should I block the release?), top skills use explicit **decision tables**, not prose descriptions.
 
-`implementation-strategy` ([source](https://raw.githubusercontent.com/openai/openai-agents-python/main/.agents/skills/implementation-strategy/SKILL.md)):
+[implementation-strategy](https://raw.githubusercontent.com/openai/openai-agents-python/main/.agents/skills/implementation-strategy/SKILL.md):
 
 ```markdown
 ## Compatibility boundary rules
@@ -228,7 +211,7 @@ When a skill involves classification (is this a breaking change? should I block 
 - Unreleased persisted schema: may be renumbered.
 ```
 
-`final-release-review` ([source](https://raw.githubusercontent.com/openai/openai-agents-python/main/.agents/skills/final-release-review/SKILL.md)):
+[final-release-review](https://raw.githubusercontent.com/openai/openai-agents-python/main/.agents/skills/final-release-review/SKILL.md):
 
 ```markdown
 Blocking triggers (at least one required):
@@ -253,13 +236,13 @@ Both are **lookup tables**: the agent identifies which row matches, then follows
 
 The SKILL.md body loads into the agent's context window alongside everything else — conversation history, tool results, other skills. Every token competes for attention.
 
-The spec recommends: body under 500 lines, under ~5,000 tokens. ([source](https://agentskills.io/specification))
+The [Agent Skills spec](https://agentskills.io/specification) recommends: body under 500 lines, under ~5,000 tokens.
 
-Anthropic's authoring guide: "Once Claude loads [SKILL.md], every token competes with conversation history and your actual request." ([source](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices))
+Anthropic's [skill authoring best practices](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices): "Once Claude loads [SKILL.md], every token competes with conversation history and your actual request."
 
 The solution: **keep SKILL.md as a table of contents that points to detail in reference files**.
 
-OpenAI's `runtime-behavior-probe` has 4 reference files:
+[runtime-behavior-probe](https://github.com/openai/openai-agents-python/blob/main/.agents/skills/runtime-behavior-probe/SKILL.md) has 4 reference files:
 ```
 references/validation-matrix.md
 references/error-cases.md
@@ -267,7 +250,7 @@ references/openai-runtime-patterns.md
 references/reporting-format.md
 ```
 
-OpenAI's `imagegen` has 5:
+[imagegen](https://github.com/openai/skills/blob/main/skills/.curated/imagegen/SKILL.md) has 5:
 ```
 references/cli.md
 references/image-api.md
