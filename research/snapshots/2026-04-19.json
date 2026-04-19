@@ -39770,6 +39770,9 @@
     "frequency_shift_pp": 5.0,
     "new_top20_threshold": 20,
     "pattern_candidate_min": 3,
-    "pattern_add_min": 5
+    "pattern_add_min": 5,
+    "worklist_top_n": 20,
+    "worklist_new_entrants": 10,
+    "worklist_outlier_count": 10
   }
 }

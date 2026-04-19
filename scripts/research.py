@@ -1,22 +1,36 @@
 #!/usr/bin/env python3
-"""research.py — refresh the book's empirical foundation in one command.
+"""research.py — the cheap-and-quantitative half of the book update pipeline.
 
-The book is grounded in measurements of the top-1000 downloaded ClawHub
-skills. Those measurements go stale. This tool keeps them fresh.
+This script does what pattern matching is good at:
+  - counting known patterns across 1,000 skills
+  - detecting citation decay
+  - finding top-20 entrants
+  - surfacing pattern candidates approaching threshold
 
-  research.py            # full pipeline: fetch -> analyze -> compare -> validate
-  research.py fetch      # just snapshot the top-1000 to research/snapshots/
+It does NOT decide what's a new pattern. Regex can't read a skill
+and notice that 5 skills are converging on a structure no existing
+detector knows about. That's the agent's job.
+
+The output is a *worklist* — a small, curated set of skills for the
+agent to actually read. The agent's judgment, not this script's count,
+determines whether the book should change.
+
+Usage:
+  research.py            # full pipeline: fetch -> analyze -> compare -> worklist -> validate
+  research.py fetch      # snapshot the top-1000 to research/snapshots/
   research.py analyze    # recompute pattern frequencies on the latest snapshot
   research.py compare    # diff latest snapshot against previous
+  research.py worklist   # emit the skills the agent should read next
   research.py validate   # verify every skill citation in book/ still resolves
 
 Output:
   research/snapshots/<date>.json   — raw data for future diffs
-  research/reports/<date>.md       — human-readable report per cycle
+  research/reports/<date>.md       — per-cycle quantitative report
+  research/worklists/<date>.md     — curated skills for the agent to read
 
-Scripts are under research/ not /tmp/; this is the authoritative location.
-Pipeline is intentionally strict: fail fast, produce structured output, let
-the human decide what to act on.
+Pipeline is intentionally strict: fail fast on errors, produce structured
+output, never silently skip. The agent and the human both rely on the
+numbers being honest; a silent skip corrupts the book permanently.
 """
 from __future__ import annotations
 
@@ -40,6 +54,7 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 RESEARCH_DIR = REPO_ROOT / "research"
 SNAPSHOTS_DIR = RESEARCH_DIR / "snapshots"
 REPORTS_DIR = RESEARCH_DIR / "reports"
+WORKLISTS_DIR = RESEARCH_DIR / "worklists"
 BOOK_DIR = REPO_ROOT / "book"
 
 # ClawHub listing API — used purely read-only. Requires a UA header.
@@ -60,6 +75,9 @@ THRESHOLDS = {
     "new_top20_threshold": 20,       # top N skills whose novelty is interesting
     "pattern_candidate_min": 3,      # track candidates with 3+ skills
     "pattern_add_min": 5,            # actual add requires 5+ skills
+    "worklist_top_n": 20,            # always read the top-N by downloads
+    "worklist_new_entrants": 10,     # plus the N most recent top-20 entrants
+    "worklist_outlier_count": 10,    # plus N skills with unusual structure
 }
 
 # Patterns detected via regex across SKILL.md content.
@@ -396,6 +414,189 @@ def validate_citations(skills: list[Skill], book_dir: Path) -> list[tuple[Path, 
 
 
 # --------------------------------------------------------------------------
+# Worklist: the curated set of skills the agent should actually read
+# --------------------------------------------------------------------------
+
+
+def _skill_fingerprint(s: Skill) -> tuple:
+    """A rough structural shape. Skills with unusual fingerprints among the
+    top 1,000 are candidates for agent reading — they may use patterns the
+    regex detectors don't know about."""
+    hit_count = sum(1 for v in s.pattern_hits.values() if v)
+    return (
+        s.lines // 100,        # size bucket
+        s.sections // 5,       # structure bucket
+        s.code_blocks // 10,   # density bucket
+        s.script_count,
+        hit_count,
+    )
+
+
+def select_outliers(skills: list[Skill], n: int) -> list[Skill]:
+    """Return N skills that look structurally unlike their neighbors.
+
+    Heuristic: skills whose fingerprint is rare among the top 1,000 AND
+    that match fewer known patterns than average are the most likely to
+    be inventing something the detectors miss. Ranked by downloads so
+    the agent's attention goes to skills users actually use.
+    """
+    matched = [s for s in skills if s.content_found]
+    if not matched:
+        return []
+    fingerprints: dict[tuple, int] = {}
+    for s in matched:
+        fp = _skill_fingerprint(s)
+        fingerprints[fp] = fingerprints.get(fp, 0) + 1
+    avg_hits = sum(sum(v for v in s.pattern_hits.values()) for s in matched) / len(matched)
+    scored = []
+    for s in matched:
+        fp = _skill_fingerprint(s)
+        rarity = 1.0 / fingerprints[fp]
+        hit_count = sum(1 for v in s.pattern_hits.values() if v)
+        under_matched = max(0.0, avg_hits - hit_count) / max(avg_hits, 1.0)
+        # Downloads as a log-scale tiebreaker, but rarity dominates.
+        score = rarity * 10 + under_matched * 3 + (s.downloads / 1_000_000)
+        scored.append((score, s))
+    scored.sort(key=lambda x: -x[0])
+    return [s for _, s in scored[:n]]
+
+
+def build_worklist(
+    curr: Snapshot,
+    diff: "SnapshotDiff",
+) -> dict[str, list[Skill]]:
+    """Pick the skills the agent should read this cycle, grouped by reason."""
+    top_n = THRESHOLDS["worklist_top_n"]
+    new_count = THRESHOLDS["worklist_new_entrants"]
+    outlier_count = THRESHOLDS["worklist_outlier_count"]
+
+    top = curr.skills[:top_n]
+    new_entrants = diff.new_top20[:new_count]
+    seen = {s.slug for s in top} | {s.slug for s in new_entrants}
+    outliers = [s for s in select_outliers(curr.skills, outlier_count * 2) if s.slug not in seen][:outlier_count]
+
+    return {
+        "top": top,
+        "new_entrants": new_entrants,
+        "outliers": outliers,
+    }
+
+
+def render_worklist(
+    snap: Snapshot,
+    groups: dict[str, list[Skill]],
+    diff: "SnapshotDiff",
+) -> str:
+    """Produce an agent-facing Markdown worklist.
+
+    The agent reads this, opens each linked SKILL.md, and answers three
+    questions per skill:
+      1. Does this skill use a structural pattern not in Chapter 4?
+      2. Does it quote a principle that belongs in Chapter 1?
+      3. If cited in the book, is the citation still accurate?
+    """
+    lines: list[str] = []
+    lines.append(f"# Agent Worklist — {snap.date}\n")
+    lines.append(
+        "This worklist is what the quantitative pipeline could not decide on its own. "
+        "Read each skill's SKILL.md and answer the three questions at the bottom. "
+        "Append your findings to `research/findings/{date}.md` before the human reviews.\n"
+    )
+    lines.append("## Reading instructions\n")
+    lines.append(
+        "For each skill below, open its `SKILL.md` in `/tmp/clawhub-skills/skills/<owner>/<slug>/SKILL.md` "
+        "(or fetch from [github.com/openclaw/skills](https://github.com/openclaw/skills)). "
+        "Do **not** rely on the description or the auto-extracted pattern hits — read the actual body. "
+        "Reading is the point; pattern hits are a hint, not a substitute.\n"
+    )
+
+    lines.append("---\n")
+    lines.append(
+        f"## 1. Top {len(groups['top'])} by downloads (reference class)\n"
+    )
+    lines.append("_These are the most-downloaded skills. Any structural move they make is high-leverage. Read them first._\n")
+    for s in groups["top"]:
+        lines.append(_worklist_row(s))
+
+    lines.append("")
+    lines.append(
+        f"## 2. New entrants into top {THRESHOLDS['new_top20_threshold']} ({len(groups['new_entrants'])} skills)\n"
+    )
+    lines.append("_Skills that weren't in the previous snapshot's top 20. Check whether they invent something new._\n")
+    if groups["new_entrants"]:
+        for s in groups["new_entrants"]:
+            lines.append(_worklist_row(s))
+    else:
+        lines.append("_None this cycle._\n")
+
+    lines.append("")
+    lines.append(f"## 3. Structural outliers ({len(groups['outliers'])} skills)\n")
+    lines.append(
+        "_Skills whose shape (lines/sections/code blocks/scripts) is unusual among the top 1,000 and whose regex pattern hits are below average. These are the most likely candidates to be using a pattern the detectors don't know about._\n"
+    )
+    if groups["outliers"]:
+        for s in groups["outliers"]:
+            lines.append(_worklist_row(s))
+    else:
+        lines.append("_None this cycle._\n")
+
+    lines.append("")
+    lines.append("## 4. Pattern candidates (quantitative hint)\n")
+    if diff.pattern_candidates:
+        lines.append(
+            "_The regex pipeline says these known patterns are rising but haven't hit threshold. "
+            "Read a handful of skills in the top 20 that match each pattern to verify the detector isn't over-counting._\n"
+        )
+        for name, cnt in diff.pattern_candidates:
+            lines.append(f"- `{name}`: {cnt} skills in top 20 (need ≥{THRESHOLDS['pattern_add_min']})")
+    else:
+        lines.append("_No candidates near threshold this cycle._\n")
+
+    lines.append("")
+    lines.append("## 5. Broken citations (auto-detected — verify, don't trust)\n")
+    # Broken citations are filled in at the call site; this section is a placeholder
+    # the caller injects into.
+    lines.append("_See `research/reports/{date}.md` for the citation validation results. Each broken citation needs a human or agent decision: replace with an equivalent skill, or rework the paragraph to not need the citation._\n")
+
+    lines.append("---\n")
+    lines.append("## Questions to answer per skill\n")
+    lines.append(
+        "For each skill you read (especially in Sections 2 and 3), write a brief note answering:\n\n"
+        "1. **Is there a structural pattern here that is NOT in `book/04-skill-patterns.md`?** "
+        "If yes, describe it in one sentence. If 3+ skills in this worklist share it, it's a candidate for `research/candidates.md`. "
+        "If 5+ skills across the full top 1,000 share it (check by reading more widely), propose a new pattern entry.\n\n"
+        "2. **Does this skill quote or declare a design stance worth adding to `book/01-philosophy.md`?** "
+        "Only if a higher-downloaded skill makes a principle's point better than the current citation does. "
+        "Do not add a principle based on a single skill.\n\n"
+        "3. **If this skill is cited in the book, are the citation's specifics still accurate?** "
+        "Check the quoted text still appears in SKILL.md verbatim, and the download count cited matches current data (±5%).\n\n"
+        "## Non-findings are findings\n\n"
+        "If you read the whole worklist and nothing in the book needs to change, write that down. "
+        "A flat cycle is a valid cycle. The changelog should record it.\n"
+    )
+    return "\n".join(lines)
+
+
+def _worklist_row(s: Skill) -> str:
+    hit_count = sum(1 for v in s.pattern_hits.values() if v)
+    scripts_info = f"{s.script_count} scripts" if s.has_scripts else "no scripts"
+    refs_info = f"{s.ref_count} refs" if s.has_refs else "no refs"
+    return (
+        f"- [`{s.slug}`](https://clawhub.ai/skills/{s.slug}) — "
+        f"{s.downloads:,} dl · {s.lines} lines · {s.sections} sections · "
+        f"{s.code_blocks} code blocks · {scripts_info} · {refs_info} · "
+        f"{hit_count} known patterns hit"
+    )
+
+
+def save_worklist(text: str, snap_date: str) -> Path:
+    WORKLISTS_DIR.mkdir(parents=True, exist_ok=True)
+    path = WORKLISTS_DIR / f"{snap_date}.md"
+    path.write_text(text)
+    return path
+
+
+# --------------------------------------------------------------------------
 # Snapshot persistence
 # --------------------------------------------------------------------------
 
@@ -568,8 +769,24 @@ def cmd_validate(_: argparse.Namespace) -> int:
     return 1
 
 
+def cmd_worklist(_: argparse.Namespace) -> int:
+    """Emit an agent-facing worklist based on the latest snapshot."""
+    snapshots = sorted(SNAPSHOTS_DIR.glob("*.json")) if SNAPSHOTS_DIR.exists() else []
+    if not snapshots:
+        die("no snapshot exists — run `research.py fetch` first")
+    snap = load_latest_snapshot()
+    prev = load_latest_snapshot(exclude=snapshots[-1]) if len(snapshots) >= 2 else None
+    diff = diff_snapshots(snap, prev)
+    groups = build_worklist(snap, diff)
+    text = render_worklist(snap, groups, diff)
+    path = save_worklist(text, snap.date)
+    log(f"worklist: {path.relative_to(REPO_ROOT)}")
+    print(text)
+    return 0
+
+
 def cmd_default(_: argparse.Namespace) -> int:
-    """Full pipeline: fetch -> analyze -> compare -> validate -> write report."""
+    """Full pipeline: fetch, analyze, compare, validate, then build worklist."""
     api_items = fetch_top_skills()
     log(f"fetched {len(api_items)} skills from API")
     skills = build_skills(api_items)
@@ -593,6 +810,12 @@ def cmd_default(_: argparse.Namespace) -> int:
     report = render_report(snap, diff, broken)
     report_path = save_report(report, snap.date)
     log(f"report: {report_path.relative_to(REPO_ROOT)}")
+
+    worklist = render_worklist(snap, build_worklist(snap, diff), diff)
+    worklist_path = save_worklist(worklist, snap.date)
+    log(f"worklist: {worklist_path.relative_to(REPO_ROOT)}")
+
+    log("pipeline complete — next step: an agent reads the worklist, not the report")
     return 0
 
 
@@ -608,6 +831,7 @@ def build_parser() -> argparse.ArgumentParser:
         "fetch":    cmd_fetch,
         "analyze":  cmd_analyze,
         "compare":  cmd_compare,
+        "worklist": cmd_worklist,
         "validate": cmd_validate,
     }
     for name, fn in cmds.items():

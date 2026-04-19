@@ -1,19 +1,32 @@
 # SkillDesignBook — Update Guide
 
-> This guide is itself a skill. It follows the book's own principles: opinionated stance, named failure modes, explicit thresholds, and scripts that do the real work. If you find yourself about to violate one of the rules below, the guide is probably right and you're probably being tempted by a rationalization. Re-read the Rationalizations table at the bottom first.
+> This guide is itself a skill. It follows the book's own principles: opinionated stance, named failure modes, explicit thresholds, and a clear split between what machines decide and what agents decide. If you find yourself about to violate one of the rules below, the guide is probably right and you're probably being tempted by a rationalization. Re-read the Rationalizations table at the bottom first.
 
 ---
 
+## The Two-Layer Design
+
+**Pattern matching counts. Agents read.**
+
+This is the central discipline of the update process. The script `scripts/research.py` handles what regex is good at — counting occurrences of *known* patterns, detecting 404s, surfacing new top-20 entrants, computing frequency diffs. It never decides what's a new pattern, because regex can't detect patterns it hasn't been taught.
+
+An agent handles what reading is good at — opening actual SKILL.md files, noticing structural moves the detectors don't know about, verifying that a citation's quoted text still appears verbatim, judging whether a new skill's philosophy genuinely extends Chapter 1 or just rephrases an existing principle.
+
+Neither layer can substitute for the other. A regex-only pipeline misses novel patterns. An agent-only pipeline wastes context reading the same 1,000 skills every cycle when most cycles don't need a book change.
+
+The script produces a **worklist**: a small, curated set of skills the agent should actually read. The agent reads them and writes findings. A human reviews the findings before any book edit lands.
+
 ## Why This Guide Exists
 
-The book is grounded in measurements: "Pattern X appears in N% of the top-1,000 downloaded skills." Those numbers go stale. Skills drop out of the top 1,000. Citations break. New structural patterns emerge.
+The book is grounded in measurements: "Pattern X appears in N% of the top-1,000 downloaded skills." Those numbers go stale. Skills drop out of the top 1,000. Citations break. New structural patterns emerge that no existing detector will catch.
 
-This guide exists to prevent **two failure modes**:
+This guide exists to prevent **three failure modes**:
 
 - **Staleness** — the book keeps claiming frequency numbers that no longer match reality, cites skills that no longer rank, or misses patterns that have become universal.
 - **Churn** — the book gets rewritten every cycle to match the latest top-1 skill, losing the stable principles that were already well-founded.
+- **Detector blindness** — the book's pattern list calcifies around what the regex detectors know, and genuinely new structural moves in the corpus go unnoticed because the script never flagged them.
 
-Staleness erodes credibility. Churn destroys structure. This guide produces changes only when the evidence demands them.
+Staleness erodes credibility. Churn destroys structure. Detector blindness is the subtlest: the book looks consistent, the numbers look fresh, but the corpus has moved on in a direction the pipeline can't see.
 
 ---
 
@@ -33,13 +46,22 @@ Everything else is noise. Single-skill examples, blog announcements, and persona
 ## Quick Start
 
 ```bash
-# One command; does the whole cycle.
+# Step 1: refresh the quantitative layer (~10 seconds)
 python3 scripts/research.py
+
+# Step 2: agent reads the worklist and writes findings
+#   research/worklists/<date>.md   ← what to read
+#   research/findings/<date>.md    ← what you conclude
 ```
 
-This fetches the top 1,000 from the ClawHub API, analyzes pattern frequencies against the repo-local skill corpus, diffs against the previous snapshot, validates citations in `book/`, and writes a structured report to `research/reports/<date>.md`.
+Step 1 fetches the top 1,000 from the ClawHub API, analyzes against the local SKILL.md corpus, diffs against the previous snapshot, validates citations, and writes two outputs:
 
-No changes to the book happen automatically. The report tells you what changed; you decide what to edit.
+- `research/reports/<date>.md` — the **quantitative report** (numbers: frequency shifts, broken citations, pattern candidates)
+- `research/worklists/<date>.md` — the **agent reading list** (about 40 skills: top 20, new entrants, structural outliers)
+
+Step 2 is manual: an agent opens the worklist, reads each listed SKILL.md, and writes answers to the three questions at the bottom of the worklist into `research/findings/<date>.md`.
+
+No book changes happen until a human reviews the findings.
 
 ### Subcommands if you need them
 
@@ -48,14 +70,15 @@ No changes to the book happen automatically. The report tells you what changed; 
 | `research.py fetch` | Snapshot the top 1,000 to `research/snapshots/<date>.json` |
 | `research.py analyze` | Print pattern frequencies from the latest snapshot |
 | `research.py compare` | Diff the two most recent snapshots, print a report |
+| `research.py worklist` | Emit the agent reading list for the latest snapshot |
 | `research.py validate` | List book citations that no longer resolve |
-| `research.py` (default) | Run the full pipeline and write a dated report |
+| `research.py` (default) | Run the full pipeline: fetch → compare → validate → worklist |
 
 ---
 
 ## Workflow
 
-### 1. Run the pipeline
+### 1. Quantitative layer — run the pipeline
 
 ```bash
 python3 scripts/research.py
@@ -67,29 +90,52 @@ If the SKILL.md corpus isn't cloned locally, clone it once:
 git clone --depth 1 https://github.com/openclaw/skills.git /tmp/clawhub-skills
 ```
 
-The pipeline looks for SKILL.md files under the path in `$SKILLS_REPO` (defaults to `/tmp/clawhub-skills/skills`). It tolerates missing files — unmatched skills are counted but not pattern-analyzed.
+The pipeline looks for SKILL.md files under `$SKILLS_REPO` (defaults to `/tmp/clawhub-skills/skills`). It tolerates missing files — unmatched skills are counted but not pattern-analyzed.
 
-### 2. Read the report
+Outputs:
 
-The report has five sections. Act on each in order:
+- `research/snapshots/<date>.json` — raw data for future diffs
+- `research/reports/<date>.md` — quantitative findings
+- `research/worklists/<date>.md` — what the agent should read
 
-- **Frequency shifts exceeding threshold** → update the numbers in `book/04-skill-patterns.md` and `book/06-top1000-analysis.md`. No other chapters change for this.
-- **New entrants into top 20** → scan their SKILL.md files. If their structure uses a pattern the book doesn't name, that's a candidate for Chapter 4. If their structure uses an existing pattern differently, that's a candidate exemplar swap.
-- **Pattern candidates** (3–4 hits, not yet at threshold) → append to `research/candidates.md` so you can see which ones are rising over multiple cycles. Do NOT add to the book yet.
-- **Broken citations** → fix in place. Either replace with a skill that still ranks and makes the same point, or drop the citation if no replacement exists.
-- **Dropped from top 1,000** → only matters if the dropped skills are currently cited. If yes, treat as broken citations.
+### 2. Agentic layer — read the worklist
 
-### 3. Run the pre-flight landscape check
+Open `research/worklists/<date>.md`. It's organized into four groups:
 
-Before touching `book/`, answer these three questions:
+- **Top 20 by downloads (reference class)** — read every one. These are the skills users actually use; any structural move they make is high-leverage. Some you'll skim because you already know them; read at least the ones you haven't seen recently.
+- **New entrants into top 20** — read carefully. These are the skills breaking in. A new structural move here is the most likely source of a new pattern.
+- **Structural outliers** — skills whose shape (lines, sections, scripts, regex hit count) is unusual among the top 1,000 AND whose pattern hits are below average. The combination is the signal: they don't look like their neighbors AND they don't match known patterns. If a new pattern is hiding anywhere, it's most likely hiding here.
+- **Pattern candidates (from the regex)** — the script says these known patterns are close to threshold. Verify by reading a few matching skills — the detector might be overcounting.
+
+For each skill, **read the actual SKILL.md body, not just the description or the pattern hit row**. The pattern hits are a hint, not a substitute. The worklist lists download counts, line counts, and section counts — use these to prioritize, not to conclude.
+
+For each skill you read, write a one-line note in `research/findings/<date>.md`. Then answer three questions for the cycle:
+
+1. **Is there a structural pattern here that is NOT in `book/04-skill-patterns.md`?**
+   - If you see the same novel structure across 3+ skills → candidate; add to `research/candidates.md`, don't yet add to the book.
+   - If 5+ skills → propose a new pattern entry with evidence links.
+   - If just 1–2 skills → one-off, not a pattern.
+
+2. **Does this skill declare a design stance worth adding to `book/01-philosophy.md`?**
+   - Only if a higher-downloaded skill makes a principle's point better than the current citation.
+   - Never propose a principle based on a single skill. Chapter 1 requires multi-skill convergence.
+
+3. **If this skill is cited in the book, are the citation's specifics still accurate?**
+   - Check the quoted text still appears in SKILL.md verbatim.
+   - Check the download count cited is within ±5% of current.
+   - Check any claim about the skill's structure still holds.
+
+### 3. Pre-flight landscape check
+
+Before touching `book/`, with the findings file in front of you, answer:
 
 1. **Has a new pattern genuinely emerged?** Multi-skill convergence only. Single high-downloaded skills don't count.
 2. **Does Chapter 1 (Philosophy) still hold?** Pick two principles and check: are the cited skills still reference-class? Are their quoted lines still intact? If a principle's evidence has eroded, flag for human review — do not auto-edit Chapter 1.
-3. **Is Chapter 4's pattern list still complete?** If the report shows a pattern hitting 5+ skills that's not in Chapter 4, the chapter is incomplete. Propose an addition.
+3. **Is Chapter 4's pattern list still complete?** If your findings show a pattern hitting 5+ skills that's not in Chapter 4, the chapter is incomplete. Propose an addition.
 
 ### 4. Make the changes
 
-See the per-chapter policy below.
+See the per-chapter policy below. Agent auto-commit is allowed only for the specific cases listed there; anything else needs human review of the findings file first.
 
 ### 5. Commit with a changelog entry
 
@@ -214,6 +260,9 @@ One invariant: this guide and `scripts/research.py` must agree. If you change th
 | "The API returned weird data, but the numbers look roughly right" | No. Stop and verify the API shape. Silently-wrong data corrupts the book permanently. |
 | "This cycle I'll also fix the chapter structure" | Structure changes are out of scope for a data-refresh cycle. Propose structural changes in a separate PR with their own justification. |
 | "I'll update the script later" | The script is the authoritative source of the numbers. Updating the book without updating the script creates skew. Do both, or neither. |
+| "The regex didn't flag anything, so there's nothing new" | The regex only finds what it was taught. Always run the agentic step — skills invent patterns the detectors don't know about. That's the whole reason the worklist exists. |
+| "The worklist is long; I'll skip the outliers section" | Outliers are where novel patterns hide. The top-20 rarely contains something unknown to the script because those skills have been seen before. Skip the outliers and you're running a regex-only pipeline. |
+| "I'll commit the book edits directly from the findings file" | No. Findings → human review → commit. The agent doesn't commit book changes directly; it proposes them. |
 
 ---
 
@@ -223,17 +272,27 @@ One invariant: this guide and `scripts/research.py` must agree. If you change th
 SkillDesignBook/
 ├── book/                         # The book (mdBook source)
 ├── scripts/
-│   ├── research.py               # Update pipeline — fetch, analyze, compare, validate
+│   ├── research.py               # Quantitative pipeline (fetch, analyze, compare, worklist, validate)
 │   └── optimize-book.py          # Post-build CI optimizer (unrelated)
 ├── research/
 │   ├── snapshots/<date>.json     # Raw data per cycle, for future diffs
-│   ├── reports/<date>.md         # Human-readable report per cycle
+│   ├── reports/<date>.md         # Quantitative report per cycle
+│   ├── worklists/<date>.md       # Curated skills for the agent to read
+│   ├── findings/<date>.md        # Agent's notes after reading the worklist
 │   ├── candidates.md             # Patterns at 3–4 skills, tracked over time
 │   └── changelog.md              # Update history
 ├── UPDATE_GUIDE.md               # This file
 ├── book.toml
 └── README.md
 ```
+
+## The Division of Labor
+
+| Who | What they do | What they don't do |
+|---|---|---|
+| **Script** (`research.py`) | Count known patterns, detect top-20 changes, find broken citations, flag outliers, emit a worklist | Decide what's a new pattern, judge whether a citation still "makes the same point," rewrite any book content |
+| **Agent** | Read worklist skills carefully, write findings file, propose book edits with evidence | Commit book edits directly, lower thresholds, rewrite philosophy chapters |
+| **Human** | Review findings, approve or reject each proposed change, merge | Be consulted on every citation repair or stat refresh (those are auto-safe) |
 
 ---
 
