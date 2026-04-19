@@ -353,3 +353,221 @@ A pattern must appear in **at least 5 independently-authored skills**, unless it
 | 16 | Per-Stack Commands | 6+ | Exact commands per technology | Eliminates guesswork | [solo-review](https://clawhub.ai/skills/solo-review) |
 
 ★ = pioneering pattern
+
+---
+
+*The following patterns were discovered by analyzing an additional 70+ skills from ClawHub community (code, git, docker, memory, python, react, nextjs, linux, deploy, ci-cd, plan, self-improving-agent, etc.), Anthropic official (docx, algorithmic-art, frontend-design), Vercel (react-best-practices, web-design-guidelines), Stripe (stripe-best-practices), Sentry (sentry-fix-issues), Trail of Bits (agentic-actions-auditor), and the full addyosmani/agent-skills pack (19 skills).*
+
+---
+
+## Pattern 17: Common Traps / Gotchas as Primary Content (20+/50)
+
+**What**: A dedicated section (often the longest) listing domain-specific pitfalls, each as a one-liner pairing the trap with its fix, using an em-dash separator.
+
+**Why**: For reference/advisory skills (git, docker, linux, typescript), traps ARE the value. Developers don't need a workflow — they need to know what will bite them. Structuring content as traps is more useful than structuring it as tutorials, because agents encounter problems mid-task and need the specific fix.
+
+**How**: Create sections named "Common Traps", "Gotchas", or "\<Domain\> Traps". Each bullet: `Trap description — Fix or correct approach`. Group traps by subcategory.
+
+**Skills demonstrating this:**
+
+- [docker](https://clawhub.ai/skills/docker): **6 trap categories** — Image Traps, Runtime Traps, Networking Traps, Compose Traps, Volume Traps, Resource Leaks. E.g.: "Running as root in container — Add `USER nonroot` in Dockerfile"
+- [git](https://clawhub.ai/skills/git): "Common Traps" section + "Recovery Commands" section. E.g.: "Force-pushing shared branches — Use `--force-with-lease` instead"
+- [linux](https://clawhub.ai/skills/linux): ENTIRE skill is traps — Permission Traps, Process Gotchas, Filesystem Traps, SSH Traps, Commands That Lie
+- [typescript](https://clawhub.ai/skills/typescript): Stop Using `any`, Narrowing Failures, Literal Type Traps, Inference Limits
+- [python](https://clawhub.ai/skills/python): Anti-patterns to Avoid section with ✅/❌ code pairs
+- [react](https://clawhub.ai/skills/react): Common Traps (Rendering / Hooks / Data Fetching subsections)
+- [nextjs](https://clawhub.ai/skills/nextjs): Common Traps table (trap → fix)
+- [devops](https://clawhub.ai/skills/devops): Common Mistakes section
+- [ci-cd](https://clawhub.ai/skills/ci-cd): Common Pipeline Pitfalls table (mistake → impact → fix)
+- [deploy](https://clawhub.ai/skills/deploy): Common Mistakes section
+
+---
+
+## Pattern 18: ✅/❌ Code Contrast Pairs (10+/50)
+
+**What**: Showing the wrong way and right way as adjacent code blocks, marked with ✅ and ❌.
+
+**Why**: Models learn by contrast. Showing ONLY the correct way leaves the agent uncertain about what to avoid. Showing both — with visual markers — creates a clear boundary. Research on instruction-following confirms that negative examples reduce misfires.
+
+**How**: Place bad example (❌) first, then good example (✅) immediately after. Use the same scenario for both so the contrast is clear.
+
+**Skills demonstrating this:**
+
+- [python](https://clawhub.ai/skills/python): ✅/❌ for PEP 8 patterns, import style, type hints
+- [react](https://clawhub.ai/skills/react): ✅/❌ for component patterns, hooks usage, state management
+- [typescript](https://clawhub.ai/skills/typescript): ✅/❌ for type narrowing, inference, strict mode
+- [github](https://raw.githubusercontent.com/openclaw/openclaw/main/skills/github/SKILL.md): ✅ "USE this skill when..." / ❌ "DON'T use this skill when..."
+- [skill-reviewer](https://raw.githubusercontent.com/openclaw/skills/main/skills/gitgoodordietrying/skill-reviewer/SKILL.md): GOOD/BAD example pairs for descriptions — `GOOD: "Write Makefiles for any project type." BAD: "This skill covers Makefiles."`
+- [code-review-and-quality](https://github.com/addyosmani/agent-skills/blob/main/skills/code-review-and-quality/SKILL.md): Bad/good comparison for change descriptions
+- All 19 [addyosmani/agent-skills](https://github.com/addyosmani/agent-skills): Bad → Good contrast in verification sections
+
+---
+
+## Pattern 19: Rationalizations-to-Reject Table (12+/50)
+
+**What**: A two-column table of `Excuse | Reality` that names specific rationalizations the agent (or human) might use to skip important steps.
+
+**Why**: This is distinct from Pattern 15 (Traps Table) which focuses on *domain* traps. This pattern targets *process* traps — the temptation to skip testing, rubber-stamp reviews, or declare done prematurely. Found in 17/19 Osmani skills, making it one of the most consistent patterns in the most-starred skill pack.
+
+**How**: Table with `| Rationalization | Reality |`. Place near the end (recency bias helps it stick). Target the specific temptations of the skill's domain.
+
+**Skills demonstrating this:**
+
+- All 17 of 19 [addyosmani/agent-skills](https://github.com/addyosmani/agent-skills) — each has a "Common Rationalizations" section. Examples from [code-review-and-quality](https://github.com/addyosmani/agent-skills/blob/main/skills/code-review-and-quality/SKILL.md):
+  - `"It works, that's good enough" → "Working unreadable code creates compound debt"`
+  - `"AI-generated code is probably fine" → "AI code needs MORE scrutiny, not less"`
+  - `"We'll clean it up later" → "Later never comes. Require cleanup now."`
+- [solo-review](https://clawhub.ai/skills/solo-review): 6-row table
+- [review-code](https://clawhub.ai/skills/review-code): "Common Traps" framed as rationalizations
+
+---
+
+## Pattern 20: Red Flags Section (8+/50)
+
+**What**: A list of observable warning signs (gerund-phrased behaviors) that indicate process failure, separate from the rationalizations table.
+
+**Why**: While rationalizations are internal thoughts, red flags are observable behaviors that can be detected. An agent can check for red flags in its own behavior or in the codebase it's reviewing. The gerund phrasing ("Skipping...", "Starting...") makes them pattern-matchable.
+
+**How**: List of `- [gerund phrase] [consequence]`. Placed after the main workflow, before or after rationalizations.
+
+**Skills demonstrating this:**
+
+- All 19 [addyosmani/agent-skills](https://github.com/addyosmani/agent-skills) have a "Red Flags" section. From [code-review-and-quality](https://github.com/addyosmani/agent-skills/blob/main/skills/code-review-and-quality/SKILL.md): "PRs merged without any review" / "LGTM without evidence of actual review" / "Large PRs that are too big to review properly (split them)" / "No regression tests with bug fix PRs"
+- [solo-review](https://clawhub.ai/skills/solo-review): Implicit red flags in verdict logic (security issue = BLOCK, failing tests = BLOCK)
+- [review-code](https://clawhub.ai/skills/review-code): "Missing migration and backward-compatibility checks → runtime failures after deploy"
+
+---
+
+## Pattern 21: Local Memory / State Directory (8+/50)
+
+**What**: The skill declares a local directory (typically `~/skillname/`) for persisting preferences, findings, and session history across runs.
+
+**Why**: Skills that learn from past runs (coding style, review preferences, decision patterns) need persistent storage. Declaring the path explicitly makes storage transparent, auditable, and cleanable. It also enables skills to build up domain knowledge over time.
+
+**How**: Declare the path in an "Architecture" or "Data Storage" section. Define the file structure. Always require user confirmation before creating or modifying files.
+
+**Skills demonstrating this:**
+
+- [code](https://clawhub.ai/skills/code): `~/code/` — memory.md (preferences), findings/ (per-review logs)
+- [coding](https://clawhub.ai/skills/coding): Coding style memory that "adapts to your preferences, conventions, and patterns"
+- [memory](https://clawhub.ai/skills/memory): `~/memory/` — INDEX.md, categorized storage files. Most comprehensive memory architecture on ClawHub (9.7K downloads)
+- [review-code](https://clawhub.ai/skills/review-code): `~/review-code/` — memory.md, findings/, baselines/, sessions/
+- [decide](https://clawhub.ai/skills/decide): Decision pattern storage with promotion gates
+- [nextjs](https://clawhub.ai/skills/nextjs): `~/nextjs/` for framework-specific preferences
+- [plan](https://clawhub.ai/skills/plan): Outcome tracking with strategy learning
+- [self-improving-agent](https://clawhub.ai/skills/self-improving-agent): Logging format with entry types, ID generation, promotion to project memory (399K downloads, highest on ClawHub)
+
+---
+
+## Pattern 22: Related Skills Cross-References (15+/50)
+
+**What**: A "Related Skills" section listing complementary skills with install commands.
+
+**Why**: Skills work better in ecosystems. A code review skill pairs with a git skill, a testing skill, and a CI/CD skill. Cross-references help users build complete workflows and help agents know which other skills to suggest.
+
+**How**: List skill names with one-line descriptions and install commands. Place at the end of the skill.
+
+**Skills demonstrating this:**
+
+- [review-code](https://clawhub.ai/skills/review-code): "code — implementation workflow" / "git — branch, diff, commit handling" / "typescript — typing and runtime safety" / "ci-cd — release-gate checks" / "devops — production risk"
+- [docker](https://clawhub.ai/skills/docker): Related to devops, deploy, linux
+- [git](https://clawhub.ai/skills/git): Related to github, deploy, ci-cd
+- [code](https://clawhub.ai/skills/code): Related to review-code, git, typescript, ci-cd
+- [react](https://clawhub.ai/skills/react): Related to typescript, nextjs, frontend
+- [nextjs](https://clawhub.ai/skills/nextjs): Related to react, typescript, deploy
+- [github-actions](https://clawhub.ai/skills/github-actions): Related to ci-cd, deploy, git
+- All 19 [addyosmani/agent-skills](https://github.com/addyosmani/agent-skills): Cross-reference by name (e.g., "For detailed security guidance, see `security-and-hardening`")
+- [skill-reviewer](https://raw.githubusercontent.com/openclaw/skills/main/skills/gitgoodordietrying/skill-reviewer/SKILL.md): "When comparing skills in the same category" — comparative review template
+
+---
+
+## Pattern 23: Security & Privacy Declaration (10+/50)
+
+**What**: An explicit section declaring what data the skill sends externally, what it stores locally, and what it does NOT do.
+
+**Why**: Users and security teams need to audit skill behavior. Post-ClawHavoc (January 2026, 341 malicious skills), transparency declarations became standard on ClawHub. ClawHub's security scan checks whether declared behavior matches actual behavior.
+
+**How**: Three-part structure: "Data that leaves your machine" / "Data stored locally" / "This skill does NOT:" followed by explicit denials.
+
+**Skills demonstrating this:**
+
+- [review-code](https://clawhub.ai/skills/review-code): "Data that leaves: Nothing by default" / "Data stored locally: Review preferences in ~/review-code/" / "This skill does NOT: auto-approve code, make network calls, store credentials, modify its own instructions"
+- [code](https://clawhub.ai/skills/code): External Endpoints table (Endpoint / Data Sent / Purpose) — "None | None | N/A"
+- [github-actions](https://clawhub.ai/skills/github-actions): External Endpoints + Trust section
+- [coding](https://clawhub.ai/skills/coding): Security & Privacy section
+- [memory](https://clawhub.ai/skills/memory): Security & Privacy section
+- [decide](https://clawhub.ai/skills/decide): Security & Privacy section
+- [skill-reviewer](https://raw.githubusercontent.com/openclaw/skills/main/skills/gitgoodordietrying/skill-reviewer/SKILL.md): Includes "Trust" assessment as part of review framework
+- [agentic-actions-auditor](https://github.com/trailofbits/skills) (Trail of Bits): Security auditing skill — security is the core content
+- [stripe-best-practices](https://github.com/stripe/ai) (Stripe): Secret handling constraints
+
+---
+
+## Pattern 24: AI-Mistakes-to-Avoid Section (5+/50, pioneering)
+
+**What**: A section explicitly targeting mistakes that AI agents (not humans) commonly make, addressing the agent as "you."
+
+**Why**: LLMs have known failure modes that differ from human mistakes: they hallucinate API parameters, use deprecated syntax, over-engineer simple tasks, and struggle with specific technical patterns (e.g., React hook dependency arrays). Naming these AI-specific mistakes directly reduces their frequency.
+
+**How**: Table or list of `AI Mistake → Correct Approach`, written addressing the agent: "You will be tempted to..." / "AI assistants commonly..."
+
+**Skills demonstrating this:**
+
+- [react](https://clawhub.ai/skills/react): "AI Mistakes to Avoid" — dedicated table of React patterns that AI agents specifically get wrong
+- [code-review-and-quality](https://github.com/addyosmani/agent-skills/blob/main/skills/code-review-and-quality/SKILL.md): "AI-generated code needs more scrutiny, not less"
+- [solo-review](https://clawhub.ai/skills/solo-review): "Never write 'tests should pass' — run them and show the output"
+- [coding](https://clawhub.ai/skills/coding): "Never infer from silence" — explicitly targets AI inference tendency
+- [AGI skill](https://clawhub.ai/skills/agi) (ClawHub): Meta-cognitive self-check — "Would a thoughtful human senior colleague respond this way?"
+
+---
+
+## Pattern 25: Em-Dash Rationale Style (15+/50)
+
+**What**: Each rule or bullet point includes a brief rationale after an em-dash (`—`), on the same line.
+
+**Why**: Without rationale, rules feel arbitrary and agents may deprioritize them. With rationale, the agent understands *why* the rule exists and can apply it correctly to edge cases not explicitly covered. The em-dash format keeps it compact (one line per rule+reason).
+
+**How**: `Rule statement — one-line rationale why`. Keep the rationale to 5-15 words.
+
+**Skills demonstrating this:**
+
+- [docker](https://clawhub.ai/skills/docker): "Always pin image tags — `latest` changes without warning"
+- [git](https://clawhub.ai/skills/git): "Never force-push shared branches — rewrites others' history"
+- [devops](https://clawhub.ai/skills/devops): Every bullet uses this format
+- [linux](https://clawhub.ai/skills/linux): Every pitfall uses this format
+- [code](https://clawhub.ai/skills/code): Core Rules use this format
+- [memory](https://clawhub.ai/skills/memory): Core Rules use this format
+- [coding](https://clawhub.ai/skills/coding): Core Rules use this format
+- [deploy](https://clawhub.ai/skills/deploy): Strategy descriptions use this format
+
+---
+
+## Updated Pattern Summary Table
+
+| # | Pattern | Freq | What | Why | Exemplar |
+|---|---------|------|------|-----|----------|
+| 1 | When to Use / NOT | 30+ | +/- triggers in description | Prevent collision | [github](https://raw.githubusercontent.com/openclaw/openclaw/main/skills/github/SKILL.md) |
+| 2 | Numbered Workflow | 25+ | Imperative numbered steps | Reliable execution | [gh-issues](https://raw.githubusercontent.com/openclaw/openclaw/main/skills/gh-issues/SKILL.md) |
+| 3 | Output Template | 20+ | Exact output format | Eliminate variance | [final-release-review](https://raw.githubusercontent.com/openai/openai-agents-python/main/.agents/skills/final-release-review/SKILL.md) |
+| 4 | Report-Then-Approve | 15+ | Analysis → report → ask → act | Safety gate | [docs-sync](https://raw.githubusercontent.com/openai/openai-agents-python/main/.agents/skills/docs-sync/SKILL.md) |
+| 5 | Quick Start | 12+ | Compressed fast path | Strong models skip detail | [implementation-strategy](https://raw.githubusercontent.com/openai/openai-agents-python/main/.agents/skills/implementation-strategy/SKILL.md) |
+| 6 | Script-Backed | 12+ | Scripts for determinism | Prevent improvisation | [code-change-verification](https://playbooks.com/skills/openai/openai-agents-python/code-change-verification) |
+| 7 | Decision Table | 8+ | Category → action lookup | Deterministic classification | [implementation-strategy](https://raw.githubusercontent.com/openai/openai-agents-python/main/.agents/skills/implementation-strategy/SKILL.md) |
+| 8 | Exact Input Commands | 8+ | Shell commands for inputs | Prevent asking/improvising | [pr-draft-summary](https://raw.githubusercontent.com/openai/openai-agents-python/main/.agents/skills/pr-draft-summary/SKILL.md) |
+| 9 | Reference Files | 10+ | Depth in `references/` | Context budget | [review-code](https://clawhub.ai/skills/review-code) |
+| 10 | Severity Labels | 7+ | Graded finding severity | Triage protocol | [code-review-and-quality](https://github.com/addyosmani/agent-skills/blob/main/skills/code-review-and-quality/SKILL.md) |
+| 11 | Anti-Sycophancy | 5+★ | Counter agreeable defaults | LLMs rationalize | [solo-review](https://clawhub.ai/skills/solo-review) |
+| 12 | Post-Action Verify | 10+ | Re-check after acting | Catch silent failures | [test-coverage-improver](https://raw.githubusercontent.com/openai/openai-agents-python/main/.agents/skills/test-coverage-improver/SKILL.md) |
+| 13 | Scoring Rubric | 5+★ | Numeric grades | Deterministic eval | [skill-reviewer](https://raw.githubusercontent.com/openclaw/skills/main/skills/gitgoodordietrying/skill-reviewer/SKILL.md) |
+| 14 | Checklist Backbone | 8+ | Binary pass/fail checks | Judgment → verification | [skill-reviewer](https://raw.githubusercontent.com/openclaw/skills/main/skills/gitgoodordietrying/skill-reviewer/SKILL.md) |
+| 15 | Traps Table | 5+★ | Rationalization → reality | Inoculate shortcuts | [solo-review](https://clawhub.ai/skills/solo-review) |
+| 16 | Per-Stack Commands | 6+ | Exact per-technology cmds | Eliminate guesswork | [solo-review](https://clawhub.ai/skills/solo-review) |
+| **17** | **Domain Traps as Content** | **20+** | **Pitfall + fix as primary content** | **Traps ARE the value** | **[docker](https://clawhub.ai/skills/docker)** |
+| **18** | **✅/❌ Code Contrast** | **10+** | **Bad/good code side-by-side** | **Models learn by contrast** | **[python](https://clawhub.ai/skills/python)** |
+| **19** | **Rationalizations Table** | **12+** | **Excuse → Reality for process traps** | **17/19 Osmani skills** | **[code-review-and-quality](https://github.com/addyosmani/agent-skills/blob/main/skills/code-review-and-quality/SKILL.md)** |
+| **20** | **Red Flags Section** | **8+** | **Observable warning signs** | **Pattern-matchable** | **[addyosmani all 19](https://github.com/addyosmani/agent-skills)** |
+| **21** | **Local Memory Directory** | **8+** | **~/skillname/ for persistence** | **Cross-session learning** | **[memory](https://clawhub.ai/skills/memory)** |
+| **22** | **Related Skills Cross-Refs** | **15+** | **Complementary skill links** | **Ecosystem building** | **[review-code](https://clawhub.ai/skills/review-code)** |
+| **23** | **Security & Privacy Decl.** | **10+** | **Data flow transparency** | **Post-ClawHavoc trust** | **[review-code](https://clawhub.ai/skills/review-code)** |
+| **24** | **AI-Mistakes-to-Avoid** | **5+★** | **Agent-specific failure modes** | **LLMs ≠ humans** | **[react](https://clawhub.ai/skills/react)** |
+| **25** | **Em-Dash Rationale** | **15+** | **Rule — reason in one line** | **Rules without reason feel arbitrary** | **[docker](https://clawhub.ai/skills/docker)** |
