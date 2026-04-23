@@ -115,15 +115,18 @@ def depth_to_root(html_path: Path, book_root: Path) -> str:
     return "../" * len(parts)
 
 
+LANG_SUBDIRS = {"zh"}
+
+
 def collect_pages(book_root: Path) -> list[Path]:
     pages = []
     for p in sorted(book_root.rglob("*.html")):
-        # Skip print.html (single-page dump, very heavy, rarely navigated to).
         if p.name in ("print.html", "404.html"):
             continue
-        # Skip inside theme/ or other generator-private folders.
         rel_parts = p.relative_to(book_root).parts
         if any(seg.startswith(".") for seg in rel_parts):
+            continue
+        if rel_parts and rel_parts[0] in LANG_SUBDIRS:
             continue
         pages.append(p)
     return pages

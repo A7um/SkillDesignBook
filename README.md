@@ -6,7 +6,9 @@
 
 ## Read the Book
 
-**[book/README.md](book/README.md)**
+**English**: [book/README.md](book/README.md)
+
+**中文版**: [zh/book/README.md](zh/book/README.md)
 
 ## What's Inside
 

@@ -1,13 +1,13 @@
 [book]
-title = "The Skill Design Book"
+title = "Skill 设计之书"
 authors = ["Atum <https://atum.li>"]
-description = "How to Write SKILL.md — philosophy, methodology, and patterns extracted from the top 1,000 most-downloaded ClawHub skills."
-language = "en"
+description = "如何编写 SKILL.md — 从 ClawHub 下载量前 1,000 名的 Skill 中提炼出的设计哲学、方法论与模式。"
+language = "zh"
 multilingual = false
 src = "book"
 
 [build]
-build-dir = "_book"
+build-dir = "../_book/zh"
 create-missing = false
 
 [output.html]
@@ -16,9 +16,9 @@ preferred-dark-theme = "navy"
 git-repository-url = "https://github.com/A7um/SkillDesignBook"
 git-repository-icon = "fa-github"
 edit-url-template = "https://github.com/A7um/SkillDesignBook/edit/main/{path}"
-site-url = "/SkillDesignBook/"
-additional-css = ["theme/custom.css"]
-additional-js = ["theme/lang-switch.js"]
+site-url = "/SkillDesignBook/zh/"
+additional-css = ["../theme/custom.css"]
+additional-js = ["../theme/lang-switch.js"]
 
 [output.html.fold]
 enable = true
