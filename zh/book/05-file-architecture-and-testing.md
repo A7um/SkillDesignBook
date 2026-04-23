@@ -1,4 +1,4 @@
-# 第二部分，第五章：文件架构、脚本与 Skill 测试
+# 第二部分 · 第 5 章：目录怎么摆、脚本怎么写、Skill 怎么测
 
 ### 参考来源
 
@@ -73,7 +73,7 @@ imagegen/
 4. **禁止内嵌密钥**：通过环境变量传递
 5. **输入输出有文档**：清楚说明输入什么、输出什么
 
-来自 OpenAI `code-change-verification/scripts/run.sh`——该脚本执行完整的验证流程：
+OpenAI 的 `code-change-verification/scripts/run.sh`，一整条验证链路都写死在脚本里：
 
 ```bash
 #!/usr/bin/env bash
@@ -85,7 +85,7 @@ make mypy
 make tests
 ```
 
-来自 `gh-fix-ci/scripts/inspect_pr_checks.py`——处理 API 变化：
+`gh-fix-ci/scripts/inspect_pr_checks.py` 里，顺带把 API 变了怎么办也考虑进去：
 
 ```bash
 # Usage:
@@ -93,7 +93,7 @@ python scripts/inspect_pr_checks.py --repo "." --pr "123"
 python scripts/inspect_pr_checks.py --repo "." --pr "123" --json
 ```
 
-`--json` 参数用于输出机器友好的格式，这是一个值得借鉴的模式——它让其他工具可以直接消费该脚本的输出。
+`--json` 这种「给人看默认输出、给程序看加开关」的写法，很值得抄：别的工具也能直接吃脚本结果。
 
 ### 跨 Skill 引用
 

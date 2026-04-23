@@ -1,6 +1,6 @@
-# 参考资料目录 — 各主题的超链接参考文献
+# 参考资料目录：按主题整理的链接
 
-本书中的每项论述都链接到原始来源。使用此目录可直接跳转到原始材料。
+书里该点出处的地方，尽量都链回一手材料。想顺着某个话题往下挖，可以从这份目录直接跳过去。
 
 ---
 
@@ -140,7 +140,7 @@
 | OpenClaw `pr-commit-workflow` | [github.com/openclaw/skills](https://github.com/openclaw/skills/tree/main/skills/joshp123/pr-commit-workflow/SKILL.md) | 提交 + PR 强制执行，要求人工编写的意图说明 |
 | OpenClaw `openclaw-pr-maintainer` | [github.com/openclaw/openclaw](https://github.com/openclaw/openclaw/blob/9098e948/.agents/skills/openclaw-pr-maintainer/SKILL.md) | 分流、标记、合入 PR，要求提供 bug 修复证据 |
 | Best ClawHub Skills Guide（2026 年 3 月） | [medium.com/@tentenco](https://medium.com/@tentenco/the-best-clawhub-skills-worth-installing-now-a-category-by-category-guide-5221c4850d21) | 分类指南、安全审查、100/3 规则 |
-| SkillCompass Analysis of Top 100 | [dev.to/john_spaghetti](https://dev.to/john_spaghetti/i-ran-skillcompass-on-the-top-100-clawhub-skills-heres-what-i-found-18fo) | 顶级 ClawHub skills 的质量分析 |
+| SkillCompass Analysis of Top 100 | [dev.to/john_spaghetti](https://dev.to/john_spaghetti/i-ran-skillcompass-on-the-top-100-clawhub-skills-heres-what-i-found-18fo) | 对 ClawHub 下载量头部 Skill 的质量分析 |
 | Top 5 Downloaded Skills Review | [dev.to/99rebels](https://dev.to/99rebels/i-installed-the-5-most-downloaded-skills-on-clawhub-only-one-did-anything-49e4) | 批判性评测 — 下载与安装比平均为 59:1 |
 
 ---

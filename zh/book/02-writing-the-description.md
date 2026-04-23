@@ -1,6 +1,6 @@
-# 第二部分，第 2 章：编写 Description（描述）
+# 第二部分 · 第 2 章：Description（描述）
 
-Description 是 Agent 启动时对每个已安装 Skill 唯一能看到的文本。它是路由决策边界。本章展示如何编写它，附带生产案例的拆解。
+Agent 启动时，每个已装上的 Skill，它**最先、也往往只会**扫到 Description 这一小段。说白了，这就是「要不要激活这个 Skill」的路由边界。本章用线上真实例子，拆开讲怎么写才好用。
 
 ### 来源
 
@@ -23,11 +23,11 @@ Description 是 Agent 启动时对每个已安装 Skill 唯一能看到的文本
 - 启动时为所有已安装 Skill 加载（每个约 100 token）
 - 这是 Agent 在决定激活之前读到的 **唯一内容**
 
-## 2.2 生产级 Description 的结构
+## 2.2 好用的 Description 长什么样
 
-每个顶级 Description 包含以下组件：
+写得好的 Description，通常几块信息都有：
 
-### 组件 1：做什么（一句话）
+### 组件 1：一句话说清「干什么」
 
 ```
 "Run the mandatory verification stack..."
@@ -36,7 +36,7 @@ Description 是 Agent 启动时对每个已安装 Skill 唯一能看到的文本
 "Create the required PR-ready summary block..."
 ```
 
-### 组件 2：正向触发器（"在……时使用"）
+### 组件 2：什么时候该用它（正向触发）
 
 ```
 "Use when a task changes exported APIs, runtime behavior,
@@ -50,30 +50,30 @@ to runtime code, tests, examples, build/test configuration,
 or docs with behavior impact"
 ```
 
-### 组件 3：负向触发器 / 边界
+### 组件 3：什么时候别用 / 边界在哪
 
-两种子模式：
+常见几种写法：
 
-**明确的跳过条件：**
+**写清楚「可以跳过」的情况：**
 ```
 "skip only for trivial or conversation-only tasks,
 repo-meta/doc-only tasks without behavior impact,
 or when the user explicitly says not to"
 ```
 
-**范围边界：**
+**范围写死：**
 ```
 "Only update English docs under docs/** and never touch
 translated docs under docs/ja, docs/ko, or docs/zh."
 ```
 
-**重定向到其他 Skill：**
+**该换别的 Skill 时，顺手指个路：**
 ```
 "Don't use for production deployments (use deploy-production).
 Don't use for query optimization (use query-optimizer skill)."
 ```
 
-## 2.3 六个生产级 Description 注解
+## 2.3 六个线上 Description，逐条拆
 
 ### 1. `code-change-verification`
 
@@ -87,7 +87,7 @@ description: >
 - **做什么**：运行验证栈
 - **何时**：变更影响运行时代码、测试或构建/测试行为时
 - **哪里**：在 OpenAI Agents Python 仓库中（限定在一个仓库内）
-- **跳过**：暗含的 — "当变更影响……"意味着"不影响时跳过"
+- **跳过**：没明说，但「当变更影响……」反过来就是「不影响就不用跑」
 - 长度：149 字符。简短、精确。
 
 ### 2. `implementation-strategy`

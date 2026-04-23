@@ -1,10 +1,10 @@
-# 第二部分，第四章：从下载量最高的 1,000 个 Skill 中发现的写作模式
+# 第二部分 · 第 4 章：从前 1,000 个下载量 Skill 里归纳出的写法
 
-本章展示的模式均来自对 **ClawHub 下载量最高的 1,000 个 Skill** 的实证分析（1,250 万次下载，匹配到 990 个 SKILL.md 文件和 889 个脚本文件）。
+这一章里的模式，都是对 **ClawHub 下载量前 1,000 的 Skill** 一条条对出来的（累计约 1,250 万次下载；其中 990 个对上了 SKILL.md，另有 889 个脚本被扫过）。
 
-以下每个模式均从数据中发现——而非照搬现有文献。每个模式都标注了出现频率和具体的 Skill 实例。
+模式是**从数据里长出来的**，不是从哪本书抄目录。每条都尽量标了频次，并点到具体 Skill，方便你对照原文。
 
-### 数据来源
+### 数据从哪来
 
 - **ClawHub API**: [clawhub.atomicbot.ai/api/skills?sort=downloads&dir=desc](https://clawhub.atomicbot.ai/api/skills?sort=downloads&dir=desc)
 - **Skills 仓库**: [github.com/openclaw/skills](https://github.com/openclaw/skills)（克隆了 58,593 个 Skill，其中 990 个匹配 top-1000）
@@ -16,7 +16,7 @@
 
 **定义**：一种一致的 7 段式结构，专门用于封装外部 API 的 Skill。这些段落以极高的共现率同时出现。
 
-**证据**：67 个以上的 Skill 同时包含 `Authentication` + `Base URL` + `API Reference` 段落。68 个包含 `Base URL` + `Code Examples` + `Connection Management`。如此紧密的共现不可能是巧合——这是一种习得的模板。
+**证据**：67 个以上的 Skill 同时包含 `Authentication` + `Base URL` + `API Reference` 段落。68 个包含 `Base URL` + `Code Examples` + `Connection Management`。共现紧成这样，很难说是巧合，更像是大家互相抄出来的「行业默认骨架」。
 
 **脚手架结构**：
 ```
@@ -251,7 +251,7 @@ Brief tagline.
 
 ## 模式 J："三大支柱" / 品牌化哲学开篇（头部 Skill）
 
-**定义**：顶级 Skill 以品牌化的概念框架开篇——通常是 3 个原则——出现在任何实操内容之前。这使该 Skill 与其模仿者区别开来。
+**定义**：有的头部 Skill 一上来先抛一套「品牌感」很强的概念框架——常见是三条原则——实操细节统统往后放。好记，也好跟山寨货拉开距离。
 
 **证据**：在最成熟的 top-20 Skill 中观察到，但在普通 Skill 中未见。
 

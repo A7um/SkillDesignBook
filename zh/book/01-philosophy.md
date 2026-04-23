@@ -1,16 +1,16 @@
-# 第一部分：设计哲学 — 顶级 Skill 如何自我定位
+# 第一部分：设计哲学 — 头部 Skill 怎么介绍自己
 
-本章通过阅读下载量前 1,000 的 Skill 中**明确表述**的立场 — 它们的"核心原则"、"核心哲学"、"方法论"、"为什么存在"章节，以及首段自我描述和"绝不"/"始终"/"把……当作"/"而不是"声明 — 来提炼设计哲学。
+本章读的是下载量前 1,000 的 Skill 里**自己怎么说**的：「核心原则」「核心哲学」「方法论」「为什么存在」，再加上开头的自我描述，以及「绝不」「始终」「把……当作」「而不是」这类表态。
 
-以下每条原则都是多个排名靠前的 Skill 明确声明的哲学。每条都直接引自语料库。
+下面每条原则，都是好几个头部 Skill 反复写出来的立场，原文都可在语料里查到。
 
 ---
 
 ## 原则 1：改变 Agent 的思考方式，而不仅仅是行为
 
-**通俗解释**：好的 Skill 改变的是 *Agent 在选择方法之前问自己的问题*。告诉 Agent "做第 1 步，然后做第 2 步"给了它一个流程。改变 Agent 试图达成的目标则赋予它判断力 — 这种判断力能够泛化到作者从未预料到的场景。
+**核心想法**：好的 Skill 改的是 *Agent 动手前先问自己的那个问题*。只说「先做第 1 步，再做第 2 步」，给的是流程；把「到底要办成什么事」说清楚，给的是判断力，遇到作者没写过的情形也更好办。
 
-**证据**：下载量最高的、包含哲学章节的 Skill 描述的是一种 *心智转变*，而非流程。
+**例证**：下载量高、又愿意写「哲学」的 Skill，多半在讲 *怎么换脑子想问题*，而不是堆步骤。
 
 [proactive-agent](https://clawhub.ai/skills/proactive-agent)（14.5 万次下载）的核心哲学开头写道：
 
@@ -36,15 +36,15 @@
 
 > 目标是改善团队协作流程和个人工作方法，而不是评判一个人的价值。
 
-**共同点**：它们重新定义了 Agent 问自己的问题。没有一个以"做第 1 步，然后做第 2 步"开头。它们改变了 Agent 在选择方法之前 *试图达成的目标*。
+**共同点**：都在改 Agent 心里那道题。没人一上来就「第 1 步、第 2 步」，而是先把 *这次到底要办成什么* 说透。
 
 ---
 
 ## 原则 2：选择一个默认值并解释原因 — 不要提供菜单
 
-**通俗解释**：差的 Skill 列出选项（"你可以用 X 或 Y 或 Z"）。好的 Skill 选择一个（"默认使用 X，因为……"）。提供菜单把选择权交给了 Agent，这会导致不同运行之间的行为不一致。选择一个默认值并附上一句话的理由，给 Agent 一个稳定的起点，同时在理由不适用时仍允许它偏离。
+**核心想法**：差的 Skill 爱列菜单（「你可以用 X、Y 或 Z」）。好的 Skill 会拍板（「默认用 X，因为……」）。菜单把选择丢给 Agent，每次跑出来的习惯都不一样；给一个默认值，再配一句理由，Agent 有个稳定起点，真不适用时再偏离也不迟。
 
-**证据**：顶级 Skill 不提供选项菜单 — 它们选择默认值并说明原因。
+**例证**：头部 Skill 很少给菜单，多半是默认值 + 一句为什么。
 
 [nextjs-expert](https://clawhub.ai/skills/nextjs-expert)（8 千次下载）核心原则：
 
@@ -63,15 +63,15 @@
 > - 对所有访问控制遵循最小权限原则
 > - 永远不信任用户输入 — 严格验证一切
 
-**模式**：鲜明立场 + 简短理由，重复 4-6 个要点。不是"考虑 X 或 Y" — 而是"优先选择 X，因为 Y。"
+**模式**：立场要硬、理由要短，往往 4～6 条排下来。不是「不妨考虑 X 或 Y」，而是「优先 X，因为 Y」。
 
 ---
 
 ## 原则 3：用"是什么"来定义 Skill，包括"不是什么"
 
-**通俗解释**：顶级 Skill 有清晰的身份。它们不只说"这个 Skill 做 X" — 当用户常常把它们误认为 Y 时，它们经常补充"这个 Skill **不是** Y"。说明 Skill 不是什么，不是免责声明或责任盾牌；它是一个定位声明，帮助 Agent（和用户）知道什么时候该用它，什么时候该用别的。
+**核心想法**：头部 Skill 身份很清楚。不只写「我能做 X」，还会在常被误会成 Y 时补一句「我**不是** Y」。这不是甩锅免责声明，而是帮 Agent（和人）判断：该找我，还是该找别的。
 
-**证据**：顶级 Skill 通过声明自己是什么来定义自己 — 即使这意味着拒绝常见的期望。
+**例证**：它们用「我是什么」来定义自己，哪怕要顶掉一些想当然的期待。
 
 [who-is-actor](https://clawhub.ai/skills/who-is-actor)（1.3 万次下载）：
 
@@ -93,15 +93,15 @@
 
 > 本 Skill 适用于多次交接的持续性工作流。
 
-**模式**：顶级 Skill 有清晰的身份。"不是……"这种表述出现在 32 个 Skill 中（44 个实例）— 通过对比来强化身份。声明 Skill 不是什么，帮助 Agent 知道何时该使用它。
+**模式**：身份要立得住。「不是……」在 32 个 Skill 里出现了 44 次，用对比把边界划清楚，Agent 才晓得什么时候该用你。
 
 ---
 
 ## 原则 4：用"把 X 当作 Y，而不是 Z"来纠正 Agent 的心智模型
 
-**通俗解释**：模型对事物常常有错误的心智图像。一个 `.docx` 文件看起来像文本文档；实际上它是一个 XML 的 ZIP 包。一个 CSV 看起来像 Excel 文件；它不是。当模型的心智模型有误时，再多的步骤说明都无法修复下游错误。顶级 Skill 用"把 X 当作 Y，而不是 Z"这个短语直接修复心智模型 — 强制 Agent 在开始工作之前重新归类这个事物。
+**核心想法**：模型心里常常把东西归错类。`.docx` 看着像纯文本，其实是 XML 打成的 ZIP；CSV 看着像 Excel，其实也不是。心智模型错了，后面堆再多步骤也白搭。头部 Skill 会直接甩一句「把 X 当作 Y，别当 Z」，逼 Agent 先换分类，再动手。
 
-**证据**：23 个 Skill 中的 30 个实例使用了"把 X 当作 Y，而不是 Z"的表述 — 强制进行心智模型重置。
+**例证**：23 个 Skill 里一共出现了 30 次这类「把……当作……而不是……」的写法，等于先给心智模型复位。
 
 [word-docx](https://clawhub.ai/skills/word-docx)（6.2 万次下载）：
 
@@ -119,15 +119,15 @@
 
 > **像对待账号密码一样小心对待它们。**
 
-**模式**："把 X 当作 Y，而不是 Z"这种表述迫使 Agent 切换推理框架。顶级 Skill 不是说"以下是如何处理 Excel 文件"，而是告诉 Agent "你的心智模型是错的 — 当涉及 CSV 时，不要把 Excel 当作功能完整的电子表格格式。"这种重构比任何规则列表都更持久。
+**模式**：这句话是在换推理框架。头部 Skill 不会泛泛写「怎么处理 Excel」，而会说「你想错了：碰到 CSV 时，别把 Excel 当成全功能电子表格。」这种纠偏往往比一长串规则更管用。
 
 ---
 
-## 原则 5：明确命名 Agent 会失败的具体方式 — 这是核心教学，不是边缘案例
+## 原则 5：把会栽跟头的地方点名写出来 — 这是正文里的硬骨头，不是边角备注
 
-**通俗解释**：每个领域都有一些模型 *持续犯的* 错误 — 不是罕见的边缘案例，而是在这个特定领域中会失败的默认行为。顶级 Skill 把这些放在最前面，作为"绝不……"和"不要……"声明。它们不是脚注或警告；它们是 Skill 的承重教学。一个没有"绝不"声明的 Skill 要么还没在生产中使用过，要么其作者还没有识别出失败模式。
+**核心想法**：每个领域都有几件模型 *老会搞砸* 的事，不是千年一遇的边角 case，而是它在这个场景下的默认坏毛病。头部 Skill 会把「绝不……」「不要……」顶在前面写。那不是脚注、也不是客套警告，往往就是整篇 Skill 最该被记住的几句。一篇里要是连一句「绝不」都没有，要么还没真上过战场，要么作者还没摸清坑在哪儿。
 
-**证据**："绝不……"在 96 个顶级 Skill 中出现了 131 次。"不要……"在 133 个 Skill 中出现了 250 次。这些不是边缘案例警告 — 它们是核心教学。
+**例证**：「绝不……」在 96 个头部 Skill 里出现了 131 次；「不要……」在 133 个里出现了 250 次。这些不是边角提醒，而是正文里的主菜。
 
 [self-improving-agent](https://clawhub.ai/skills/self-improving-agent)（#1，39.8 万次下载）：
 
@@ -146,17 +146,17 @@
 
 > **不要只是移除不良模式；要注入真正的个性。** 避免 AI 模式只是工作的一半。
 
-**模式**："绝不/不要"声明指向模型持续掉入的特定失败模式。这不是防御性的 — 它是 Skill 最承重的教学。一个没有"绝不"声明的 Skill 可能还没遇到过失败。
+**模式**：「绝不 / 不要」对准的是模型反复踩的那几个坑。不是摆防御姿态，而是把最该防的几刀写清楚。一篇里一句「绝不」都没有，多半还没被现实打过脸。
 
 ---
 
-## 原则 6：让 Skill 产出人们据以行动的决策，而非看起来漂亮的报告
+## 原则 6：要的是能帮人拍板的输出，不是看起来很厉害的报告
 
-**通俗解释**：构建一个产出精致、全面输出的 Skill 很容易 — 长篇分析、详细报告、全面总结。但如果没有人因为读了它而改变行为，这个 Skill 就没做任何有用的事。顶级 Skill 将"成功"定义为 *有人因为输出做出了不同的决策*，而不是 *输出看起来很完整*。这种导向改变了 Skill 的一切 — 收集什么数据、强调什么、何时停止。
+**核心想法**：堆一份又长又全的分析不难。读完却没人改主意、没人动代码、没人下单，那这份输出等于白写。头部 Skill 会把「成功」定义成 *有人因为这份输出做了不一样的决定*，而不是 *版面看起来有多完整*。这一下子就决定了：该采什么数据、该强调什么、什么时候可以收手。
 
-股票分析 Skill 在你买入或卖出时才算成功。代码审查 Skill 在作者修改代码时才算成功。研究 Skill 在用户选择方向时才算成功。如果输出没有推动决策，Skill 就是在生成算术。
+股票分析 Skill 在你买入或卖出时才算成功。代码审查 Skill 在作者修改代码时才算成功。研究 Skill 在用户选择方向时才算成功。输出若推不动决策，Skill 充其量是在做算术题。
 
-**证据**：多个顶级 Skill 明确拒绝理论性输出，转而支持可操作的决策。
+**例证**：不少头部 Skill 会直说：别交「好看但没用」的理论活，要交能落地、能拍板的结论。
 
 [data-analysis](https://clawhub.ai/skills/data-analysis)（2.7 万次下载）：
 
@@ -174,17 +174,17 @@
 
 > 目标不是每笔交易都赚钱。
 
-**模式**：顶级 Skill 有一个判断输出是否 *有用* 的标准，而不仅仅是输出是否 *正确*。"这个分析可操作吗？"比"这个分析完整吗？"更重要。这将 Skill 的行为约束在真正重要的结果上。
+**模式**：头部 Skill 会问：这份东西 *有没有用*，而不只是 *对不对*。「这分析能帮人做决定吗？」比「这分析写全了吗？」重要得多，行为自然就被拴在结果上。
 
 ---
 
-## 原则 7：预先阻止 Agent 的默认错误，不要依赖它记住
+## 原则 7：默认会犯的错，当场堵上，别指望它「下次记住」
 
-**通俗解释**：LLM 有默认行为 — 有些好，有些危险。它们会记录详细错误（这可能泄露密钥）。它们在被要求时会自动批准"安全改进"（这可能破坏东西）。它们安装包来解决问题（这可能引入供应链风险）。这些默认行为是烘焙进模型的；你无法通过训练 Agent 一次来消除它们。每次新会话，默认行为都会回来。
+**核心想法**：LLM 自带一堆习惯，有的好、有的坑：爱把报错打满屏（容易泄密钥）、一说「加固安全」就敢改代码（可能改挂）、遇事就想装包（供应链风险跟着来）。这些习惯是模型里自带的，你训 Agent 一次挡不住；新开一局，坏习惯照样回来。
 
-顶级 Skill 通过在 Agent 读取 Skill 的那一刻明确 *阻止* 特定默认错误来预防这一点。不是"注意保密" — 而是"不要记录密钥、令牌、私钥、环境变量或完整源/配置文件，除非用户明确要求这种详细程度。"具体默认行为，具体阻止。
+头部 Skill 会在 Agent 刚读到你的那一刻，就把 *具体哪几种默认行为* 直接禁掉。不是泛泛写「注意保密」，而是写清：不要记录密钥、令牌、私钥、环境变量或整份源码/配置，除非用户点名要这个粒度。哪条默认坏毛病，就写哪条禁令。
 
-**证据**：顶级 Skill 命名模型的具体偏差并阻止它们。
+**例证**：头部 Skill 会把模型的具体坏毛病点名，然后一条条挡回去。
 
 [self-improving-agent](https://clawhub.ai/skills/self-improving-agent)：
 
@@ -198,21 +198,21 @@
 
 > 绝不在没有人工审批的情况下实施"安全改进"。
 
-**模式**：顶级 Skill 不信任模型会默认采取安全行为。它们命名具体的不安全默认行为（记录密钥、安装未审查的 Skill、自动批准变更）并明确阻止它们。
+**模式**：它们默认模型不会自己变乖，所以把不安全的默认动作（记密钥、装未审的 Skill、自动批准改动）一条条写出来，再一条条拦住。
 
 ---
 
 ## 原则 8：先说"为什么"，再说"怎么做"
 
-**通俗解释**：顶级 Skill 的前 5-15 行告诉 Agent *这个 Skill 的用途以及如何思考它*。只有在那之后 Skill 才进入命令、设置和流程。这与参考文档相反，参考文档通常以"安装"或"快速开始"开头，把"哲学"（如果有的话）留到最后。Skill 之所以颠倒顺序，是因为 Agent 的首次阅读会影响后续每个决策 — 如果你以命令开头，Agent 会把 Skill 看作命令列表。如果你以哲学开头，Agent 会看到一种心态加上支持性事实。
+**核心想法**：头部 Skill 往往前 5～15 行先交代 *这玩意儿是干嘛的、该用什么心态看*，后面才上命令、配置、流程。这跟常见文档反着来：文档爱先「安装」「快速开始」，哲学若有，多半塞在最后。Skill 敢把顺序倒过来，是因为 Agent 第一眼读到的，会带着它后面每一步怎么选 — 一上来就堆命令，它把你当 checklist；一上来先立心，它才当你是一套打法加事实依据。
 
-**证据**：从阅读前 20 名 Skill 来看，存在一致的结构：
+**例证**：粗读下载量前 20 的 Skill，骨架都差不多：
 
 - **标题 + 标语**（1-2 行）
 - **核心哲学或心态**（3-7 行，通常在 `Core Principle` 部分）
 - **命令 / 工作流 / 事实**（其余部分）
 
-短的顶级 Skill 在 <50 行内完成这个结构。长的顶级 Skill（[self-improving-agent](https://clawhub.ai/skills/self-improving-agent) 645 行，[proactive-agent](https://clawhub.ai/skills/proactive-agent) 633 行）仍然前置哲学。
+短的头部 Skill，不到 50 行也能把这层意思讲圆。长的像 [self-improving-agent](https://clawhub.ai/skills/self-improving-agent)（645 行）、[proactive-agent](https://clawhub.ai/skills/proactive-agent)（633 行），照样把「为什么」顶在最前。
 
 来自 [proactive-agent](https://clawhub.ai/skills/proactive-agent) 的开头：
 
@@ -226,17 +226,17 @@
 
 身份优先。设置其次。
 
-**模式**：顶级 Skill 的前 5-15 行是哲学：这个 Skill 为什么存在，适用什么心态。剩余 95% 是事实和命令。这个比例与文档相反；一个 Skill 是 5% 的哲学加 95% 的事实 — 但那 5% 排在最前面，影响了后面的一切。
+**模式**：前 5～15 行像「为什么存在、该用什么心态」；剩下九成多是事实和命令。比例看着像文档反过来——其实就那几行哲学，但排在最前，后面整篇都跟着变味。
 
 ---
 
 ## 原则 9：只从用户实际说过或做过的事中学习 — 不要猜测
 
-**通俗解释**：跨会话积累记忆的 Skill 面临一种诱惑：从模式中外推。用户从未提到过风格 X，所以他们一定偏好风格 Y。三个任务用了工具 Z，所以 Z 现在是首选工具。这种猜测会随时间腐蚀记忆，因为模型不断在推断之上做推断，最终"记忆"充满了用户从未实际表达过的信念。
+**核心想法**：会跨会话记东西的 Skill，特别容易手痒去「猜」：用户从没提过风格 X，就猜他其实爱 Y；三个任务用了工具 Z，就把 Z 写成默认首选。猜多了，记忆层里堆的全是用户从没说过的话。模型还会叠罗汉式地猜上加猜。
 
-顶级记忆 Skill 拒绝这一点。它们只从**明确信号**中学习：用户的直接纠正（"不，那是错的"）、声明的偏好（"我偏好 X"）、记录在案的成功结果、以及重复的相同模式（不是相似的，是相同的）。其他一切都是噪音。
+头部记忆类 Skill 会刻意刹住车，只认**实打实的信号**：用户当面纠正（「不对」「其实……」）、亲口说的偏好、有记录的成功结果、以及重复出现的同一模式（要一模一样，别靠「有点像」）。别的都当噪音。
 
-**证据**：记忆和学习类 Skill 都收敛于一条规则。
+**例证**：记忆、学习向的 Skill，翻来覆去其实在讲同一条底线。
 
 [self-improving](https://clawhub.ai/skills/self-improving)（16.7 万次下载）：
 
@@ -254,15 +254,15 @@
 
 > AI 负责解释和评估。所有数据收集完全通过原生 git 命令完成。
 
-**模式**：当 Skill 随时间积累知识时，它只从**明确信号**中学习 — 用户纠正、明确偏好、记录在案的结果。它明确禁止从噪音、沉默或单次出现中推断模式。这是对模型自然倾向过度泛化的有力反制。
+**模式**：能攒知识的 Skill，只从**明确信号**里学：纠正、偏好、有记录的结果。它会写死：别从杂音、沉默或单次现象里硬编规律——专治模型爱过度泛化的毛病。
 
 ---
 
 ## 原则 10：围绕你要预防的失败来设计，而不是你要执行的任务
 
-**通俗解释**：问 Skill 作者"你的 Skill 做什么？"他们会描述任务（"它审查代码"、"它审计安全"、"它获取股票数据"）。问"你的 Skill 存在是为了预防什么失败？"你会得到更锋利的答案（"通过审查但实际存在 bug 因为审查者只检查了测试"、"安装恶意 Skill"、"基于过拟合回测进行交易"）。第二种框架对每个设计决策都更有用。当你知道失败模式时，你就知道该设定哪些默认值、主张哪些规则、强调哪些输出、以及 Skill 何时真正成功了。
+**核心想法**：问作者「你的 Skill 干啥？」多半听到的是任务：审代码、扫安全、拉行情。改问「你最怕它哪一步失手？」答案会尖得多：比如「审查形同虚设，因为只看测试不看逻辑」「装进来的是恶意 Skill」「回测过拟合还当真去交易」。后一种问法，才好定默认值、写死规则、决定输出里该吼什么、以及怎样算真的帮上忙。
 
-**证据**：顶级 Skill 通过它们失败时会发生什么来框定工作 — 而不是它们机械地做什么。
+**例证**：头部 Skill 爱用「要是搞砸了会怎样」来框事，而不只罗列「它平时在干哪几件活」。
 
 [skill-vetter](https://clawhub.ai/skills/skill-vetter)："**偏执是一种特性。**" — 风险是：安装恶意 Skill。
 
@@ -278,22 +278,22 @@
 
 > **为什么存在** — 我已经训练了数千人通过 AI Persona Method 构建 AI 人设。我看到的第一大问题是：[Skill 要解决的风险]。
 
-**模式**：顶级 Skill 围绕它们存在是为了预防的特定失败来定位。这不是一个"为什么"章节 — 它是审视 Skill 中每个决策的镜头。理解失败模式使得 Skill 的默认值、规则和结构感觉是必然的，而非随意的。
+**模式**：整篇 Skill 像是绕着「最怕哪种翻车」来写的。不是多贴一个「为什么」标签，而是拿失败模式当滤镜：默认值、规则、结构，读起来就会觉得是该长这样，而不是作者随手拍脑袋。
 
 ---
 
 ## 元原则：Skill 做出主张；文档描述事物
 
-**通俗解释**：综观以上 10 条原则，有一个理念贯穿始终：
+**核心想法**：把这十条串起来，其实就一句话：
 
-- **文档** 描述事物是什么。它是中立的、完整的、安全的 — 旨在不误导任何人。
-- **Skill** 不同。Skill 做出主张。它说"这是正确的默认值"、"这是不该做的"、"这是应该怎么思考的"。作者基于经验采取了立场。
+- **文档** 讲清楚「是什么」，倾向中立、求全、少得罪人。
+- **Skill** 不一样，它要**表态**：默认该咋做、别碰哪条线、该用啥思路想问题。背后是作者踩过坑之后的立场。
 
-这就是为什么措辞中立、面面俱到的 Skill 通常比有态度、有选择性的 Skill 更差。中立性消除了重新引导模型行为的力量。Skill 变成了工具的第二份描述，而模型并不需要 — 它已经知道这个工具了。
+所以那种四平八稳、啥都「可以考虑」的 Skill，往往不如有取舍、有脾气的版本。中立把劲儿卸掉了，Skill 容易退化成工具的复读机，而模型多半早就认识那个工具了。
 
 [proactive-agent](https://clawhub.ai/skills/proactive-agent) 主张 Agent 不应该等待。[skill-vetter](https://clawhub.ai/skills/skill-vetter) 主张你绝不应在审查之前安装。[data-analysis](https://clawhub.ai/skills/data-analysis) 主张没有决策的分析是算术。[word-docx](https://clawhub.ai/skills/word-docx) 主张 DOCX 不是纯文本。
 
-这些是**作者通过经验获得的观点**。从 Skill 中剥离观点 — 使其"中立" — 会使它变差，因为它消除了重新引导模型行为的力量。
+这些都是**作者用学费换来的看法**。把观点从 Skill 里抠掉、扮「中立」，等于把最能掰模型行为的那股劲也抠掉了。
 
 排名靠前的 Skill 都是有态度的。排名机制奖励这一点。
 
@@ -301,15 +301,15 @@
 
 ## 总结
 
-| # | 原则 | 一句话总结 | 证据来源 |
-|---|------|----------|---------|
-| 1 | 改变 Agent 的思考方式，而不仅仅是行为 | Skill 重构问题；流程不会 | [proactive-agent](https://clawhub.ai/skills/proactive-agent)、[data-analysis](https://clawhub.ai/skills/data-analysis)、[backtest-expert](https://clawhub.ai/skills/backtest-expert) |
-| 2 | 选择默认值并解释原因 | 菜单制造不一致；带理由的默认值稳定行为 | [nextjs-expert](https://clawhub.ai/skills/nextjs-expert)、[database-operations](https://clawhub.ai/skills/database-operations)、[security-auditor](https://clawhub.ai/skills/security-auditor) |
-| 3 | 用"是什么"定义 Skill，包括"不是什么" | 身份 + 边界，不只是描述 | [who-is-actor](https://clawhub.ai/skills/who-is-actor)、[academic-deep-research](https://clawhub.ai/skills/academic-deep-research)、[proactivity](https://clawhub.ai/skills/proactivity) |
-| 4 | 用"把 X 当作 Y，不是 Z"纠正心智模型 | 模型对 X 的默认分类有误 — 先修正它 | [word-docx](https://clawhub.ai/skills/word-docx)、[excel-xlsx](https://clawhub.ai/skills/excel-xlsx)、[playwright](https://clawhub.ai/skills/playwright) — 23 个 Skill |
-| 5 | 命名具体失败模式 — 它们是核心教学 | 模型持续犯的错误，被明确命名 | [self-improving-agent](https://clawhub.ai/skills/self-improving-agent)、[skill-vetter](https://clawhub.ai/skills/skill-vetter)、[humanizer](https://clawhub.ai/skills/humanizer) — 96 个 Skill |
-| 6 | 产出人们据以行动的决策，而非漂亮的报告 | 成功 = 有人因输出做出不同决策 | [data-analysis](https://clawhub.ai/skills/data-analysis)、[backtest-expert](https://clawhub.ai/skills/backtest-expert)、[automation-workflows](https://clawhub.ai/skills/automation-workflows) |
-| 7 | 预先阻止默认错误 | 具体默认行为 + 具体阻止，不是"小心点" | [self-improving-agent](https://clawhub.ai/skills/self-improving-agent)、[skill-vetter](https://clawhub.ai/skills/skill-vetter)、[proactive-agent](https://clawhub.ai/skills/proactive-agent) |
-| 8 | 先说"为什么"，再说"怎么做" | 首次阅读为后续一切设定心态 | 下载量前 20 的 Skill |
-| 9 | 只从用户实际说过或做过的事中学习 | 不猜测，不外推 — 仅明确信号 | [self-improving](https://clawhub.ai/skills/self-improving)、[self-improving-agent](https://clawhub.ai/skills/self-improving-agent)、[who-is-actor](https://clawhub.ai/skills/who-is-actor) |
-| 10 | 围绕你要预防的失败来设计，而非执行的任务 | 以失败模式为框架，使每个设计决策更锋利 | [skill-vetter](https://clawhub.ai/skills/skill-vetter)、[backtest-expert](https://clawhub.ai/skills/backtest-expert)、[ai-persona-os](https://clawhub.ai/skills/ai-persona-os) |
+| # | 原则 | 一句话总结 | 出处 |
+|---|------|----------|------|
+| 1 | 改变 Agent 的思考方式，而不仅仅是行为 | 先改「问自己的题」，别只塞步骤 | [proactive-agent](https://clawhub.ai/skills/proactive-agent)、[data-analysis](https://clawhub.ai/skills/data-analysis)、[backtest-expert](https://clawhub.ai/skills/backtest-expert) |
+| 2 | 选择默认值并解释原因 | 少给菜单，多给默认 + 一句为什么 | [nextjs-expert](https://clawhub.ai/skills/nextjs-expert)、[database-operations](https://clawhub.ai/skills/database-operations)、[security-auditor](https://clawhub.ai/skills/security-auditor) |
+| 3 | 用"是什么"定义 Skill，包括"不是什么" | 立住身份，顺手划清边界 | [who-is-actor](https://clawhub.ai/skills/who-is-actor)、[academic-deep-research](https://clawhub.ai/skills/academic-deep-research)、[proactivity](https://clawhub.ai/skills/proactivity) |
+| 4 | 用"把 X 当作 Y，不是 Z"纠正心智模型 | 默认归类错了，先掰过来再干活 | [word-docx](https://clawhub.ai/skills/word-docx)、[excel-xlsx](https://clawhub.ai/skills/excel-xlsx)、[playwright](https://clawhub.ai/skills/playwright) 等 23 个 Skill |
+| 5 | 把会栽跟头的地方点名写出来 | 老犯的错，别藏在脚注里 | [self-improving-agent](https://clawhub.ai/skills/self-improving-agent)、[skill-vetter](https://clawhub.ai/skills/skill-vetter)、[humanizer](https://clawhub.ai/skills/humanizer) 等 96 个 Skill |
+| 6 | 要的是能帮人拍板的输出，不是看起来很厉害的报告 | 有人因输出改了主意，才算数 | [data-analysis](https://clawhub.ai/skills/data-analysis)、[backtest-expert](https://clawhub.ai/skills/backtest-expert)、[automation-workflows](https://clawhub.ai/skills/automation-workflows) |
+| 7 | 默认会犯的错，当场堵上 | 哪条坏习惯，就写哪条禁令 | [self-improving-agent](https://clawhub.ai/skills/self-improving-agent)、[skill-vetter](https://clawhub.ai/skills/skill-vetter)、[proactive-agent](https://clawhub.ai/skills/proactive-agent) |
+| 8 | 先说"为什么"，再说"怎么做" | 第一眼定调，后面好跟 | 下载量前 20 的 Skill |
+| 9 | 只从用户实际说过或做过的事中学习 | 没实锤就别瞎猜、别硬推 | [self-improving](https://clawhub.ai/skills/self-improving)、[self-improving-agent](https://clawhub.ai/skills/self-improving-agent)、[who-is-actor](https://clawhub.ai/skills/who-is-actor) |
+| 10 | 围绕你要预防的失败来设计，而非执行的任务 | 先想清楚怕哪种翻车，再动笔 | [skill-vetter](https://clawhub.ai/skills/skill-vetter)、[backtest-expert](https://clawhub.ai/skills/backtest-expert)、[ai-persona-os](https://clawhub.ai/skills/ai-persona-os) |

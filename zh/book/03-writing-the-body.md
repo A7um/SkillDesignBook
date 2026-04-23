@@ -1,6 +1,6 @@
-# 第二部分，第 3 章：编写 Body（正文）
+# 第二部分 · 第 3 章：Body（正文）
 
-本章涵盖你在编写 SKILL.md 正文时需要做出的每一个结构性决策：章节顺序、指令风格、决策树、输入收集、输出模板、脚本和约束。每种技巧都配有生产级代码示例。
+写 SKILL.md 正文时，结构怎么排、话怎么说、分支怎么画、输入怎么收、输出长什么样、脚本和约束怎么落笔——这些都在本章里，并配有线上 Skill 里的真实片段。
 
 ### 来源
 
@@ -31,21 +31,21 @@
 5. Notes/Constraints — 边缘情况、护栏
 ```
 
-这不是随意安排的。它利用了 LLM 处理指令的特性：
+这么排不是拍脑袋，而是在蹭 LLM 读长指令时的习惯：
 
-| 位置 | LLM 记忆强度 | 放什么内容 |
-|------|-------------|-----------|
-| 顶部 | 最强（首因效应） | Overview + 硬性约束 |
-| 中上部 | 较好 | Quick Start / 正常路径 |
-| 中部 | 最弱 | 详细工作流步骤 |
-| 中下部 | 中等 | 输出格式 |
-| 底部 | 较强（近因效应） | 边缘情况 + NEVER 规则 |
+| 位置 | LLM 记起来有多牢 | 适合放什么 |
+|------|------------------|------------|
+| 顶部 | 最牢（开头效应） | Overview + 硬约束 |
+| 中上部 | 还不错 | Quick Start / 主路径 |
+| 中部 | 最容易飘 | 细碎的步骤说明 |
+| 中下部 | 一般 | 输出格式 |
+| 底部 | 又牢起来（结尾效应） | 边角情况 + NEVER 规则 |
 
-**Quick Start** 章节是一个关键模式：它为 Agent 提供了处理简单情况的快速路径。强模型可能只读这一部分。下面的完整 Workflow 负责处理边缘情况和复杂场景。
+**Quick Start** 很要紧：给 Agent 一条「简单场景先这么走」的捷径。模型强的时候，有时就扫这一段。下面的完整 Workflow 再兜复杂情况和边角。
 
-## 3.2 祈使语气
+## 3.2 用祈使句，少用说明腔
 
-每条指令都应是命令，而不是描述：
+能写成动作，就别写成状态描写：
 
 ```markdown
 # ❌ Declarative:
@@ -70,7 +70,7 @@ OpenAI 的 `docs-sync` 工作流开头：
 
 ## 3.3 收集输入
 
-顶级 Skill 会指定**精确的命令**来收集输入，并明确注明"(do not ask the user)"（不要询问用户）。
+头部 Skill 会给**一条条具体命令**去捞输入，并写明 "(do not ask the user)"（别去问用户）。
 
 摘自 `pr-draft-summary`：
 
@@ -89,7 +89,7 @@ OpenAI 的 `docs-sync` 工作流开头：
     @{upstream} 2>/dev/null || echo origin/main)
 ```
 
-这是一个关键模式：**为每个输入提供精确的 shell 命令**。不要说"查明你在哪个分支上"——而要说 `git rev-parse --abbrev-ref HEAD`。
+这是很关键的一招：**每个输入对应一条可复制的 shell**。别写「先搞清楚自己在哪个分支」，直接写 `git rev-parse --abbrev-ref HEAD`。
 
 摘自 `docs-sync`：
 
@@ -98,11 +98,11 @@ OpenAI 的 `docs-sync` 工作流开头：
   `rg "Settings"`, `rg "Config"`, `rg "os.environ"`, `rg "OPENAI_"`
 ```
 
-给出具体的搜索命令，而不是"搜索与配置相关的代码"。
+给的是一条条 `rg`，而不是「去搜一下和配置有关的代码」这种空话。
 
 ## 3.4 决策树
 
-当工作流出现分支时，你必须显式地表达分支。以下是生产中的三种模式：
+工作流一旦要分叉，就要把岔路写明白。线上常见有三种写法：
 
 ### 模式 A：If/Then 步骤
 
@@ -202,7 +202,7 @@ git checkout -b <suggestion>
 
 ## 3.6 审批关卡
 
-对于会修改文件的 Skill，必须包含一个显式的暂停点：
+会动文件的 Skill，中间要留一个**明确的停一下**的环节：
 
 ```markdown
 # docs-sync:
@@ -222,7 +222,7 @@ git checkout -b <suggestion>
 
 ## 3.7 执行后验证
 
-顶级 Skill 在执行操作后都包含验证步骤：
+头部 Skill 动完手，多半还会留一步「再验一遍」：
 
 ```markdown
 # test-coverage-improver:
@@ -251,7 +251,7 @@ and `gh pr checks` to confirm."
 "Open references/validation-matrix.md for case templates"
 ```
 
-Agent 只有执行到对应步骤时才会读取参考文件。`references/` 中的文件在被显式打开之前不消耗任何 token。
+Agent 走到那一步才会去翻参考文件。`references/` 里的东西在被点名打开之前，不占 token。
 
 OpenAI 的 Skill 目录结构：
 
